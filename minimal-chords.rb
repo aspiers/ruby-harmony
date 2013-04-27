@@ -119,12 +119,13 @@ end
 debug 1, "-" * 72
 debug 1, ''
 puts <<EOF
-Summary:
-========
+Summary
+=======
 
 EOF
 
 modes_by_chord_size = { }
+distinctiveness = { }
 
 identifiers.sort.each do |mode, chords_by_size|
   if chords_by_size.empty?
@@ -137,13 +138,32 @@ identifiers.sort.each do |mode, chords_by_size|
   size, chords = chords_by_size.sort.first
   modes_by_chord_size[size] ||= [ ]
   modes_by_chord_size[size].push mode
+  distinctiveness[[size, chords.size]] ||= [ ]
+  distinctiveness[[size, chords.size]].push mode
   puts "#{size} note chords uniquely identifying #{mode}:"
   for chord in chords
     puts "    #{chord}"
   end
 end
 
-puts
+puts <<EOF
+
+Modes sorted by "uniqueness" (ease of identification)
+-----------------------------------------------------
+
+EOF
+
+for sizes, modes in distinctiveness.sort_by { |sizes, modes| [sizes[0], -sizes[1]] }
+  chord_size, num_chords = sizes
+  puts "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
+end
+
+puts <<EOF
+
+How many notes are needed?
+--------------------------
+
+EOF
 
 for size, modes in modes_by_chord_size.sort
   if size == 0
