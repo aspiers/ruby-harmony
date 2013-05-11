@@ -38,7 +38,7 @@ class NoteArray < Array
   def to_s;       note_names.map { |n| "%-2s" % n }.join " " end
 end
 
-Mode = Struct.new(:degree, :scale_type, :index) do
+class Mode < Struct.new(:degree, :scale_type, :index)
   DEGREES = %w(ion dor phryg lyd mixo aeol loc)
 
   # rotate intervallic increments by different degrees of the scale
@@ -64,24 +64,24 @@ Mode = Struct.new(:degree, :scale_type, :index) do
   def <=>(other)
     index <=> other.index
   end
-end
 
-def all_modes # builds all 28 modes
-  @@modes ||= \
-  begin
-    modes = [ ]
-    ScaleType.all.each do |scale_type|
-      degree = 3 # start with lydian
-      begin
-        mode = Mode.new(degree, scale_type, modes.length - 1)
-        modes.push mode
-        debug 2, "%-15s %s" % [ mode, mode.notes.to_s ]
-        degree = (degree + 4) % 7 # move through modes from open to closed
-      end while degree % 7 != 3 # stop when we get back to lydian
+  def Mode.all # builds all 28 modes
+    @@modes ||= \
+    begin
+      modes = [ ]
+      ScaleType.all.each do |scale_type|
+        degree = 3 # start with lydian
+        begin
+          mode = Mode.new(degree, scale_type, modes.length - 1)
+          modes.push mode
+          debug 2, "%-15s %s" % [ mode, mode.notes.to_s ]
+          degree = (degree + 4) % 7 # move through modes from open to closed
+        end while degree % 7 != 3 # stop when we get back to lydian
+        debug 2, ''
+      end
       debug 2, ''
+      modes
     end
-    debug 2, ''
-    modes
   end
 end
 
@@ -90,10 +90,10 @@ def debug(level, msg)
 end
 
 def modes_matching_chord(chord)
-  all_modes.find_all { |mode| (chord & mode.notes).length == chord.length }
+  Mode.all.find_all { |mode| (chord & mode.notes).length == chord.length }
 end
 
-identifiers = Hash[ all_modes.map { |mode| [mode, {}] } ]
+identifiers = Hash[ Mode.all.map { |mode| [mode, {}] } ]
 
 for chord_size in 3..7
   debug 1, "Checking all #{chord_size}-note chords ..."
