@@ -172,7 +172,7 @@ Modes sorted by "uniqueness" (ease of identification)
 
 EOF
 
-  for sizes, modes in distinctiveness.sort_by { |sizes, modes| [sizes[0], -sizes[1]] }
+  for sizes, modes in distinctiveness.sort_by { |s, m| [s[0], -s[1]] }
     chord_size, num_chords = sizes
     puts "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
   end
