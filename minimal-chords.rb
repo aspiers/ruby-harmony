@@ -95,14 +95,16 @@ end
 
 # Returns nested Hash:
 #   { uniquely_identified_mode => { chord_size => [ chord, ... ] }
-def find_identifiers(scales)
+def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
   identifiers = Hash[ scales.map { |scale| [scale, {}] } ]
 
-  for chord_size in 3..7
+  for num_variable_notes in 0..(variable_chord_notes.size)
+    chord_size = fixed_chord_notes.size + num_variable_notes
+    next if chord_size > 7
     debug 1, "Checking all #{chord_size}-note chords ..."
-    for chord in (1..11).to_a.combination(chord_size - 1) # exclude root
+    for alterations in variable_chord_notes.combination(num_variable_notes)
+      chord = NoteArray.new((fixed_chord_notes + alterations).sort)
       matches = scales_matching_chord(scales, chord)
-      chord = NoteArray.new([0] + chord)
       case matches.length
       when 0
         debug 2, "    #{chord} didn't match any modes"
@@ -136,7 +138,7 @@ Summary
 
 EOF
 
-  identifiers = find_identifiers(Mode.all)
+  identifiers = find_identifiers(Mode.all, NoteArray[0], NoteArray[*1..11])
 
   # map chord size to an Array of all modes which need that number of
   # notes to uniquely identify the mode.
