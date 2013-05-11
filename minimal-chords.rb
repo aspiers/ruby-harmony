@@ -152,12 +152,13 @@ identifiers.sort.each do |mode, chords_by_size|
     next
   end
 
-  size, chords = chords_by_size.sort.first
-  modes_by_chord_size[size] ||= [ ]
-  modes_by_chord_size[size].push mode
-  distinctiveness[[size, chords.size]] ||= [ ]
-  distinctiveness[[size, chords.size]].push mode
-  puts "#{size} note chords uniquely identifying #{mode}:"
+  chord_size, chords = chords_by_size.sort.first # show smallest identifying chords
+  modes_by_chord_size[chord_size] ||= [ ]
+  modes_by_chord_size[chord_size].push mode
+  chords_count = chords.size # number of identifying chords of this size
+  distinctiveness[[chord_size, chords_count]] ||= [ ]
+  distinctiveness[[chord_size, chords_count]].push mode
+  puts "#{chord_size} note chords uniquely identifying #{mode}:"
   for chord in chords
     puts "    #{chord}"
   end
