@@ -10,19 +10,24 @@ NOTES = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B' ]
 class ScaleType
   @@all = [ ]
 
-  attr_reader :name, :increments
+  attr_reader :name, :increments, :symmetry
 
-  def initialize(name, increments)
+  def initialize(name, increments, symmetry)
     @name = name
     @increments = increments
     @@all.push self
     @index = @@all.length - 1
   end
 
-  MAJOR          = new('maj',      [ 2, 2, 1, 2, 2, 2, 1 ])
-  MELODIC_MINOR  = new('mel min',  [ 2, 1, 2, 2, 2, 2, 1 ])
-  HARMONIC_MINOR = new('harm min', [ 2, 1, 2, 2, 1, 3, 1 ])
-  HARMONIC_MAJOR = new('harm maj', [ 2, 2, 1, 2, 1, 3, 1 ])
+  new('maj',      [ 2, 2, 1, 2, 2, 2, 1    ], 7)
+  new('mel min',  [ 2, 1, 2, 2, 2, 2, 1    ], 7)
+  new('harm min', [ 2, 1, 2, 2, 1, 3, 1    ], 7)
+  new('harm maj', [ 2, 2, 1, 2, 1, 3, 1    ], 7)
+
+  # new('whole',    [ 2, 2, 2, 2, 2, 2       ], 1)
+  # new('dim',      [ 2, 1, 2, 1, 2, 1, 2, 1 ], 2)
+  # new('aug',      [ 3, 1, 3, 1, 3, 1       ], 2)
+  # new('dbl harm', [ 1, 3, 1, 2, 1, 3, 1    ], 7)
 
   def ScaleType.all; @@all end
   def inspect;       name  end
