@@ -89,36 +89,42 @@ def debug(level, msg)
   puts msg if level <= $verbosity
 end
 
-def modes_matching_chord(chord)
-  Mode.all.find_all { |mode| (chord & mode.notes).length == chord.length }
+def scales_matching_chord(scales, chord)
+  scales.find_all { |scale| (chord & scale.notes).length == chord.length }
 end
 
-identifiers = Hash[ Mode.all.map { |mode| [mode, {}] } ]
+# Returns nested Hash:
+#   { uniquely_identified_mode => { chord_size => [ chord, ... ] }
+def find_identifiers(scales)
+  identifiers = Hash[ scales.map { |scale| [scale, {}] } ]
 
-for chord_size in 3..7
-  debug 1, "Checking all #{chord_size}-note chords ..."
-  for chord in (1..11).to_a.combination(chord_size - 1) # exclude root
-    matches = modes_matching_chord(chord)
-    chord = NoteArray.new([0] + chord)
-    case matches.length
-    when 0
-      debug 2, "    #{chord} didn't match any modes"
-    when 1
-      identified_mode = matches[0]
-      debug 1, "*   #{chord} uniquely identified: #{identified_mode}"
-      identifiers[identified_mode][chord_size] ||= [ ]
-      identifiers[identified_mode][chord_size].push chord
-    else
-      matches_to_show = matches.dup
-      if $verbosity == 2
-        matches_to_show = matches.first(2)
-        matches_to_show += [ '...' ] if matches.length > 2
-      end
-      debug 2, ".   #{chord} matched #{matches.length} modes: " + \
+  for chord_size in 3..7
+    debug 1, "Checking all #{chord_size}-note chords ..."
+    for chord in (1..11).to_a.combination(chord_size - 1) # exclude root
+      matches = scales_matching_chord(scales, chord)
+      chord = NoteArray.new([0] + chord)
+      case matches.length
+      when 0
+        debug 2, "    #{chord} didn't match any modes"
+      when 1
+        identified_mode = matches[0]
+        debug 1, "*   #{chord} uniquely identified: #{identified_mode}"
+        identifiers[identified_mode][chord_size] ||= [ ]
+        identifiers[identified_mode][chord_size].push chord
+      else
+        matches_to_show = matches.dup
+        if $verbosity == 2
+          matches_to_show = matches.first(2)
+          matches_to_show += [ '...' ] if matches.length > 2
+        end
+        debug 2, ".   #{chord} matched #{matches.length} modes: " + \
         matches_to_show.join(', ')
+      end
     end
+    debug 1, ''
   end
-  debug 1, ''
+
+  return identifiers
 end
 
 debug 1, "-" * 72
@@ -128,6 +134,8 @@ Summary
 =======
 
 EOF
+
+identifiers = find_identifiers(Mode.all)
 
 modes_by_chord_size = { }
 distinctiveness = { }
