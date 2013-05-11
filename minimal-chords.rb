@@ -137,7 +137,11 @@ EOF
 
 identifiers = find_identifiers(Mode.all)
 
+# map chord size to an Array of all modes which need that number of
+# notes to uniquely identify the mode.
 modes_by_chord_size = { }
+
+# map [ chord_size, chords_count ] => [ mode, ... ]
 distinctiveness = { }
 
 identifiers.sort.each do |mode, chords_by_size|
