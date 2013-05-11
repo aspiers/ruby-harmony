@@ -127,66 +127,70 @@ def find_identifiers(scales)
   return identifiers
 end
 
-debug 1, "-" * 72
-debug 1, ''
-puts <<EOF
+def identify_modes
+  debug 1, "-" * 72
+  debug 1, ''
+  puts <<EOF
 Summary
 =======
 
 EOF
 
-identifiers = find_identifiers(Mode.all)
+  identifiers = find_identifiers(Mode.all)
 
-# map chord size to an Array of all modes which need that number of
-# notes to uniquely identify the mode.
-modes_by_chord_size = { }
+  # map chord size to an Array of all modes which need that number of
+  # notes to uniquely identify the mode.
+  modes_by_chord_size = { }
 
-# map [ chord_size, chords_count ] => [ mode, ... ]
-distinctiveness = { }
+  # map [ chord_size, chords_count ] => [ mode, ... ]
+  distinctiveness = { }
 
-identifiers.sort.each do |mode, chords_by_size|
-  if chords_by_size.empty?
-    modes_by_chord_size[0] ||= [ ]
-    modes_by_chord_size[0].push mode
-    puts "no chords found uniquely identifying #{mode}!"
-    next
+  identifiers.sort.each do |mode, chords_by_size|
+    if chords_by_size.empty?
+      modes_by_chord_size[0] ||= [ ]
+      modes_by_chord_size[0].push mode
+      puts "no chords found uniquely identifying #{mode}!"
+      next
+    end
+
+    chord_size, chords = chords_by_size.sort.first # show smallest identifying chords
+    modes_by_chord_size[chord_size] ||= [ ]
+    modes_by_chord_size[chord_size].push mode
+    chords_count = chords.size # number of identifying chords of this size
+    distinctiveness[[chord_size, chords_count]] ||= [ ]
+    distinctiveness[[chord_size, chords_count]].push mode
+    puts "#{chord_size} note chords uniquely identifying #{mode}:"
+    for chord in chords
+      puts "    #{chord}"
+    end
   end
 
-  chord_size, chords = chords_by_size.sort.first # show smallest identifying chords
-  modes_by_chord_size[chord_size] ||= [ ]
-  modes_by_chord_size[chord_size].push mode
-  chords_count = chords.size # number of identifying chords of this size
-  distinctiveness[[chord_size, chords_count]] ||= [ ]
-  distinctiveness[[chord_size, chords_count]].push mode
-  puts "#{chord_size} note chords uniquely identifying #{mode}:"
-  for chord in chords
-    puts "    #{chord}"
-  end
-end
-
-puts <<EOF
+  puts <<EOF
 
 Modes sorted by "uniqueness" (ease of identification)
 -----------------------------------------------------
 
 EOF
 
-for sizes, modes in distinctiveness.sort_by { |sizes, modes| [sizes[0], -sizes[1]] }
-  chord_size, num_chords = sizes
-  puts "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
-end
+  for sizes, modes in distinctiveness.sort_by { |sizes, modes| [sizes[0], -sizes[1]] }
+    chord_size, num_chords = sizes
+    puts "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
+  end
 
-puts <<EOF
+  puts <<EOF
 
 How many notes are needed?
 --------------------------
 
 EOF
 
-for size, modes in modes_by_chord_size.sort
-  if size == 0
-    puts "modes with no unique identifier found: " + modes.join(', ')
-  else
-    puts "#{modes.length} mode#{modes.length == 1 ? '' : 's'} uniquely identified by #{size} notes: " + modes.join(', ')
+  for size, modes in modes_by_chord_size.sort
+    if size == 0
+      puts "modes with no unique identifier found: " + modes.join(', ')
+    else
+      puts "#{modes.length} mode#{modes.length == 1 ? '' : 's'} uniquely identified by #{size} notes: " + modes.join(', ')
+    end
   end
 end
+
+identify_modes
