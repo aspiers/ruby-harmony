@@ -214,7 +214,7 @@ def analyse(fixed_chord_notes, descr)
   identify_modes(descr, fixed_chord_notes, alterations)
 end
 
-sevenths = [
+chords = [
   [[0, 4, 7, 11], 'maj7'  ],
   [[0, 4, 8, 11], 'maj7#5'],
   [[0, 3,    11], '-maj7' ],
@@ -223,9 +223,13 @@ sevenths = [
   [[0, 3, 7, 10], '-7'    ],
   [[0, 3, 6, 10], '-7b5'  ],
   [[0, 3, 6,  9], 'dim'   ],
+  [[0, 4, 7,  9], '6'     ],
+  [[0, 3, 7,  9], '-6'    ],
+  [[0, 5, 7, 10], 'sus7'  ],
+  [[0, 1, 5, 10], 'sus7b9'],
 ]
 
-sevenths.each do |seventh, descr|
-  analyse(seventh, descr)
+chords.each do |chord, descr|
+  analyse(chord, descr)
   puts
 end
