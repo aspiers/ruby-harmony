@@ -139,8 +139,8 @@ Summary
 EOF
 end
 
-def identify_modes
-  identifiers = find_identifiers(Mode.all, NoteArray[0], NoteArray[*1..11])
+def identify_modes(fixed_chord_notes, variable_chord_notes)
+  identifiers = find_identifiers(Mode.all, fixed_chord_notes, variable_chord_notes)
 
   output_summary_header
 
@@ -206,4 +206,6 @@ EOF
   end
 end
 
-identify_modes
+fixed_chord_notes = NoteArray[0]
+alterations = NoteArray[*(0..11).to_a - fixed_chord_notes]
+identify_modes(fixed_chord_notes, alterations)
