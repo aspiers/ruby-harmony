@@ -129,20 +129,18 @@ def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
   return identifiers
 end
 
-def output_summary_header
+def output_summary_header(fixed_chord_notes, variable_chord_notes)
   debug 1, "-" * 72
   debug 1, ''
-  puts <<EOF
-Summary
-=======
-
-EOF
+  header = "Summary for #{fixed_chord_notes.to_s.strip} + #{variable_chord_notes.to_s.strip}"
+  puts header
+  puts "=" * header.size, "\n"
 end
 
 def identify_modes(fixed_chord_notes, variable_chord_notes)
   identifiers = find_identifiers(Mode.all, fixed_chord_notes, variable_chord_notes)
 
-  output_summary_header
+  output_summary_header(fixed_chord_notes, variable_chord_notes)
 
   # map chord size to an Array of all modes which need that number of
   # notes to uniquely identify the mode.
