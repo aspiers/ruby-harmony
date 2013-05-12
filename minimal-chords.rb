@@ -169,7 +169,9 @@ def identify_modes(descr, fixed_chord_notes, variable_chord_notes)
     distinctiveness[[chord_size, chords_count]].push mode
     puts "#{chord_size} note chords uniquely identifying #{mode}:"
     for chord in chords
-      puts "    #{chord}"
+      remaining = mode.notes - chord
+      alterations = remaining - fixed_chord_notes
+      puts "    %-14s + %s" % [chord, alterations]
     end
   end
 
