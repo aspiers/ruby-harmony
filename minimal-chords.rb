@@ -33,7 +33,7 @@ class ScaleType
   def inspect;       name  end
 end
 
-class NoteArray < Array
+class NoteSet < Set
   def note_names; map { |note| NOTES[note] } end
   def to_s;       note_names.map { |n| "%-2s" % n }.join " " end
 end
@@ -50,9 +50,9 @@ class Mode < Struct.new(:degree, :scale_type, :index)
   # convert intervallic increments into numeric pitches
   # relative to the root (0)
   def notes
-    @notes ||= increments.inject(NoteArray.new [0]) do |array, note|
+    @notes ||= NoteSet[*increments.inject([0]) do |array, note|
       array.push(array.last + note)
-    end
+    end]
   end
 
   def to_s
@@ -98,19 +98,22 @@ end
 def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
   identifiers = Hash[ scales.map { |scale| [scale, {}] } ]
 
-  for num_variable_notes in 0..(variable_chord_notes.size)
-    chord_size = fixed_chord_notes.size + num_variable_notes
+  for num_variable_notes in 1..7 # 0..(variable_chord_notes.size)
+    chord_size = num_variable_notes + 1 #fixed_chord_notes.size + num_variable_notes
     next if chord_size > 7
     debug 1, "Checking all #{chord_size}-note chords ..."
-    for alterations in variable_chord_notes.combination(num_variable_notes)
-      chord = NoteArray.new((fixed_chord_notes + alterations).sort)
-      matches = scales_matching_chord(scales, chord)
+    for pitches in (1..11).to_a.combination(num_variable_notes)
+      chord = NoteSet.new(([0] + pitches).sort)
+      alterations = chord - fixed_chord_notes
+      matches = scales_matching_chord(scales, fixed_chord_notes + chord)
+      chord_text = fixed_chord_notes.to_s.strip
+      chord_text += " + #{alterations.to_s.strip}" unless alterations.empty?
       case matches.length
       when 0
-        debug 2, "    #{chord} didn't match any modes"
+        debug 2, "    #{chord_text} didn't match any modes"
       when 1
         identified_mode = matches[0]
-        debug 1, "*   #{chord} uniquely identified: #{identified_mode}"
+        debug 1, "*   #{chord_text} uniquely identified: #{identified_mode}"
         identifiers[identified_mode][chord_size] ||= [ ]
         identifiers[identified_mode][chord_size].push chord
       else
@@ -119,7 +122,7 @@ def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
           matches_to_show = matches.first(2)
           matches_to_show += [ '...' ] if matches.length > 2
         end
-        debug 2, ".   #{chord} matched #{matches.length} modes: " + \
+        debug 2, ".   #{chord_text} matched #{matches.length} modes: " + \
         matches_to_show.join(', ')
       end
     end
@@ -129,18 +132,19 @@ def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
   return identifiers
 end
 
-def output_summary_header(fixed_chord_notes, variable_chord_notes)
+def output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
   debug 1, "-" * 72
   debug 1, ''
-  header = "Summary for #{fixed_chord_notes.to_s.strip} + #{variable_chord_notes.to_s.strip}"
+  chord = fixed_chord_notes.to_s.strip.gsub(/\s+/, ' ')
+  header = "C#{descr}: #{chord}" # + #{variable_chord_notes.to_s.strip}"
   puts header
   puts "=" * header.size, "\n"
 end
 
-def identify_modes(fixed_chord_notes, variable_chord_notes)
+def identify_modes(descr, fixed_chord_notes, variable_chord_notes)
   identifiers = find_identifiers(Mode.all, fixed_chord_notes, variable_chord_notes)
 
-  output_summary_header(fixed_chord_notes, variable_chord_notes)
+  output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
 
   # map chord size to an Array of all modes which need that number of
   # notes to uniquely identify the mode.
@@ -169,8 +173,8 @@ def identify_modes(fixed_chord_notes, variable_chord_notes)
     end
   end
 
-  output_uniqueness(distinctiveness)
-  output_notes_needed(modes_by_chord_size)
+  # output_uniqueness(distinctiveness)
+  # output_notes_needed(modes_by_chord_size)
 end
 
 def output_uniqueness(distinctiveness)
@@ -204,6 +208,24 @@ EOF
   end
 end
 
-fixed_chord_notes = NoteArray[0]
-alterations = NoteArray[*(0..11).to_a - fixed_chord_notes]
-identify_modes(fixed_chord_notes, alterations)
+def analyse(fixed_chord_notes, descr)
+  fixed_chord_notes = NoteSet[*fixed_chord_notes]
+  alterations = NoteSet[*(0..11).to_a] - fixed_chord_notes
+  identify_modes(descr, fixed_chord_notes, alterations)
+end
+
+sevenths = [
+  [[0, 4, 7, 11], 'maj7'  ],
+  [[0, 4, 8, 11], 'maj7#5'],
+  [[0, 3,    11], '-maj7' ],
+  [[0, 4, 6, 10], '7b5'   ],
+  [[0, 4, 7, 10], '7'     ],
+  [[0, 3, 7, 10], '-7'    ],
+  [[0, 3, 6, 10], '-7b5'  ],
+  [[0, 3, 6,  9], 'dim'   ],
+]
+
+sevenths.each do |seventh, descr|
+  analyse(seventh, descr)
+  puts
+end
