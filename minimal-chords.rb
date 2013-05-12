@@ -155,7 +155,7 @@ def identify_modes(fixed_chord_notes, variable_chord_notes)
     if chords_by_size.empty?
       modes_by_chord_size[0] ||= [ ]
       modes_by_chord_size[0].push mode
-      puts "no chords found uniquely identifying #{mode}!"
+      debug 3, "no chords found uniquely identifying #{mode}!"
       next
     end
 
