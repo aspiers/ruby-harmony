@@ -171,6 +171,11 @@ def identify_modes
     end
   end
 
+  output_uniqueness(distinctiveness)
+  output_notes_needed(modes_by_chord_size)
+end
+
+def output_uniqueness(distinctiveness)
   puts <<EOF
 
 Modes sorted by "uniqueness" (ease of identification)
@@ -182,7 +187,9 @@ EOF
     chord_size, num_chords = sizes
     puts "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
   end
+end
 
+def output_notes_needed(modes_by_chord_size)
   puts <<EOF
 
 How many notes are needed?
