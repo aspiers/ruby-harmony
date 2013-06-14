@@ -1,0 +1,222 @@
+Cmaj7: C E G B
+==============
+
+3 note chords uniquely identifying lyd:
+    C  D  F#       + A 
+3 note chords uniquely identifying ion:
+    C  F  A        + D 
+2 note chords uniquely identifying aeol harm min:
+    C  Eb          + F# A 
+2 note chords uniquely identifying ion harm maj:
+    C  Ab          + D  F 
+
+Cmaj7#5: C E Ab B
+=================
+
+3 note chords uniquely identifying phryg mel min:
+    C  D  F#       + A 
+3 note chords uniquely identifying phryg harm min:
+    C  F  A        + D 
+2 note chords uniquely identifying ion harm maj:
+    C  G           + D  F 
+2 note chords uniquely identifying aeol harm maj:
+    C  Eb          + F# A 
+
+C-maj7: C Eb B
+==============
+
+3 note chords uniquely identifying ion mel min:
+    C  F  A        + D  G 
+3 note chords uniquely identifying ion harm min:
+    C  D  Ab       + F  G 
+    C  F  Ab       + D  G 
+    C  G  Ab       + D  F 
+3 note chords uniquely identifying aeol harm min:
+    C  E  G        + F# A 
+3 note chords uniquely identifying lyd harm maj:
+    C  D  F#       + G  A 
+3 note chords uniquely identifying aeol harm maj:
+    C  E  Ab       + F# A 
+    C  F# Ab       + E  A 
+    C  Ab A        + E  F#
+
+C7b5: C E F# Bb
+===============
+
+2 note chords uniquely identifying lyd mel min:
+    C  D           + G  A 
+    C  G           + D  A 
+    C  A           + D  G 
+2 note chords uniquely identifying loc mel min:
+    C  Db          + Eb Ab
+    C  Eb          + Db Ab
+    C  Ab          + Db Eb
+
+C7: C E G Bb
+============
+
+4 note chords uniquely identifying mixo:
+    C  D  F  A     + 
+2 note chords uniquely identifying lyd mel min:
+    C  F#          + D  A 
+3 note chords uniquely identifying mixo mel min:
+    C  D  Ab       + F 
+4 note chords uniquely identifying mixo harm min:
+    C  Db F  Ab    + 
+3 note chords uniquely identifying mixo harm maj:
+    C  Db A        + F 
+2 note chords uniquely identifying phryg harm maj:
+    C  Eb          + Db Ab
+
+C-7: C Eb G Bb
+==============
+
+4 note chords uniquely identifying dor:
+    C  D  F  A     + 
+3 note chords uniquely identifying aeol:
+    C  D  Ab       + F 
+4 note chords uniquely identifying phryg:
+    C  Db F  Ab    + 
+3 note chords uniquely identifying dor mel min:
+    C  Db A        + F 
+2 note chords uniquely identifying lyd harm min:
+    C  F#          + D  A 
+2 note chords uniquely identifying phryg harm maj:
+    C  E           + Db Ab
+
+C-7b5: C Eb F# Bb
+=================
+
+4 note chords uniquely identifying loc:
+    C  Db F  Ab    + 
+3 note chords uniquely identifying aeol mel min:
+    C  D  Ab       + F 
+2 note chords uniquely identifying loc mel min:
+    C  E           + Db Ab
+2 note chords uniquely identifying lyd harm min:
+    C  G           + D  A 
+3 note chords uniquely identifying dor harm min:
+    C  Db A        + F 
+4 note chords uniquely identifying dor harm maj:
+    C  D  F  A     + 
+
+Cdim: C Eb F# A
+===============
+
+3 note chords uniquely identifying lyd harm min:
+    C  G  Bb       + D 
+3 note chords uniquely identifying dor harm min:
+    C  Db Bb       + F 
+3 note chords uniquely identifying aeol harm min:
+    C  E  G        + B 
+3 note chords uniquely identifying loc harm min:
+    C  Db E        + Ab
+3 note chords uniquely identifying lyd harm maj:
+    C  D  B        + G 
+3 note chords uniquely identifying dor harm maj:
+    C  D  F        + Bb
+3 note chords uniquely identifying aeol harm maj:
+    C  Ab B        + E 
+3 note chords uniquely identifying loc harm maj:
+    C  F  Ab       + Db
+
+C6: C E G A
+===========
+
+4 note chords uniquely identifying lyd:
+    C  D  F# B     + 
+3 note chords uniquely identifying ion:
+    C  F  B        + D 
+4 note chords uniquely identifying mixo:
+    C  D  F  Bb    + 
+3 note chords uniquely identifying lyd mel min:
+    C  F# Bb       + D 
+2 note chords uniquely identifying aeol harm min:
+    C  Eb          + F# B 
+2 note chords uniquely identifying mixo harm maj:
+    C  Db          + F  Bb
+
+C-6: C Eb G A
+=============
+
+4 note chords uniquely identifying dor:
+    C  D  F  Bb    + 
+3 note chords uniquely identifying ion mel min:
+    C  F  B        + D 
+2 note chords uniquely identifying dor mel min:
+    C  Db          + F  Bb
+3 note chords uniquely identifying lyd harm min:
+    C  F# Bb       + D 
+2 note chords uniquely identifying aeol harm min:
+    C  E           + F# B 
+4 note chords uniquely identifying lyd harm maj:
+    C  D  F# B     + 
+
+Csus7: C F G Bb
+===============
+
+4 note chords uniquely identifying mixo:
+    C  D  E  A     + 
+4 note chords uniquely identifying dor:
+    C  D  Eb A     + 
+4 note chords uniquely identifying aeol:
+    C  D  Eb Ab    + 
+4 note chords uniquely identifying phryg:
+    C  Db Eb Ab    + 
+4 note chords uniquely identifying mixo mel min:
+    C  D  E  Ab    + 
+4 note chords uniquely identifying dor mel min:
+    C  Db Eb A     + 
+4 note chords uniquely identifying mixo harm min:
+    C  Db E  Ab    + 
+4 note chords uniquely identifying mixo harm maj:
+    C  Db E  A     + 
+
+Csus7b9: C Db F Bb
+==================
+
+4 note chords uniquely identifying phryg:
+    C  Eb G  Ab    + 
+3 note chords uniquely identifying loc:
+    C  F# Ab       + Eb
+4 note chords uniquely identifying dor mel min:
+    C  Eb G  A     + 
+3 note chords uniquely identifying mixo harm min:
+    C  E  Ab       + G 
+3 note chords uniquely identifying dor harm min:
+    C  F# A        + Eb
+3 note chords uniquely identifying mixo harm maj:
+    C  E  A        + G 
+
+C69: C D E G A
+==============
+
+3 note chords uniquely identifying lyd:
+    C  F# B        + 
+3 note chords uniquely identifying ion:
+    C  F  B        + 
+3 note chords uniquely identifying mixo:
+    C  F  Bb       + 
+3 note chords uniquely identifying lyd mel min:
+    C  F# Bb       + 
+
+Csus4add2: C D F G
+==================
+
+4 note chords uniquely identifying ion:
+    C  E  A  B     + 
+4 note chords uniquely identifying mixo:
+    C  E  A  Bb    + 
+4 note chords uniquely identifying dor:
+    C  Eb A  Bb    + 
+4 note chords uniquely identifying aeol:
+    C  Eb Ab Bb    + 
+4 note chords uniquely identifying ion mel min:
+    C  Eb A  B     + 
+4 note chords uniquely identifying mixo mel min:
+    C  E  Ab Bb    + 
+4 note chords uniquely identifying ion harm min:
+    C  Eb Ab B     + 
+4 note chords uniquely identifying ion harm maj:
+    C  E  Ab B     + 
+
