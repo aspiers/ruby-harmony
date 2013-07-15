@@ -33,7 +33,7 @@ class Note < Struct.new(:letter, :accidental, :pitch)
 
   def Note.letter_shift(letter, degree)
     index = LETTERS.find_index { |l| l == letter }
-    abort "no such letter '#{letter}'" unless index
+    raise "no such letter '#{letter}'" unless index
     return LETTERS[(index + degree) % LETTERS.length]
   end
 
@@ -41,8 +41,8 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     letter = n[0]
     accidental_label = n[1..-1]
     accidental_delta = ACCIDENTAL_DELTAS[accidental_label]
-    abort "unrecognised accidental '#{accidental_label}'" unless accidental_delta
-    
+    raise "unrecognised accidental '#{accidental_label}'" unless accidental_delta
+
     natural = by_letter(letter)
     pitch = (natural.pitch + accidental_delta) % 12
     new(letter, accidental_delta, pitch)
