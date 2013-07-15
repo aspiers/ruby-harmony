@@ -3,87 +3,11 @@
 require 'set'
 require 'pp'
 
+require 'note'
+require 'scale'
+
 $verbosity = ARGV.shift.to_i || 0
 
-NOTES = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B' ]
-
-class ScaleType
-  @@all = [ ]
-
-  attr_reader :name, :increments, :symmetry
-
-  def initialize(name, increments, symmetry)
-    @name = name
-    @increments = increments
-    @@all.push self
-    @index = @@all.length - 1
-  end
-
-  new('maj',      [ 2, 2, 1, 2, 2, 2, 1    ], 7)
-  new('mel min',  [ 2, 1, 2, 2, 2, 2, 1    ], 7)
-  new('harm min', [ 2, 1, 2, 2, 1, 3, 1    ], 7)
-  new('harm maj', [ 2, 2, 1, 2, 1, 3, 1    ], 7)
-
-  # new('whole',    [ 2, 2, 2, 2, 2, 2       ], 1)
-  # new('dim',      [ 2, 1, 2, 1, 2, 1, 2, 1 ], 2)
-  # new('aug',      [ 3, 1, 3, 1, 3, 1       ], 2)
-  # new('dbl harm', [ 1, 3, 1, 2, 1, 3, 1    ], 7)
-
-  def ScaleType.all; @@all end
-  def inspect;       name  end
-end
-
-class NoteSet < Set
-  def note_names; map { |note| NOTES[note] } end
-  def to_s;       note_names.map { |n| "%-2s" % n }.join " " end
-end
-
-class Mode < Struct.new(:degree, :scale_type, :index)
-  DEGREES = %w(ion dor phryg lyd mixo aeol loc)
-
-  # rotate intervallic increments by different degrees of the scale
-  # to generate the 7 modes for this scale type
-  def increments
-    scale_type.increments.rotate(degree)[0...-1]
-  end
-
-  # convert intervallic increments into numeric pitches
-  # relative to the root (0)
-  def notes
-    @notes ||= NoteSet[*increments.inject([0]) do |array, note|
-      array.push(array.last + note)
-    end]
-  end
-
-  def to_s
-    deg = DEGREES[degree]
-    return deg if scale_type.name == 'maj'
-    "%s %s" % [ deg, scale_type.name ]
-  end
-
-  def <=>(other)
-    index <=> other.index
-  end
-
-  def Mode.all # builds all 28 modes
-    @@modes ||= \
-    begin
-      modes = [ ]
-      ScaleType.all.each do |scale_type|
-        degree = 3 # start with lydian
-        begin
-          mode = Mode.new(degree, scale_type, modes.length - 1)
-          modes.push mode
-          debug 2, "%-15s %s" % [ mode, mode.notes.to_s ]
-          degree = (degree + 4) % 7 # move through modes from open to closed
-        end while degree % 7 != 3 # stop when we get back to lydian
-        debug 2, ''
-      end
-      debug 2, ''
-      modes
-    end
-  end
-end
 
 def debug(level, msg)
   puts msg if level <= $verbosity
