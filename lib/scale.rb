@@ -35,8 +35,8 @@ class DiatonicScale < ScaleType
   # Return the note which is the given degree of the scale.
   def note(key_note, degree)
     letter = Note.letter_shift(key_note.letter, degree - 1)
-    pitch = key.pitch + offset_from_key(degree)
-    key_pitch -= 12 if key_pitch >= 12
+    pitch = key_note.pitch + offset_from_key(degree)
+    pitch -= 12 if pitch >= 12
     return Note.by_letter_and_pitch(letter, pitch)
   end
 

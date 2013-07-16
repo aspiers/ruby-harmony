@@ -2,10 +2,15 @@ require 'scale'
 
 describe DiatonicScale do
   shared_examples "a diatonic scale" do |scale, tests|
-    tests.each do |name, degree, key|
+    tests.each do |name, degree, key_name|
       note = Note.by_name(name)
-      it "should have the right key (#{key}) when #{note} is degree #{degree}" do
-        scale.key(note, degree).name.should == key
+      it "should have the right key (#{key_name}) when #{note} is degree #{degree}" do
+        scale.key(note, degree).name.should == key_name
+      end
+
+      specify "degree #{degree} of #{key_name} is #{name}" do
+        key_note = Note.by_name(key_name)
+        scale.note(key_note, degree).name.should == name
       end
     end
   end
@@ -157,12 +162,6 @@ describe DiatonicScale do
 
     specify "harmonic minor should return a minor third" do
       DiatonicScale::HARMONIC_MINOR.offset_from_key(3).should == 3
-    end
-  end
-
-  context "#note" do
-    specify "major 6th in A is F#" do
-      DiatonicScale::MAJOR.note(Note.by_name('A'), 6).name.should == 'F#'
     end
   end
 end
