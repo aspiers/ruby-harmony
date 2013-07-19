@@ -5,6 +5,7 @@ require 'pp'
 
 require 'note'
 require 'scale'
+require 'mode'
 
 $verbosity = ARGV.shift.to_i || 0
 
@@ -13,13 +14,13 @@ def debug(level, msg)
   puts msg if level <= $verbosity
 end
 
-def scales_matching_chord(scales, chord)
-  scales.find_all { |scale| (chord & scale.notes).length == chord.length }
+def scales_matching_chord(scales, chord, key_note)
+  scales.find_all { |scale| (chord & scale.notes(key_note)).length == chord.length }
 end
 
 # Returns nested Hash:
 #   { uniquely_identified_mode => { chord_size => [ chord, ... ] }
-def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
+def find_identifiers(scales, fixed_chord_notes, variable_chord_notes, key_note)
   identifiers = Hash[ scales.map { |scale| [scale, {}] } ]
 
   for num_variable_notes in 1..7 # 0..(variable_chord_notes.size)
@@ -29,7 +30,7 @@ def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
     for pitches in (1..11).to_a.combination(num_variable_notes)
       chord = NoteSet.new(([0] + pitches).sort)
       alterations = chord - fixed_chord_notes
-      matches = scales_matching_chord(scales, fixed_chord_notes + chord)
+      matches = scales_matching_chord(scales, fixed_chord_notes + chord, key_note)
       chord_text = fixed_chord_notes.to_s.strip
       chord_text += " + #{alterations.to_s.strip}" unless alterations.empty?
       case matches.length
@@ -65,8 +66,19 @@ def output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
   puts "=" * header.size, "\n"
 end
 
-def identify_modes(descr, fixed_chord_notes, variable_chord_notes)
-  identifiers = find_identifiers(Mode.all, fixed_chord_notes, variable_chord_notes)
+def output_modes(key_note)
+  Mode.all.each do |modes|
+    modes.each do |mode|
+      debug 2, "%-15s %s" % [ mode, mode.notes_from(key_note).to_s ]
+    end
+    debug 2, ''
+  end
+end
+
+def identify_modes(descr, fixed_chord_notes, variable_chord_notes, key_name)
+  key_note = Note.by_name(key_name)
+  output_modes(key_note)
+  identifiers = find_identifiers(Mode.all.flatten, fixed_chord_notes, variable_chord_notes, key_note)
 
   output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
 
@@ -137,7 +149,7 @@ end
 def analyse(fixed_chord_notes, descr)
   fixed_chord_notes = NoteSet[*fixed_chord_notes]
   alterations = NoteSet[*(0..11).to_a] - fixed_chord_notes
-  identify_modes(descr, fixed_chord_notes, alterations)
+  identify_modes(descr, fixed_chord_notes, alterations, "C")
 end
 
 chords = [

@@ -55,5 +55,9 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   def to_s
     name
   end
+
+  def inspect
+    "%-2s" % to_s
+  end
 end
 
