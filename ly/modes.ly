@@ -15,7 +15,9 @@ emphasise = \once {
   \override NoteHead.color = \emphasisColor
   \override Stem.color = \emphasisColor
 
-  % would need http://lsr.dsi.unimi.it/LSR/Item?id=700 for this to work
+  % Would need to stop/restart staff for this to work; see
+  % example of how to do that here:
+  % http://lsr.dsi.unimi.it/LSR/Item?id=700 
   \override Staff.LedgerLineSpanner.color = \emphasisColor
 }
 
