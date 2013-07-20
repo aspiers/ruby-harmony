@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+require 'erb'
+require 'ostruct'
 require 'set'
 require 'pp'
 
@@ -107,6 +109,12 @@ def output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
   puts "=" * header.size, "\n"
 end
 
+class TemplateData < OpenStruct
+  def render(template)
+    ERB.new(template, nil, '-').result(binding)
+  end
+end
+
 def identify_modes(descr, fixed_chord_notes, variable_chord_notes, starting_note_name)
   starting_note = Note.by_name(starting_note_name)
   scales = ModeInKey.all(starting_note).flatten
@@ -120,6 +128,8 @@ def identify_modes(descr, fixed_chord_notes, variable_chord_notes, starting_note
 
   # map [ chord_size, chords_count ] => [ scale, ... ]
   distinctiveness = { }
+
+  ly_scales = [ ]
 
   identifiers.sort_by { |ident, value| ident }.each do |scale, chords_by_size|
     if chords_by_size.empty?
@@ -144,14 +154,28 @@ def identify_modes(descr, fixed_chord_notes, variable_chord_notes, starting_note
         unless note_in_scale
           raise "Couldn't find note in scale #{scale} for pitch #{pitch}"
         end
-        note
+        note_in_scale
       }
       puts "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
+      ly_scales.push [ scale.to_s, ly_notes(scale, chord_in_scale) ]
     end
   end
 
+  data = TemplateData.new(
+    descr:  descr,
+    chord:  fixed_chord_notes.map(&:to_ly).join(" "),
+    scales: ly_scales,
+  )
+  File.write('ly/out.ly', data.render(File.read('ly/template.ly.erb')))
+
   # output_uniqueness(distinctiveness)
   # output_notes_needed(scales_by_chord_size)
+end
+
+def ly_notes(scale, chord_in_scale)
+  scale.notes.map do |note|
+    (chord_in_scale.include?(note) ? '\emphasise ' : '') + note.to_ly
+  end
 end
 
 def output_uniqueness(distinctiveness)

@@ -1,7 +1,7 @@
 require 'note'
 
 describe Note do
-  shared_examples "a note" do |name, letter, pitch, accidental|
+  shared_examples "a note" do |name, letter, ly, pitch, accidental|
     it "should have the right letter (#{letter})" do
       note.letter.should == letter
     end
@@ -11,7 +11,11 @@ describe Note do
     end
 
     it "should have the right name (#{name})" do
-      note.name == name
+      note.name.should == name
+    end
+
+    it "should have the right LilyPond code (#{ly})" do
+      note.to_ly.should == ly
     end
 
     it "should have the right accidental (#{accidental})" do
@@ -22,7 +26,7 @@ describe Note do
   context "constructing #by_letter" do
     context "A" do
       let(:note) { Note.by_letter('A') }
-      it_should_behave_like "a note", "A", "A", 9, 0
+      it_should_behave_like "a note", "A", "A", "a", 9, 0
     end
 
     context "invalid letter" do
@@ -33,42 +37,42 @@ describe Note do
   end
 
   NOTES = [
-    [ "Gx",   9, +2 ],
-    [ "A",    9,  0 ],
-    [ "Bbb",  9, -2 ],
+    [ "Gx",  "gss",  9, +2 ],
+    [ "A",   "a",    9,  0 ],
+    [ "Bbb", "bff",  9, -2 ],
 
-    [ "A#",  10,  1 ],
-    [ "Bb",  10, -1 ],
-    [ "Cbb", 10, -2 ],
+    [ "A#",  "as",  10,  1 ],
+    [ "Bb",  "bf",  10, -1 ],
+    [ "Cbb", "cff", 10, -2 ],
 
-    [ "Ax",  11, +2 ],
-    [ "B",   11,  0 ],
-    [ "Cb",  11, -1 ],
+    [ "Ax",  "ass", 11, +2 ],
+    [ "B",   "b",   11,  0 ],
+    [ "Cb",  "cf",  11, -1 ],
 
-    [ "B#",   0, +1 ],
-    [ "C",    0,  0 ],
-    [ "Dbb",  0, -2 ],
+    [ "B#",  "bs",   0, +1 ],
+    [ "C",   "c",    0,  0 ],
+    [ "Dbb", "dff",  0, -2 ],
 
-    [ "Bx",   1, +2 ],
-    [ "C#",   1, +1 ],
-    [ "Db",   1, -1 ],
+    [ "Bx",  "bss",  1, +2 ],
+    [ "C#",  "cs",   1, +1 ],
+    [ "Db",  "df",   1, -1 ],
 
-    [ "Cx",   2, +2 ],
-    [ "D",    2,  0 ],
-    [ "Ebb",  2, -2 ],
+    [ "Cx",  "css",  2, +2 ],
+    [ "D",   "d",    2,  0 ],
+    [ "Ebb", "eff",  2, -2 ],
 
-    [ "Dx",   4, +2 ],
-    [ "Fb",   4, -1 ],
+    [ "Dx",  "dss",  4, +2 ],
+    [ "Fb",  "ff",   4, -1 ],
   ]
 
   context "constructing #by_letter_and_pitch" do
-    shared_examples "a note by letter and pitch" do |name, pitch, accidental|
+    shared_examples "a note by letter and pitch" do |name, ly, pitch, accidental|
       let(:note) { Note.by_letter_and_pitch(name[0], pitch) }
-      it_should_behave_like "a note", name, name[0], pitch, accidental
+      it_should_behave_like "a note", name, name[0], ly, pitch, accidental
     end
 
-    NOTES.each do |name, pitch, accidental|
-      it_should_behave_like "a note by letter and pitch", name, pitch, accidental
+    NOTES.each do |name, ly, pitch, accidental|
+      it_should_behave_like "a note by letter and pitch", name, ly, pitch, accidental
     end
 
     context "invalid input" do
@@ -94,13 +98,13 @@ describe Note do
   end
 
   context "constructing #by_name" do
-    shared_examples "a note by name" do |name, pitch, accidental|
+    shared_examples "a note by name" do |name, ly, pitch, accidental|
       let(:note) { Note.by_name(name) }
-      it_should_behave_like "a note", name, name[0], pitch, accidental
+      it_should_behave_like "a note", name, name[0], ly, pitch, accidental
     end
 
-    NOTES.each do |name, pitch, accidental|
-      it_should_behave_like "a note by name", name, pitch, accidental
+    NOTES.each do |name, ly, pitch, accidental|
+      it_should_behave_like "a note by name", name, ly, pitch, accidental
     end
   end
 

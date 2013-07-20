@@ -14,6 +14,14 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   }
   ACCIDENTAL_DELTAS = ACCIDENTAL_LABELS.invert
 
+  ACCIDENTAL_LY_LABELS = {
+    -2 => 'ff',
+    -1 => 'f',
+     0 => '',
+    +1 => 's',
+    +2 => 'ss',
+  }
+
   def Note.by_letter_and_pitch(letter, pitch)
     natural = NATURALS.find { |n| n.letter == letter }
     raise "no such note with letter '#{letter}'" unless natural
@@ -54,6 +62,10 @@ class Note < Struct.new(:letter, :accidental, :pitch)
 
   def to_s
     name
+  end
+
+  def to_ly
+    letter.downcase + ACCIDENTAL_LY_LABELS[accidental]
   end
 
   def inspect
