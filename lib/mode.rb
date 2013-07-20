@@ -45,7 +45,9 @@ end
 
 class ScaleInKey < Struct.new(:mode, :key_note)
   def to_s
-    "%s %s (in %s)" % [ starting_note, mode, key_note ]
+    text = "%s %s" % [ starting_note, mode ]
+    text += " (in #{key_note})" if key_note != starting_note
+    text
   end
 
   def inspect
