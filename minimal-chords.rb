@@ -14,25 +14,56 @@ def debug(level, msg)
   puts msg if level <= $verbosity
 end
 
-def scales_matching_chord(scales, chord, key_note)
-  scales.find_all { |scale| (chord & scale.notes(key_note)).length == chord.length }
+def scales_matching_chord(scales, chord)
+  debug 4, ".. " + chord.sort.to_s
+  scales.find_all { |scale|
+    debug 4, "-- " + scale.notes.sort.to_s
+    (chord.pitches & scale.pitches).length == chord.length
+  }
 end
 
+# Brute-force iteration through all possible chords (within an octave
+# span) up to a certain size, finding which match any of the scales we
+# know, and of those, which uniquely identify that scale.
+# 
+# Note that if fixed_chord_notes is big enough, it's feasible that a
+# chord uniquely identifying a scale which contains all the notes in
+# fixed_chord_notes, may not actually contain all the notes of
+# fixed_chord_notes itself.  So we need to iterate over all
+# combinations of variable_chord_notes and then add in
+# fixed_chord_notes to perform the scale matching, rather than
+# iterating over all combinations of fixed_chord_notes +
+# variable_chord_notes.
+# 
 # Returns nested Hash:
-#   { uniquely_identified_mode => { chord_size => [ chord, ... ] }
-def find_identifiers(scales, fixed_chord_notes, variable_chord_notes, key_note)
+#   { uniquely_identified_scale => { chord_size => [ chord, ... ] }
+def find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
   identifiers = Hash[ scales.map { |scale| [scale, {}] } ]
 
-  for num_variable_notes in 1..7 # 0..(variable_chord_notes.size)
-    chord_size = num_variable_notes + 1 #fixed_chord_notes.size + num_variable_notes
-    next if chord_size > 7
-    debug 1, "Checking all #{chord_size}-note chords ..."
-    for pitches in (1..11).to_a.combination(num_variable_notes)
-      chord = NoteSet.new(([0] + pitches).sort)
-      alterations = chord - fixed_chord_notes
-      matches = scales_matching_chord(scales, fixed_chord_notes + chord, key_note)
+  # fixed_chord_notes might be enough to uniquely identify a mode
+  for num_variable_notes in 0..(variable_chord_notes.size)
+    # More than 7 (or even 5) variable notes not possible in a 7 note
+    # diatonic scale.  Change this if we want to narrow/expand the
+    # search to pentatonic/hexatonic/octatonic scales etc.
+    break if fixed_chord_notes.size + num_variable_notes > 7
+
+    chords_seen = Hash.new(false)
+
+    debug 1, "Checking all #{num_variable_notes}-note chords ..."
+    for pitches in (0..11).to_a.combination(num_variable_notes)
+      identifier_candidate_chord = PitchSet.to_note_set(pitches)
+      chord_to_match = fixed_chord_notes + identifier_candidate_chord
+      chord_size = identifier_candidate_chord.size
+
       chord_text = fixed_chord_notes.to_s.strip
+      alterations = identifier_candidate_chord - fixed_chord_notes
       chord_text += " + #{alterations.to_s.strip}" unless alterations.empty?
+      debug 4, "    seen #{chord_to_match}" if chords_seen[chord_text]
+      next if chords_seen[chord_text]
+      chords_seen[chord_text] = true
+
+      matches = scales_matching_chord(scales, chord_to_match)
+
       case matches.length
       when 0
         debug 2, "    #{chord_text} didn't match any modes"
@@ -40,7 +71,7 @@ def find_identifiers(scales, fixed_chord_notes, variable_chord_notes, key_note)
         identified_mode = matches[0]
         debug 1, "*   #{chord_text} uniquely identified: #{identified_mode}"
         identifiers[identified_mode][chord_size] ||= [ ]
-        identifiers[identified_mode][chord_size].push chord
+        identifiers[identified_mode][chord_size].push identifier_candidate_chord
       else
         matches_to_show = matches.dup
         if $verbosity == 2
@@ -57,62 +88,70 @@ def find_identifiers(scales, fixed_chord_notes, variable_chord_notes, key_note)
   return identifiers
 end
 
+def output_modes(starting_note)
+  ModeInKey.all(starting_note).each do |modes_in_key|
+    modes_in_key.each do |mode_in_key|
+      mode = mode_in_key.mode
+      debug 1, "%d %-15s %s" % [ mode.degree, mode, mode_in_key.notes ]
+    end
+    debug 1, ''
+  end
+end
+
 def output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
   debug 1, "-" * 72
   debug 1, ''
   chord = fixed_chord_notes.to_s.strip.gsub(/\s+/, ' ')
-  header = "C#{descr}: #{chord}" # + #{variable_chord_notes.to_s.strip}"
+  header = "%s: %s" % [ descr, chord ] # + #{variable_chord_notes.to_s.strip}"
   puts header
   puts "=" * header.size, "\n"
 end
 
-def output_modes(key_note)
-  Mode.all.each do |modes|
-    modes.each do |mode|
-      debug 2, "%-15s %s" % [ mode, mode.notes_from(key_note).to_s ]
-    end
-    debug 2, ''
-  end
-end
-
-def identify_modes(descr, fixed_chord_notes, variable_chord_notes, key_name)
-  key_note = Note.by_name(key_name)
-  output_modes(key_note)
-  identifiers = find_identifiers(Mode.all.flatten, fixed_chord_notes, variable_chord_notes, key_note)
+def identify_modes(descr, fixed_chord_notes, variable_chord_notes, starting_note_name)
+  starting_note = Note.by_name(starting_note_name)
+  scales = ModeInKey.all(starting_note).flatten
+  identifiers = find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
 
   output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
 
-  # map chord size to an Array of all modes which need that number of
-  # notes to uniquely identify the mode.
-  modes_by_chord_size = { }
+  # map chord size to an Array of all scales which need that number of
+  # notes to uniquely identify the scale.
+  scales_by_chord_size = { }
 
-  # map [ chord_size, chords_count ] => [ mode, ... ]
+  # map [ chord_size, chords_count ] => [ scale, ... ]
   distinctiveness = { }
 
-  identifiers.sort.each do |mode, chords_by_size|
+  identifiers.sort_by { |ident, value| ident }.each do |scale, chords_by_size|
     if chords_by_size.empty?
-      modes_by_chord_size[0] ||= [ ]
-      modes_by_chord_size[0].push mode
-      debug 3, "no chords found uniquely identifying #{mode}!"
+      scales_by_chord_size[0] ||= [ ]
+      scales_by_chord_size[0].push scale
+      debug 3, "no chords found uniquely identifying #{scale}!"
       next
     end
 
     chord_size, chords = chords_by_size.sort.first # show smallest identifying chords
-    modes_by_chord_size[chord_size] ||= [ ]
-    modes_by_chord_size[chord_size].push mode
+    scales_by_chord_size[chord_size] ||= [ ]
+    scales_by_chord_size[chord_size].push scale
     chords_count = chords.size # number of identifying chords of this size
     distinctiveness[[chord_size, chords_count]] ||= [ ]
-    distinctiveness[[chord_size, chords_count]].push mode
-    puts "#{chord_size} note chords uniquely identifying #{mode}:"
+    distinctiveness[[chord_size, chords_count]].push scale
+    puts "#{chord_size} note chords uniquely identifying #{scale}:"
     for chord in chords
-      remaining = mode.notes - chord
-      alterations = remaining - fixed_chord_notes
-      puts "    %-14s + %s" % [chord, alterations]
+      remaining = scale.notes.reject { |note| chord.include? note }
+      alterations = remaining.reject { |note| fixed_chord_notes.include? note }
+      chord_in_scale = chord.sort.map { |note|
+        note_in_scale = scale.notes.find { |n| n.pitch == note.pitch }
+        unless note_in_scale
+          raise "Couldn't find note in scale #{scale} for pitch #{pitch}"
+        end
+        note
+      }
+      puts "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
     end
   end
 
   # output_uniqueness(distinctiveness)
-  # output_notes_needed(modes_by_chord_size)
+  # output_notes_needed(scales_by_chord_size)
 end
 
 def output_uniqueness(distinctiveness)
@@ -146,30 +185,33 @@ EOF
   end
 end
 
-def analyse(fixed_chord_notes, descr)
-  fixed_chord_notes = NoteSet[*fixed_chord_notes]
-  alterations = NoteSet[*(0..11).to_a] - fixed_chord_notes
-  identify_modes(descr, fixed_chord_notes, alterations, "C")
+def analyse(fixed_chord_notes, root, descr)
+  fixed_chord_notes = NoteSet[*fixed_chord_notes.map { |name| Note.by_name(name) }]
+  alterations = PitchSet.chromatic_scale - fixed_chord_notes
+  descr = root + descr unless descr.include? '/'
+  identify_modes(descr, fixed_chord_notes, alterations, root)
 end
 
+output_modes(Note.by_name("C"))
+
 chords = [
-  [[0, 4, 7, 11], 'maj7'  ],
-  [[0, 4, 8, 11], 'maj7#5'],
-  [[0, 3,    11], '-maj7' ],
-  [[0, 4, 6, 10], '7b5'   ],
-  [[0, 4, 7, 10], '7'     ],
-  [[0, 3, 7, 10], '-7'    ],
-  [[0, 3, 6, 10], '-7b5'  ],
-  [[0, 3, 6,  9], 'dim'   ],
-  [[0, 4, 7,  9], '6'     ],
-  [[0, 3, 7,  9], '-6'    ],
-  [[0, 5, 7, 10], 'sus7'  ],
-  [[0, 1, 5, 10], 'sus7b9'],
-  [[0, 2, 4, 7, 9], '69'],
-  [[0, 2, 5, 7], 'sus4add2'],
+  [%w(E  G  B   ), 'C', 'maj7'       ],
+  [%w(E  G# B   ), 'C', 'maj7#5'     ],
+  [%w(Eb    B   ), 'C', '-maj7'      ],
+  [%w(E  Gb Bb  ), 'C', '7b5'        ],
+  [%w(E  G  Bb  ), 'C', '7'          ],
+  [%w(Eb G  Bb  ), 'C', '-7'         ],
+  [%w(Eb Gb Bb  ), 'D', '-7b5'       ],
+  [%w(Eb Gb A   ), 'C', 'dim'        ],
+  [%w(E  G  A   ), 'C', '6'          ],
+  [%w(Eb G  A   ), 'C', '-6'         ],
+  [%w(F  G  Bb  ), 'C', 'sus7'       ],
+  [%w(Db F  Bb  ), 'C', 'Csus7b9/G'  ],
+  [%w(D  E  G  A), 'C', '69'         ],
+  [%w(D  F  G   ), 'C', 'sus4add2'   ],
 ]
 
-chords.each do |chord, descr|
-  analyse(chord, descr)
+chords.each do |chord, root, descr|
+  analyse(chord, root, descr)
   puts
 end

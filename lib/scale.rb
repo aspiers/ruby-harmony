@@ -43,7 +43,7 @@ class DiatonicScale < ScaleType
   def notes(key)
     @notes ||=
       begin
-        NoteSet[*increments.inject([0]) do |array, note|
+        NoteArray[*increments.inject([0]) do |array, note|
           array.push(array.last + note)
         end]
       end
@@ -51,10 +51,10 @@ class DiatonicScale < ScaleType
 
   MAJOR          = DiatonicScale.new('maj',      [ 2, 2, 1, 2, 2, 2, 1    ], 7)
   MELODIC_MINOR  = DiatonicScale.new('mel min',  [ 2, 1, 2, 2, 2, 2, 1    ], 7)
-  HARMONIC_MINOR = DiatonicScale.new('harm min', [ 2, 1, 2, 2, 1, 3, 1    ], 7)
   HARMONIC_MAJOR = DiatonicScale.new('harm maj', [ 2, 2, 1, 2, 1, 3, 1    ], 7)
+  HARMONIC_MINOR = DiatonicScale.new('harm min', [ 2, 1, 2, 2, 1, 3, 1    ], 7)
+  # DOUBLE_HARMONIC = new('dbl harm', [ 1, 3, 1, 2, 1, 3, 1    ], 7)
   # WHOLE_TONE    = new('whole',    [ 2, 2, 2, 2, 2, 2       ], 1)
   # DIMINISHED    = new('dim',      [ 2, 1, 2, 1, 2, 1, 2, 1 ], 2)
   # AUGMENTED     = new('aug',      [ 3, 1, 3, 1, 3, 1       ], 2)
-  # DOUBLE_HARMONIC = new('dbl harm', [ 1, 3, 1, 2, 1, 3, 1    ], 7)
 end

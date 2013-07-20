@@ -1,4 +1,5 @@
 require 'scale'
+require 'note_set'
 
 class Mode < Struct.new(:degree, :scale_type, :index)
   DEGREES = %w(ion dor phryg lyd mixo aeol loc)
@@ -14,12 +15,20 @@ class Mode < Struct.new(:degree, :scale_type, :index)
   end
 
   def notes(key_note)
-    degrees.map { |degree| scale_type.note(key_note, degree) }
+    NoteArray.new(degrees.map { |degree| scale_type.note(key_note, degree) })
+  end
+
+  def pitches_from(starting_note)
+    NoteArray.new(notes_from(starting_note).map { |note| note.pitch })
   end
 
   def notes_from(starting_note)
     key_note = scale_type.key(starting_note, degree)
     notes(key_note)
+  end
+
+  def in_key(key_note)
+    ModeInKey.new(self, key_note)
   end
 
   def to_s
@@ -32,19 +41,55 @@ class Mode < Struct.new(:degree, :scale_type, :index)
     index <=> other.index
   end
 
-  def Mode.all # builds all 28 modes
-    @@modes ||= \
-    begin
-      ScaleType.all.map do |scale_type|
-        modes = [ ]
-        degree = 3 # start with lydian
-        begin
-          mode = Mode.new(degree + 1, scale_type, modes.length - 1)
-          modes.push mode
-          degree = (degree + 4) % 7 # move through modes from open to closed
-        end while degree % 7 != 3 # stop when we get back to lydian
-        modes
-      end
+end
+
+class ScaleInKey < Struct.new(:mode, :key_note)
+  def to_s
+    "%s %s (in %s)" % [ starting_note, mode, key_note ]
+  end
+
+  def inspect
+    to_s
+  end
+
+  def notes
+    mode.notes(key_note)
+  end
+
+  def starting_note
+    notes.first
+  end
+
+  def pitches
+    notes.map { |note| note.pitch }
+  end
+
+  def num_sharps
+    notes.inject(0) { |total, note| note.accidental > 0 ? total += note.accidental : total }
+  end
+
+  def num_flats
+    notes.inject(0) { |total, note| note.accidental < 0 ? total -= note.accidental : total }
+  end
+
+  def accidentals
+    [ num_sharps, num_flats ]
+  end
+
+  def <=>(other)
+    [ num_flats - num_sharps ] <=> [ other.num_flats - other.num_sharps ]
+  end
+end
+
+class ModeInKey < ScaleInKey
+  def ModeInKey.all(starting_note) # builds all 28 modes starting on a given note
+    count = 0
+    ScaleType.all.map do |scale_type|
+      (1..7).map do |degree|
+        mode = Mode.new(degree, scale_type, count += 1)
+        key_note = scale_type.key(starting_note, degree)
+        ModeInKey.new(mode, key_note)
+      end.sort
     end
   end
 end
