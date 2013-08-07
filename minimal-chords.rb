@@ -235,6 +235,7 @@ chords = [
   [%w(Db F  Bb  ), 'C', 'Csus7b9/G'  ],
   [%w(D  E  G  A), 'C', '69'         ],
   [%w(D  F  G   ), 'C', 'sus4add2'   ],
+  [%w(C  D# E G B), 'C', 'maj7#9'     ],
 ]
 
 chords.each do |chord, root, descr|
