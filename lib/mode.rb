@@ -2,7 +2,9 @@ require 'scale'
 require 'note_set'
 
 class Mode < Struct.new(:degree, :scale_type, :index)
-  DEGREES = %w(ion dor phryg lyd mixo aeol loc)
+  #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
+  DEGREES = %w(ionian dorian phrygian lydian mixo aeolian locrian)
+  #DEGREES = %w(ionian dorian phrygian lydian mixolydian aeolian locrian)
 
   # rotate intervallic increments by different degrees of the scale
   # to generate the 7 modes for this scale type
