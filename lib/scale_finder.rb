@@ -8,6 +8,8 @@ require 'scale_type'
 require 'mode'
 
 class ScaleFinder
+  TEMPLATE_DIR = File.dirname(__FILE__) + '/../ly'
+
   @@verbosity = 0
 
   def set_verbosity(verbosity)
@@ -170,7 +172,7 @@ class ScaleFinder
       chord:  fixed_chord_notes.map(&:to_ly).join(" "),
       scales: ly_scales,
     )
-    File.write('ly/out.ly', data.render(File.read('ly/template.ly.erb')))
+    File.write('ly/out.ly', data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
 
     # output_uniqueness(distinctiveness)
     # output_notes_needed(scales_by_chord_size)
