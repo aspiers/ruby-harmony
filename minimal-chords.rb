@@ -227,7 +227,7 @@ chords = [
   [%w(E  Gb Bb  ), 'C', '7b5'        ],
   [%w(E  G  Bb  ), 'C', '7'          ],
   [%w(Eb G  Bb  ), 'C', '-7'         ],
-  [%w(Eb Gb Bb  ), 'D', '-7b5'       ],
+  [%w(Eb Gb Bb  ), 'C', '-7b5'       ],
   [%w(Eb Gb A   ), 'C', 'dim'        ],
   [%w(E  G  A   ), 'C', '6'          ],
   [%w(Eb G  A   ), 'C', '-6'         ],
