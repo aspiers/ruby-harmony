@@ -17,7 +17,7 @@ class ScaleType
   def inspect;       name  end
 end
 
-class DiatonicScale < ScaleType
+class DiatonicScaleType < ScaleType
   def key(note, degree)
     # Given a note which is a degree of a scale, find the original key.
     # e.g. 'C' and 3 should return Ab

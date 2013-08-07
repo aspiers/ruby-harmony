@@ -1,6 +1,6 @@
 require 'scale'
 
-describe DiatonicScale do
+describe DiatonicScaleType do
   shared_examples "a diatonic scale" do |scale, tests|
     tests.each do |name, degree, key_name|
       note = Note.by_name(name)
@@ -16,7 +16,7 @@ describe DiatonicScale do
   end
 
   context "major scales" do
-    it_should_behave_like "a diatonic scale", DiatonicScale::MAJOR, [
+    it_should_behave_like "a diatonic scale", DiatonicScaleType::MAJOR, [
       [ "C",   1, "C"  ],
       [ "D",   2, "C"  ],
       [ "E",   3, "C"  ],
@@ -52,7 +52,7 @@ describe DiatonicScale do
   end
 
   context "melodic minor scales" do
-    it_should_behave_like "a diatonic scale", DiatonicScale::MELODIC_MINOR, [
+    it_should_behave_like "a diatonic scale", DiatonicScaleType::MELODIC_MINOR, [
       [ "C",   1, "C"  ],
       [ "D",   2, "C"  ],
       [ "Eb",  3, "C"  ],
@@ -88,7 +88,7 @@ describe DiatonicScale do
   end
 
   context "harmonic minor scales" do
-    it_should_behave_like "a diatonic scale", DiatonicScale::HARMONIC_MINOR, [
+    it_should_behave_like "a diatonic scale", DiatonicScaleType::HARMONIC_MINOR, [
       [ "C",  1, "C" ],
       [ "D",  2, "C" ],
       [ "Eb", 3, "C" ],
@@ -118,7 +118,7 @@ describe DiatonicScale do
   end
 
   context "harmonic major scales" do
-    it_should_behave_like "a diatonic scale", DiatonicScale::HARMONIC_MAJOR, [
+    it_should_behave_like "a diatonic scale", DiatonicScaleType::HARMONIC_MAJOR, [
       [ "C",  1, "C" ],
       [ "D",  2, "C" ],
       [ "E",  3, "C" ],
@@ -149,19 +149,19 @@ describe DiatonicScale do
 
   context "#offset_from_key" do
     specify "major should return a major third" do
-      DiatonicScale::MAJOR.offset_from_key(3).should == 4
+      DiatonicScaleType::MAJOR.offset_from_key(3).should == 4
     end
 
     specify "harmonic major should return a major third" do
-      DiatonicScale::HARMONIC_MAJOR.offset_from_key(3).should == 4
+      DiatonicScaleType::HARMONIC_MAJOR.offset_from_key(3).should == 4
     end
 
     specify "melodic minor should return a minor third" do
-      DiatonicScale::MELODIC_MINOR.offset_from_key(3).should == 3
+      DiatonicScaleType::MELODIC_MINOR.offset_from_key(3).should == 3
     end
 
     specify "harmonic minor should return a minor third" do
-      DiatonicScale::HARMONIC_MINOR.offset_from_key(3).should == 3
+      DiatonicScaleType::HARMONIC_MINOR.offset_from_key(3).should == 3
     end
   end
 end

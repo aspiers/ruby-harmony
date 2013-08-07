@@ -2,17 +2,17 @@ require 'mode'
 
 describe Mode do
   it "should have the right increments" do
-    Mode.new(1, DiatonicScale::MAJOR, -1).increments.should == [ 2, 2, 1, 2, 2, 2 ]
-    Mode.new(2, DiatonicScale::MAJOR, -1).increments.should == [ 2, 1, 2, 2, 2, 1 ]
-    Mode.new(7, DiatonicScale::MAJOR, -1).increments.should == [ 1, 2, 2, 1, 2, 2 ]
+    Mode.new(1, DiatonicScaleType::MAJOR, -1).increments.should == [ 2, 2, 1, 2, 2, 2 ]
+    Mode.new(2, DiatonicScaleType::MAJOR, -1).increments.should == [ 2, 1, 2, 2, 2, 1 ]
+    Mode.new(7, DiatonicScaleType::MAJOR, -1).increments.should == [ 1, 2, 2, 1, 2, 2 ]
 
-    Mode.new(1, DiatonicScale::HARMONIC_MINOR, -1).increments.should == [ 2, 1, 2, 2, 1, 3 ]
-    Mode.new(2, DiatonicScale::HARMONIC_MINOR, -1).increments.should == [ 1, 2, 2, 1, 3, 1 ]
+    Mode.new(1, DiatonicScaleType::HARMONIC_MINOR, -1).increments.should == [ 2, 1, 2, 2, 1, 3 ]
+    Mode.new(2, DiatonicScaleType::HARMONIC_MINOR, -1).increments.should == [ 1, 2, 2, 1, 3, 1 ]
   end
 
   it "should have the right degrees" do
-    Mode.new(1, DiatonicScale::MAJOR, -1).degrees.should == [ 1, 2, 3, 4, 5, 6, 7 ]
-    Mode.new(2, DiatonicScale::MAJOR, -1).degrees.should == [ 2, 3, 4, 5, 6, 7, 1 ]
+    Mode.new(1, DiatonicScaleType::MAJOR, -1).degrees.should == [ 1, 2, 3, 4, 5, 6, 7 ]
+    Mode.new(2, DiatonicScaleType::MAJOR, -1).degrees.should == [ 2, 3, 4, 5, 6, 7, 1 ]
   end
 
   shared_examples "contains notes given key" do |scale, degree, key_name, expected_notes|
@@ -24,16 +24,16 @@ describe Mode do
     end
   end
 
-  it_should_behave_like "contains notes given key", DiatonicScale::MAJOR, \
+  it_should_behave_like "contains notes given key", DiatonicScaleType::MAJOR, \
     1, "A", "A B C# D E F# G#".split
 
-  it_should_behave_like "contains notes given key", DiatonicScale::MELODIC_MINOR, \
+  it_should_behave_like "contains notes given key", DiatonicScaleType::MELODIC_MINOR, \
     2, "B", "C# D E F# G# A# B".split
 
-  it_should_behave_like "contains notes given key", DiatonicScale::HARMONIC_MINOR, \
+  it_should_behave_like "contains notes given key", DiatonicScaleType::HARMONIC_MINOR, \
     2, "B", "C# D E F# G A# B".split
 
-  it_should_behave_like "contains notes given key", DiatonicScale::HARMONIC_MAJOR, \
+  it_should_behave_like "contains notes given key", DiatonicScaleType::HARMONIC_MAJOR, \
     7, "F", "E F G A Bb C Db".split
 
   shared_examples "notes in mode given starting note" do |scale, degree, start_name, expected_notes|
@@ -45,16 +45,16 @@ describe Mode do
     end
   end
 
-  include_examples "notes in mode given starting note", DiatonicScale::MAJOR, \
+  include_examples "notes in mode given starting note", DiatonicScaleType::MAJOR, \
     1, "Eb", "Eb F G Ab Bb C D".split
 
-  include_examples "notes in mode given starting note", DiatonicScale::MELODIC_MINOR, \
+  include_examples "notes in mode given starting note", DiatonicScaleType::MELODIC_MINOR, \
     3, "Eb", "Eb F G A B C D".split
 
-  include_examples "notes in mode given starting note", DiatonicScale::HARMONIC_MINOR, \
+  include_examples "notes in mode given starting note", DiatonicScaleType::HARMONIC_MINOR, \
     7, "D", "D Eb F Gb Ab Bb Cb".split
 
-  include_examples "notes in mode given starting note", DiatonicScale::HARMONIC_MAJOR, \
+  include_examples "notes in mode given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
     3, "E#", "E# F# G# A B# C# D#".split
 end
 
@@ -66,7 +66,7 @@ end
 
 describe ModeInKey do
   it "should have the right notes" do
-    mode = Mode.new(6, DiatonicScale::HARMONIC_MAJOR, -1)
+    mode = Mode.new(6, DiatonicScaleType::HARMONIC_MAJOR, -1)
     key_note = Note.by_name("E")
     mode_in_key = ModeInKey.new(mode, key_note)
     mode_in_key.notes.map { |n| n.to_s }.should == \
@@ -101,8 +101,8 @@ describe ModeInKey do
     [ "E#", 11,  0 ],
     [ "B#", 12,  0 ],
   ].each do |key_name, sharps, flats|
-    include_examples "counting accidentals", 1, DiatonicScale::MAJOR, key_name, sharps, flats
-    include_examples "counting accidentals", 7, DiatonicScale::MAJOR, key_name, sharps, flats
+    include_examples "counting accidentals", 1, DiatonicScaleType::MAJOR, key_name, sharps, flats
+    include_examples "counting accidentals", 7, DiatonicScaleType::MAJOR, key_name, sharps, flats
   end
 
   [
@@ -115,8 +115,8 @@ describe ModeInKey do
     [ "E#", 10,  0 ],
     [ "B#", 11,  0 ],
   ].each do |key_name, sharps, flats|
-    include_examples "counting accidentals", 2, DiatonicScale::MELODIC_MINOR, key_name, sharps, flats
-    include_examples "counting accidentals", 6, DiatonicScale::MELODIC_MINOR, key_name, sharps, flats
+    include_examples "counting accidentals", 2, DiatonicScaleType::MELODIC_MINOR, key_name, sharps, flats
+    include_examples "counting accidentals", 6, DiatonicScaleType::MELODIC_MINOR, key_name, sharps, flats
   end
 
   [
@@ -129,8 +129,8 @@ describe ModeInKey do
     [ "E#",  9,  0 ],
     [ "B#", 10,  0 ],
   ].each do |key_name, sharps, flats|
-    include_examples "counting accidentals", 3, DiatonicScale::HARMONIC_MINOR, key_name, sharps, flats
-    include_examples "counting accidentals", 5, DiatonicScale::HARMONIC_MINOR, key_name, sharps, flats
+    include_examples "counting accidentals", 3, DiatonicScaleType::HARMONIC_MINOR, key_name, sharps, flats
+    include_examples "counting accidentals", 5, DiatonicScaleType::HARMONIC_MINOR, key_name, sharps, flats
   end
 
   [
@@ -143,8 +143,8 @@ describe ModeInKey do
     [ "E#", 10,  0 ],
     [ "B#", 11,  0 ],
   ].each do |key_name, sharps, flats|
-    include_examples "counting accidentals", 1, DiatonicScale::HARMONIC_MAJOR, key_name, sharps, flats
-    include_examples "counting accidentals", 4, DiatonicScale::HARMONIC_MAJOR, key_name, sharps, flats
+    include_examples "counting accidentals", 1, DiatonicScaleType::HARMONIC_MAJOR, key_name, sharps, flats
+    include_examples "counting accidentals", 4, DiatonicScaleType::HARMONIC_MAJOR, key_name, sharps, flats
   end
 
   let(:all) { ModeInKey.all(Note.by_name("C")) }
