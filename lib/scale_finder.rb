@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 require 'erb'
 require 'ostruct'
 require 'set'

@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 class Note < Struct.new(:letter, :accidental, :pitch)
   LETTERS = %w(C D E F G A B)
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
