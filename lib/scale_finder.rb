@@ -119,12 +119,10 @@ class ScaleFinder
     end
   end
 
-  def identify_modes(descr, fixed_chord_notes, variable_chord_notes, starting_note_name)
+  def identify_modes(fixed_chord_notes, variable_chord_notes, starting_note_name)
     starting_note = Note.by_name(starting_note_name)
     scales = ModeInKey.all(starting_note).flatten
     identifiers = find_identifiers(scales, fixed_chord_notes, variable_chord_notes)
-
-    output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
 
     # map chord size to an Array of all scales which need that number of
     # notes to uniquely identify the scale.
@@ -167,15 +165,7 @@ class ScaleFinder
       end
     end
 
-    data = TemplateData.new(
-      descr:  descr,
-      chord:  fixed_chord_notes.map(&:to_ly).join(" "),
-      scales: ly_scales,
-    )
-    File.write('ly/out.ly', data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
-
-    # output_uniqueness(distinctiveness)
-    # output_notes_needed(scales_by_chord_size)
+    return distinctiveness, scales_by_chord_size, ly_scales
   end
 
   def ly_notes(scale, chord_in_scale)
@@ -219,6 +209,19 @@ EOF
     fixed_chord_notes = NoteSet[*fixed_chord_notes.map { |name| Note.by_name(name) }]
     alterations = PitchSet.chromatic_scale - fixed_chord_notes
     descr = root + descr unless descr.include? '/'
-    identify_modes(descr, fixed_chord_notes, alterations, root)
+
+    output_summary_header(descr, fixed_chord_notes, alterations)
+    distinctiveness, scales_by_chord_size, ly_scales =
+      identify_modes(fixed_chord_notes, alterations, root)
+
+    data = TemplateData.new(
+      descr:  descr,
+      chord:  fixed_chord_notes.map(&:to_ly).join(" "),
+      scales: ly_scales,
+    )
+    File.write('ly/out.ly', data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
+
+    # output_uniqueness(distinctiveness)
+    # output_notes_needed(scales_by_chord_size)
   end
 end
