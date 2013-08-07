@@ -131,7 +131,9 @@ def identify_modes(descr, fixed_chord_notes, variable_chord_notes, starting_note
 
   ly_scales = [ ]
 
-  identifiers.sort_by { |ident, value| ident }.each do |scale, chords_by_size|
+  identifiers.sort_by do |mode_in_key, chords_by_size|
+    mode_in_key.mode.index
+  end.each do |scale, chords_by_size|
     if chords_by_size.empty?
       scales_by_chord_size[0] ||= [ ]
       scales_by_chord_size[0].push scale
