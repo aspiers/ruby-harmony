@@ -6,7 +6,7 @@ require 'set'
 require 'pp'
 
 require 'note'
-require 'scale'
+require 'scale_type'
 require 'mode'
 
 class ScaleFinder

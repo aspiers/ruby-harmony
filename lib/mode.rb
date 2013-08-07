@@ -1,4 +1,4 @@
-require 'scale'
+require 'scale_type'
 require 'note_set'
 
 class Mode < Struct.new(:degree, :scale_type, :index)

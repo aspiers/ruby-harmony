@@ -1,4 +1,4 @@
-require 'scale'
+require 'scale_type'
 
 describe DiatonicScaleType do
   shared_examples "a diatonic scale" do |scale, tests|
