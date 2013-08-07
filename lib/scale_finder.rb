@@ -205,7 +205,7 @@ EOF
     end
   end
 
-  def analyse(fixed_chord_notes, root, descr)
+  def run(fixed_chord_notes, root, descr)
     fixed_chord_notes = NoteSet[*fixed_chord_notes.map { |name| Note.by_name(name) }]
     alterations = PitchSet.chromatic_scale - fixed_chord_notes
     descr = root + descr unless descr.include? '/'

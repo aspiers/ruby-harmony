@@ -25,6 +25,6 @@ chords = [
 ]
 
 chords.each do |chord, root, descr|
-  scalefinder.analyse(chord, root, descr)
+  scalefinder.run(chord, root, descr)
   puts
 end
