@@ -16,7 +16,7 @@ class ScaleFinder
     @fixed_chord_notes = NoteSet[*fixed_chord_notes.map { |name| Note.by_name(name) }]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @root = root
-    @descr = @root + descr unless descr.include? '/'
+    @descr = descr
   end
 
   def set_verbosity(verbosity)
