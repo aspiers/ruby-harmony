@@ -200,7 +200,7 @@ EOF
     end
   end
 
-  def run
+  def run(ly_out_dir)
     output_summary_header
 
     identify_modes
@@ -210,7 +210,7 @@ EOF
       chord:  @fixed_chord_notes.map(&:to_ly).join(" "),
       scales: @ly_scales,
     )
-    File.write('ly/out.ly', data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
+    File.write(ly_out_dir + '/out.ly', data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
 
     # output_uniqueness
     # output_notes_needed
