@@ -28,6 +28,6 @@ verbosity = ARGV.shift.to_i
 chords.each do |chord, root, descr|
   scalefinder = ScaleFinder.new(chord, root, descr)
   scalefinder.set_verbosity(verbosity)
-  scalefinder.run('ly')
+  scalefinder.run('ly/out.ly')
   puts
 end
