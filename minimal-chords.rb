@@ -3,8 +3,6 @@
 require 'mode'
 require 'scale_finder'
 
-scalefinder = ScaleFinder.new
-scalefinder.set_verbosity(ARGV.shift.to_i)
 ModeInKey.output_modes(Note.by_name("C"))
 
 chords = [
@@ -25,7 +23,11 @@ chords = [
   [%w(C  D# E G B), 'C', 'maj7#9'     ],
 ]
 
+verbosity = ARGV.shift.to_i
+
 chords.each do |chord, root, descr|
-  scalefinder.run(chord, root, descr)
+  scalefinder = ScaleFinder.new(chord, root, descr)
+  scalefinder.set_verbosity(verbosity)
+  scalefinder.run
   puts
 end
