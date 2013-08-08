@@ -1,3 +1,5 @@
+require 'set'
+
 module PitchCollection
   def to_s
     note_names.map { |n| "%-3s" % n }.join " "
