@@ -1,10 +1,11 @@
 #!/usr/bin/ruby
 
+require 'mode'
 require 'scale_finder'
 
 scalefinder = ScaleFinder.new
 scalefinder.set_verbosity(ARGV.shift.to_i)
-scalefinder.output_modes(Note.by_name("C"))
+ModeInKey.output_modes(Note.by_name("C"))
 
 chords = [
   [%w(E  G  B   ), 'C', 'maj7'       ],

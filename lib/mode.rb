@@ -96,4 +96,14 @@ class ModeInKey < ScaleInKey
       end.sort
     end
   end
+
+  def ModeInKey.output_modes(starting_note)
+    ModeInKey.all(starting_note).each do |modes_in_key|
+      modes_in_key.each do |mode_in_key|
+        mode = mode_in_key.mode
+        puts "%d %-15s %s" % [ mode.degree, mode, mode_in_key.notes ]
+      end
+      puts
+    end
+  end
 end

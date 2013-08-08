@@ -94,16 +94,6 @@ class ScaleFinder
     return identifiers
   end
 
-  def output_modes(starting_note)
-    ModeInKey.all(starting_note).each do |modes_in_key|
-      modes_in_key.each do |mode_in_key|
-        mode = mode_in_key.mode
-        debug 1, "%d %-15s %s" % [ mode.degree, mode, mode_in_key.notes ]
-      end
-      debug 1, ''
-    end
-  end
-
   def output_summary_header(descr, fixed_chord_notes, variable_chord_notes)
     debug 1, "-" * 72
     debug 1, ''
