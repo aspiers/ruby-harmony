@@ -6,9 +6,13 @@ module PitchCollection
   end
 end
 
+# A Set of numbers corresponding to absolute pitches.
 class PitchSet < Set
   include PitchCollection
 
+  # An Array arbitrarily mapping integers 0..11 to note name Strings
+  # (e.g. the second element is arbitrarily chosen as 'Db' rather than
+  # 'C#').
   NOTES = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B' ]
 
   def PitchSet.to_note_set(pitches)
@@ -16,15 +20,18 @@ class PitchSet < Set
     NoteSet[*notes]
   end
 
+  # Returns a NoteSet with the 12 notes of the chromatic scale.
   def PitchSet.chromatic_scale
     to_note_set(0..11)
   end
 
+  # Returns an array of note name Strings representing the PitchSet.
   def note_names
     map { |note| NOTES[note] }
   end
 end
 
+# A mixin for any collection of Note instances
 module NoteCollection
   include PitchCollection
 
