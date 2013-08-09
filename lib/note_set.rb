@@ -35,10 +35,12 @@ end
 module NoteCollection
   include PitchCollection
 
+  # Enumerates the names (as Strings) of notes in the collection
   def note_names
     map { |note| note.name }
   end
 
+  # Enumerates the numerical pitches of notes in the collection
   def pitches
     map { |note| note.pitch }
   end
