@@ -39,8 +39,8 @@ emphasise = \once {
 
       \time 7/4
       \small
-      <% for name, notes in scales -%>
-      <%   notes[0] += "4^\\markup { \\teeny \"#{name}\" }" %>
+      <% for description, notes in scales -%>
+      <%   notes[0] += "4^\\markup {\n          \\fontsize #-2\n#{description}        }" %>
       \relative c' {
         <%= notes.join " " %> |
       }

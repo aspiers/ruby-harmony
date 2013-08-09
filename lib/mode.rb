@@ -1,6 +1,7 @@
 require 'scale_type'
 require 'note_set'
 require 'active_support/core_ext/integer/inflections'
+require 'active_support/core_ext/string/indent'
 
 class Mode < Struct.new(:degree, :scale_type, :index)
   #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
@@ -47,16 +48,46 @@ end
 
 class ScaleInKey < Struct.new(:mode, :key_note)
   def to_s
+    text = ''
     if mode.scale_type == DiatonicScaleType::MAJOR
       text = "%s %s" % [ starting_note, mode ]
       text += " (#{key_note} major)" if key_note != starting_note
-    else
-      text = '%s %s' % [ key_note, mode.scale_type.name ]
-      if key_note != starting_note
-        text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
-      end
+    elsif mode.scale_type == DiatonicScaleType::MELODIC_MINOR
+      text =
+        case mode.degree
+        when 3
+          "%s lydian augmented" % starting_note
+        when 4
+          "%s lydian dominant" % starting_note
+        when 6
+          "%s locrian natural 2" % starting_note
+        when 7
+          "%s altered" % starting_note
+        else
+          ''
+        end
+      text << "\n(%s)" % description unless text.empty?
     end
-    text
+    return text.empty? ? description : text
+  end
+
+  def to_ly
+    text = to_s
+    return ("\"%s\"\n" % text).indent(10) unless text.include? "\n"
+    lines = text.split("\n").map { |line| "  \\line { \"#{line}\" }\n" }
+    lines.unshift "\\column {\n"
+    lines.unshift "\\override #'(baseline-skip . 2)\n"
+    lines.push    "}\n"
+    lines = lines.map { |line| line.indent(10) }
+    return lines.join('')
+  end
+
+  def description
+    text = '%s %s' % [ key_note, mode.scale_type.name ]
+    if key_note != starting_note
+      text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
+    end
+    return text
   end
 
   def inspect

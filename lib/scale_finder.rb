@@ -164,7 +164,7 @@ class ScaleFinder
           note_in_scale
         }
         puts "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
-        @ly_scales.push [ scale.to_s, ly_notes(scale, chord_in_scale) ]
+        @ly_scales.push [ scale.to_ly, ly_notes(scale, chord_in_scale) ]
       end
     end
   end
