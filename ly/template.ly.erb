@@ -34,13 +34,13 @@ emphasise = \once {
   } {
     \new Staff {
       \relative c' {
-        <<%= chord %>>1^\markup { \tiny "<%= descr %>" }
+        <<%= chord %>>1^\markup { \teeny "<%= descr %>" }
       } \bar "||" |
 
       \time 7/4
       \small
       <% for name, notes in scales -%>
-      <%   notes[0] += "4^\\markup { \\tiny \"#{name}\" }" %>
+      <%   notes[0] += "4^\\markup { \\teeny \"#{name}\" }" %>
       \relative c' {
         <%= notes.join " " %> |
       }
