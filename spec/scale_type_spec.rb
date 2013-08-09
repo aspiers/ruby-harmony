@@ -152,12 +152,24 @@ describe DiatonicScaleType do
       DiatonicScaleType::MAJOR.offset_from_key(3).should == 4
     end
 
+    specify "major should return a major tenth" do
+      DiatonicScaleType::MAJOR.offset_from_key(10).should == 16
+    end
+
     specify "harmonic major should return a major third" do
       DiatonicScaleType::HARMONIC_MAJOR.offset_from_key(3).should == 4
     end
 
+    specify "harmonic major should return a b13" do
+      DiatonicScaleType::HARMONIC_MAJOR.offset_from_key(13).should == 20
+    end
+
     specify "melodic minor should return a minor third" do
       DiatonicScaleType::MELODIC_MINOR.offset_from_key(3).should == 3
+    end
+
+    specify "melodic minor should return a natural 11" do
+      DiatonicScaleType::MELODIC_MINOR.offset_from_key(11).should == 17
     end
 
     specify "harmonic minor should return a minor third" do

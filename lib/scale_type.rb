@@ -28,7 +28,10 @@ class DiatonicScaleType < ScaleType
   end
 
   def offset_from_key(degree)
-    increments_from_key = increments.first(degree - 1)
+    # concatenate as many increments together as we need
+    # to reach the degree, which may be greater than 7 (e.g. 11, 13)
+    incs = increments * (1 + (degree - 1) / 7)
+    increments_from_key = incs.first(degree - 1)
     return increments_from_key.inject(0) { |a,x| a + x }
   end
 
