@@ -101,7 +101,7 @@ class ModeInKey < ScaleInKey
     ModeInKey.all(starting_note).each do |modes_in_key|
       modes_in_key.each do |mode_in_key|
         mode = mode_in_key.mode
-        puts "%d %-15s %s" % [ mode.degree, mode, mode_in_key.notes ]
+        s << "%d %-20s %s\n" % [ mode.degree, mode, mode_in_key.notes ]
       end
       puts
     end
