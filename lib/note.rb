@@ -37,10 +37,10 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   # steps, and returns the resulting letter (*not* a Note instance).
   # For example, shifting C by 3 steps results in F, and shifting A by
   # 4 steps results in E.
-  def Note.letter_shift(letter, degree)
+  def Note.letter_shift(letter, steps)
     index = LETTERS.find_index { |l| l == letter }
     raise "no such letter '#{letter}'" unless index
-    return LETTERS[(index + degree) % LETTERS.length]
+    return LETTERS[(index + steps) % LETTERS.length]
   end
 
   # Instantiate a note by a string representing its name, e.g. "C#".
