@@ -26,6 +26,16 @@ describe Interval do
 
     [  7, -1, "b7", "Bb", "E" , "Fb"  ],
     [  7,  0,  "7", "B" , "E#", "F"   ],
+
+    [  9, -1, "b9", "Db", "G" , "Abb" ],
+    [  9,  0,  "9", "D" , "G#", "Ab"  ],
+    [  9,  1, "#9", "D#", "Gx", "A"   ],
+
+    [ 11,  0, "11", "F" , "B" , "Cb"  ],
+    [ 11,  1,"#11", "F#", "B#", "C"   ],
+
+    [ 13, -1,"b13", "Ab", "D" , "Ebb" ],
+
   ]
 
   shared_examples "an interval" do |degree, accidental, name, e1, e2, e3|
