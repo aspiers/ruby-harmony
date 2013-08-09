@@ -1,5 +1,6 @@
 require 'scale_type'
 require 'note_set'
+require 'active_support/core_ext/integer/inflections'
 
 class Mode < Struct.new(:degree, :scale_type, :index)
   #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
@@ -34,9 +35,8 @@ class Mode < Struct.new(:degree, :scale_type, :index)
   end
 
   def to_s
-    deg = DEGREES[degree - 1]
-    return deg if scale_type.name == 'maj'
-    "%s %s" % [ deg, scale_type.name ]
+    return DEGREES[degree - 1] if scale_type.name == 'maj'
+    "%s degree of %s" % [ degree.ordinalize, scale_type.name ]
   end
 
   def <=>(other)
@@ -47,8 +47,15 @@ end
 
 class ScaleInKey < Struct.new(:mode, :key_note)
   def to_s
-    text = "%s %s" % [ starting_note, mode ]
-    text += " (in #{key_note})" if key_note != starting_note
+    if mode.scale_type == DiatonicScaleType::MAJOR
+      text = "%s %s" % [ starting_note, mode ]
+      text += " (#{key_note} major)" if key_note != starting_note
+    else
+      text = '%s %s' % [ key_note, mode.scale_type.name ]
+      if key_note != starting_note
+        text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
+      end
+    end
     text
   end
 
