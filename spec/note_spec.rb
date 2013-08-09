@@ -66,13 +66,11 @@ describe Note do
   ]
 
   context "constructing #by_letter_and_pitch" do
-    shared_examples "a note by letter and pitch" do |name, ly, pitch, accidental|
-      let(:note) { Note.by_letter_and_pitch(name[0], pitch) }
-      it_should_behave_like "a note", name, name[0], ly, pitch, accidental
-    end
-
     NOTES.each do |name, ly, pitch, accidental|
-      it_should_behave_like "a note by letter and pitch", name, ly, pitch, accidental
+      context name do
+        let(:note) { Note.by_letter_and_pitch(name[0], pitch) }
+        it_should_behave_like "a note", name, name[0], ly, pitch, accidental
+      end
     end
 
     context "invalid input" do
