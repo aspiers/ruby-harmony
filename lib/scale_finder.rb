@@ -13,7 +13,7 @@ class ScaleFinder
   @@verbosity = 0
 
   def initialize(fixed_chord_notes, root, descr)
-    @fixed_chord_notes = NoteSet[*fixed_chord_notes.map { |name| Note.by_name(name) }]
+    @fixed_chord_notes = NoteSet[*fixed_chord_notes]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @root = root
     @descr = descr

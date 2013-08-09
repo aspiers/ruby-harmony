@@ -27,7 +27,8 @@ verbosity = ARGV.shift.to_i
 
 chords.each do |chord, root, descr|
   descr = root + descr unless descr.include? '/'
-  scalefinder = ScaleFinder.new(chord, root, descr)
+  fixed_chord_notes = chord.map { |name| Note.by_name(name) }
+  scalefinder = ScaleFinder.new(fixed_chord_notes, root, descr)
   scalefinder.set_verbosity(verbosity)
   scalefinder.run('ly/out.ly')
   puts
