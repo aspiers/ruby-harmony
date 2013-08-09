@@ -24,4 +24,9 @@ class Interval < Struct.new(:degree, :accidental)
     degree = $2.to_i
     return new(degree, accidental)
   end
+
+  def <=>(other)
+    c = Note.by_name('C')
+    [degree, from(c).pitch] <=> [other.degree, other.from(c).pitch]
+  end
 end

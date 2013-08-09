@@ -66,4 +66,11 @@ describe Interval do
   INTERVALS.each do |data|
     it_should_behave_like "an interval", *data
   end
+
+  it "should sort intuitively" do
+    intervals = INTERVALS.map do |degree, accidental, *rest|
+      Interval.new(degree, accidental)
+    end
+    intervals.sort.should == intervals
+  end
 end
