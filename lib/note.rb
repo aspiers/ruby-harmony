@@ -1,10 +1,20 @@
 require 'accidental'
 
+# A class representing notes which have a numerical
+# pitch (not constrained to a single octave), and a
+# name (i.e. "F#" is considered distinct from "Gb").
 class Note < Struct.new(:letter, :accidental, :pitch)
+  # An Array of note letters, starting with C.
   LETTERS = %w(C D E F G A B)
+
+  # The numerical pitches corresponding to LETTERS, starting
+  # with C at 0.
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
+
+  # An Array of Note instances corresponding to the C major scale.
   NATURALS = LETTERS.zip(NATURAL_PITCHES).map { |l, p| new(l, 0, p) }
 
+  # Instantiates a Note with the given letter and pitch.
   def Note.by_letter_and_pitch(letter, pitch)
     natural = NATURALS.find { |n| n.letter == letter }
     raise "no such note with letter '#{letter}'" unless natural
@@ -18,16 +28,22 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     new(letter, delta, pitch)
   end
 
+  # Instantiates a Note with the given letter in the C major scale.
   def Note.by_letter(letter)
     NATURALS.find { |n| n.letter == letter }
   end
 
+  # Shifts a note letter up the C major scale by the given number of
+  # steps, and returns the resulting letter (*not* a Note instance).
+  # For example, shifting C by 3 steps results in F, and shifting A by
+  # 4 steps results in E.
   def Note.letter_shift(letter, degree)
     index = LETTERS.find_index { |l| l == letter }
     raise "no such letter '#{letter}'" unless index
     return LETTERS[(index + degree) % LETTERS.length]
   end
 
+  # Instantiate a note by a string representing its name, e.g. "C#".
   def Note.by_name(n)
     letter = n[0]
     accidental_label = n[1..-1]
@@ -39,6 +55,7 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     new(letter, accidental_delta, pitch)
   end
 
+  # Return a String representation of the Note's name.
   def name
     letter + ACCIDENTAL_LABELS[accidental]
   end
@@ -47,6 +64,7 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     name
   end
 
+  # Return a LilyPond representation of the Note's name.
   def to_ly
     letter.downcase + ACCIDENTAL_LY_LABELS[accidental]
   end
@@ -55,10 +73,13 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     "%-2s" % to_s
   end
 
+  # Order notes by pitch.
   def <=>(other)
     pitch <=> other.pitch
   end
 
+  # Returns true if the notes have the same pitch when transposed to
+  # within a single octave.
   def equivalent?(other)
     pitch % 12 == other.pitch % 12
   end
