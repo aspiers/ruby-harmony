@@ -44,6 +44,17 @@ module NoteCollection
   def pitches
     map { |note| note.pitch }
   end
+
+  # Produce a new collection from the old, with all notes transposed
+  # into a single octave where the numerical pitches range from 0 to 11.
+  def octave_squash
+    new_notes = map do |note|
+      n = note.dup
+      n.pitch %= 12
+      n
+    end
+    self.class.new(new_notes)
+  end
 end
 
 class NoteSet < Set

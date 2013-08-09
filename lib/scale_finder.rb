@@ -29,9 +29,10 @@ class ScaleFinder
 
   def scales_matching_chord(scales, chord)
     debug 4, ".. " + chord.sort.to_s
+    chord_pitches = Set[*chord.octave_squash.pitches]
     scales.find_all { |scale|
       debug 4, "-- " + scale.notes.sort.to_s
-      (chord.pitches & scale.pitches).length == chord.length
+       chord_pitches <= Set[*scale.notes.octave_squash.pitches]
     }
   end
 
