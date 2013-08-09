@@ -73,12 +73,12 @@ class ScaleInKey < Struct.new(:mode, :key_note)
 
   def to_ly
     text = to_s
-    return ("\"%s\"\n" % text).indent(10) unless text.include? "\n"
+    return ("\"%s\"\n" % text).indent(12) unless text.include? "\n"
     lines = text.split("\n").map { |line| "  \\line { \"#{line}\" }\n" }
     lines.unshift "\\column {\n"
     lines.unshift "\\override #'(baseline-skip . 2)\n"
     lines.push    "}\n"
-    lines = lines.map { |line| line.indent(10) }
+    lines = lines.map { |line| line.indent(12) }
     return lines.join('')
   end
 

@@ -6,6 +6,7 @@ require 'pp'
 require 'note'
 require 'scale_type'
 require 'mode'
+require 'accidental'
 
 class ScaleFinder
   TEMPLATE_DIR = File.dirname(__FILE__) + '/../ly'
@@ -164,7 +165,10 @@ class ScaleFinder
           note_in_scale
         }
         puts "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
-        @ly_scales.push [ scale.to_ly, ly_notes(scale, chord_in_scale) ]
+        @ly_scales.push [
+          Accidental.to_ly_markup(scale.to_ly),
+          ly_notes(scale, chord_in_scale)
+        ]
       end
     end
   end
@@ -213,7 +217,7 @@ EOF
     identify_modes
 
     data = TemplateData.new(
-      descr:  @descr,
+      descr:  Accidental.to_ly_markup(@descr),
       chord:  @fixed_chord_notes.map(&:to_ly).join(" "),
       scales: @ly_scales,
     )

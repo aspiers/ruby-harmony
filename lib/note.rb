@@ -77,6 +77,11 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     letter.downcase + Accidental::LY[accidental]
   end
 
+  # Return a LilyPond representation of the Note's name for use within \markup.
+  def to_ly_markup
+    letter + Accidental::LY_MARKUP[accidental]
+  end
+
   def inspect
     "%-2s" % to_s
   end
