@@ -60,9 +60,7 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     letter + ACCIDENTAL_LABELS[accidental]
   end
 
-  def to_s
-    name
-  end
+  alias_method :to_s, :name
 
   # Return a LilyPond representation of the Note's name.
   def to_ly
