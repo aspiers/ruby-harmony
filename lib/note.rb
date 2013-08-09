@@ -1,24 +1,9 @@
+require 'accidental'
+
 class Note < Struct.new(:letter, :accidental, :pitch)
   LETTERS = %w(C D E F G A B)
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
   NATURALS = LETTERS.zip(NATURAL_PITCHES).map { |l, p| new(l, 0, p) }
-
-  ACCIDENTAL_LABELS = {
-    -2 => 'bb',
-    -1 => 'b',
-     0 => '',
-    +1 => '#',
-    +2 => 'x',
-  }
-  ACCIDENTAL_DELTAS = ACCIDENTAL_LABELS.invert
-
-  ACCIDENTAL_LY_LABELS = {
-    -2 => 'ff',
-    -1 => 'f',
-     0 => '',
-    +1 => 's',
-    +2 => 'ss',
-  }
 
   def Note.by_letter_and_pitch(letter, pitch)
     natural = NATURALS.find { |n| n.letter == letter }
