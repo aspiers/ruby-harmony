@@ -13,14 +13,14 @@ class Interval < Struct.new(:degree, :accidental)
   end
 
   def name
-    ACCIDENTAL_LABELS[accidental] + degree.to_s
+    Accidental::LABELS[accidental] + degree.to_s
   end
 
   def Interval.by_name(name)
     if name !~ /^(bb|b||#|x)(\d\d?)$/
       raise "Invalid interval '#{name}'"
     end
-    accidental = ACCIDENTAL_DELTAS[$1]
+    accidental = Accidental::DELTAS[$1]
     degree = $2.to_i
     return new(degree, accidental)
   end

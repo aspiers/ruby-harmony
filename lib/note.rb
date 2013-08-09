@@ -47,7 +47,7 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   def Note.by_name(n)
     letter = n[0]
     accidental_label = n[1..-1]
-    accidental_delta = ACCIDENTAL_DELTAS[accidental_label]
+    accidental_delta = Accidental::DELTAS[accidental_label]
     raise "unrecognised accidental '#{accidental_label}'" unless accidental_delta
 
     natural = by_letter(letter)
@@ -67,14 +67,14 @@ class Note < Struct.new(:letter, :accidental, :pitch)
 
   # Return a String representation of the Note's name.
   def name
-    letter + ACCIDENTAL_LABELS[accidental]
+    letter + Accidental::LABELS[accidental]
   end
 
   alias_method :to_s, :name
 
   # Return a LilyPond representation of the Note's name.
   def to_ly
-    letter.downcase + ACCIDENTAL_LY[accidental]
+    letter.downcase + Accidental::LY[accidental]
   end
 
   def inspect
