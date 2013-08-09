@@ -3,7 +3,7 @@
 require 'mode'
 require 'scale_finder'
 
-ModeInKey.output_modes(Note.by_name("C"))
+puts ModeInKey.output_modes(Note.by_name("C"))
 
 chords = [
   [%w(E  G  B   ), 'C', 'maj7'       ],
