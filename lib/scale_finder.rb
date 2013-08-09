@@ -17,10 +17,15 @@ class ScaleFinder
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @root = root
     @descr = descr
+    @simplify = false
   end
 
   def set_verbosity(verbosity)
     @@verbosity = verbosity
+  end
+
+  def enable_simplification
+    @simplify = true
   end
 
   def debug(level, msg)
@@ -166,6 +171,7 @@ class ScaleFinder
 
   def ly_notes(scale, chord_in_scale)
     scale.notes.map do |note|
+      note = note.simplify if @simplify
       (chord_in_scale.include?(note) ? '\emphasise ' : '') + note.to_ly
     end
   end
