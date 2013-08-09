@@ -55,6 +55,16 @@ class Note < Struct.new(:letter, :accidental, :pitch)
     new(letter, accidental_delta, pitch)
   end
 
+  # Convert a double-sharp or double-flat into its simpler enharmonic
+  # equivalent.
+  def simplify
+    return self if accidental.abs < 2
+    direction = accidental / accidental.abs
+    new_letter = Note.letter_shift(letter, direction)
+    new_accidental = accidental - direction*2
+    Note.new(new_letter, new_accidental, pitch)
+  end
+
   # Return a String representation of the Note's name.
   def name
     letter + ACCIDENTAL_LABELS[accidental]

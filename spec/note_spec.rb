@@ -152,4 +152,26 @@ describe Note do
       end
     end
   end
+
+  describe "#simplify" do
+    it "should not touch a natural" do
+      Note.by_name("G").simplify.should == Note.by_name("G")
+    end
+
+    it "should not touch a sharp" do
+      Note.by_name("G#").simplify.should == Note.by_name("G#")
+    end
+
+    it "should not touch a flat" do
+      Note.by_name("Db").simplify.should == Note.by_name("Db")
+    end
+
+    it "should simplify a double-flat" do
+      Note.by_name("Abb").simplify.should == Note.by_name("G")
+    end
+
+    it "should simplify a double-sharp" do
+      Note.by_name("Cx").simplify.should == Note.by_name("D")
+    end
+  end
 end
