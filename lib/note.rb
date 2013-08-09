@@ -74,7 +74,7 @@ class Note < Struct.new(:letter, :accidental, :pitch)
 
   # Return a LilyPond representation of the Note's name.
   def to_ly
-    letter.downcase + ACCIDENTAL_LY_LABELS[accidental]
+    letter.downcase + ACCIDENTAL_LY[accidental]
   end
 
   def inspect

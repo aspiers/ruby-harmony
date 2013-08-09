@@ -7,7 +7,7 @@ ACCIDENTAL_LABELS = {
 }
 ACCIDENTAL_DELTAS = ACCIDENTAL_LABELS.invert
 
-ACCIDENTAL_LY_LABELS = {
+ACCIDENTAL_LY = {
   -2 => 'ff',
   -1 => 'f',
    0 => '',
