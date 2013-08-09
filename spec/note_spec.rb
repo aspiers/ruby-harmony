@@ -132,4 +132,24 @@ describe Note do
       end
     end
   end
+
+  context "equality and equivalence" do
+    NOTES.each do |name, ly, pitch, accidental|
+      context name do
+        let(:note1) { Note.new(name[0], pitch   , accidental) }
+        let(:note2) { Note.new(name[0], pitch-12, accidental) }
+        let(:note3) { Note.new(name[0], pitch+12, accidental) }
+
+        specify "notes in different octaves should not be equal" do
+          note1.should_not == note2
+          note2.should_not == note3
+        end
+
+        specify "notes in different octaves should be equivalent" do
+          note1.should === note2
+          note2.equivalent?(note3).should == true
+        end
+      end
+    end
+  end
 end

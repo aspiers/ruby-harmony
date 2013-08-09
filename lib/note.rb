@@ -58,5 +58,11 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   def <=>(other)
     pitch <=> other.pitch
   end
+
+  def equivalent?(other)
+    pitch % 12 == other.pitch % 12
+  end
+
+  alias_method :===, :equivalent?
 end
 
