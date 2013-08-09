@@ -53,6 +53,14 @@ describe Interval do
     it "should have the right note relative to Gb" do
       interval.from(g_flat).name.should == e3
     end
+
+    it "should have the right name" do
+      interval.name.should == name
+    end
+
+    it "should be constructable by name" do
+      Interval.by_name(name).name.should == name
+    end
   end
 
   INTERVALS.each do |data|

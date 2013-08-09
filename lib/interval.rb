@@ -1,4 +1,5 @@
 require 'scale_type'
+require 'accidental'
 
 class Interval < Struct.new(:degree, :accidental)
   def from(from_note)
@@ -10,5 +11,17 @@ class Interval < Struct.new(:degree, :accidental)
     end
     return to_note
   end
-end
 
+  def name
+    ACCIDENTAL_LABELS[accidental] + degree.to_s
+  end
+
+  def Interval.by_name(name)
+    if name !~ /^(bb|b||#|x)(\d\d?)$/
+      raise "Invalid interval '#{name}'"
+    end
+    accidental = ACCIDENTAL_DELTAS[$1]
+    degree = $2.to_i
+    return new(degree, accidental)
+  end
+end
