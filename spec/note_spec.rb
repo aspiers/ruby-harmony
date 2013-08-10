@@ -18,6 +18,10 @@ describe Note do
       note.to_ly.should == ly
     end
 
+    it "should have the right LilyPond absolute code (#{ly})" do
+      note.to_ly_abs.should == ly + "'"
+    end
+
     it "should have the right accidental (#{accidental})" do
       note.accidental.should == accidental
     end
@@ -172,6 +176,26 @@ describe Note do
 
     it "should simplify a double-sharp" do
       Note.by_name("Cx").simplify.should == Note.by_name("D")
+    end
+  end
+
+  describe "#to_ly_abs" do
+    notes = [
+      [ "C",  0,  0,  "c'"   ],
+      [ "A",  9,  0,  "a'"   ],
+      [ "B", 11,  0,  "b'"   ],
+      [ "C", 12,  0,  "c''"  ],
+      [ "D", 14,  0,  "d''"  ],
+      [ "E", 15, -1,  "ef''" ],
+      [ "B", 23,  0,  "b''"  ],
+      [ "C", 24,  0,  "c'''" ],
+    ]
+
+    notes.each do |letter, pitch, accidental, ly|
+      it "should handle octave 1 right" do
+        note = Note.new(letter, accidental, pitch)
+        note.to_ly_abs.should == ly
+      end
     end
   end
 end

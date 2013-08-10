@@ -72,9 +72,17 @@ class Note < Struct.new(:letter, :accidental, :pitch)
 
   alias_method :to_s, :name
 
-  # Return a LilyPond representation of the Note's name.
+  # Return a LilyPond representation of the Note's name to be used
+  # in a \relative context.
   def to_ly
     letter.downcase + Accidental::LY[accidental]
+  end
+
+  # Return a LilyPond representation of the Note's name to be used
+  # in an absolute pitch context.
+  def to_ly_abs
+    octave = pitch / 12
+    letter.downcase + Accidental::LY[accidental] + "'" * (octave + 1)
   end
 
   # Return a LilyPond representation of the Note's name for use within \markup.
