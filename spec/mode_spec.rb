@@ -16,6 +16,11 @@ describe Mode do
   end
 
   shared_examples "contains notes given key" do |scale, degree, key_name, expected_notes|
+    it "should have the right name" do
+      mode = Mode.new(degree, scale, -1)
+      mode.to_s.should == expected_name
+    end
+
     it "should have the right notes" do
       key_note = Note.by_name(key_name)
       mode = Mode.new(degree, scale, -1)
@@ -25,16 +30,16 @@ describe Mode do
   end
 
   it_should_behave_like "contains notes given key", DiatonicScaleType::MAJOR, \
-    1, "A", "A B C# D E F# G#".split
+    1, "A", "ionian", "A B C# D E F# G#".split
 
   it_should_behave_like "contains notes given key", DiatonicScaleType::MELODIC_MINOR, \
-    2, "B", "C# D E F# G# A# B".split
+    2, "B", "2nd degree of mel min", "C# D E F# G# A# B".split
 
   it_should_behave_like "contains notes given key", DiatonicScaleType::HARMONIC_MINOR, \
-    2, "B", "C# D E F# G A# B".split
+    2, "B", "2nd degree of harm min", "C# D E F# G A# B".split
 
   it_should_behave_like "contains notes given key", DiatonicScaleType::HARMONIC_MAJOR, \
-    7, "F", "E F G A Bb C Db".split
+    7, "F", "7th degree of harm maj", "E F G A Bb C Db".split
 
   shared_examples "notes in mode given starting note" do |scale, degree, start_name, expected_notes|
     it "should have the right notes" do

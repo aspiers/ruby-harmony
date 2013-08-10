@@ -55,6 +55,10 @@ class DiatonicScaleType < ScaleType
       end
   end
 
+  def mode_name(degree)
+    "%s degree of %s" % [ degree.ordinalize, name ]
+  end
+
   # The number of modes is eqal to the number of notes in the smallest
   # repeating cycle of increments.  The number of transpositions
   # (keys) is equal to the number of semitones in the cycle.
@@ -74,4 +78,14 @@ class DiatonicScaleType < ScaleType
   # MESSIAEN_FIFTH    = new("Messian's 5th", [ 1, 4, 1, 1, 4, 1             ], 3, 6)
   # MESSIAEN_SIXTH    = new("Messian's 6th", [ 2, 2, 2, 1, 2, 2, 2, 1       ], 4, 6)
   # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
+
+  class << MAJOR
+  #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
+  DEGREES = %w(ionian dorian phrygian lydian mixo aeolian locrian)
+  #DEGREES = %w(ionian dorian phrygian lydian mixolydian aeolian locrian)
+
+    def mode_name(degree)
+      DEGREES[degree - 1]
+    end
+  end
 end

@@ -4,10 +4,6 @@ require 'active_support/core_ext/integer/inflections'
 require 'active_support/core_ext/string/indent'
 
 class Mode
-  #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
-  DEGREES = %w(ionian dorian phrygian lydian mixo aeolian locrian)
-  #DEGREES = %w(ionian dorian phrygian lydian mixolydian aeolian locrian)
-
   attr_accessor :degree, :scale_type, :index
 
   def initialize(d, s, i)
@@ -43,10 +39,10 @@ class Mode
     ModeInKey.new(self, key_note)
   end
 
-  def to_s
-    return DEGREES[degree - 1] if scale_type.name == 'maj'
-    "%s degree of %s" % [ degree.ordinalize, scale_type.name ]
+  def name
+    scale_type.mode_name(degree)
   end
+  alias_method :to_s, :name
 
   def <=>(other)
     index <=> other.index
