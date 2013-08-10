@@ -15,7 +15,7 @@ describe Mode do
     Mode.new(2, DiatonicScaleType::MAJOR, -1).degrees.should == [ 2, 3, 4, 5, 6, 7, 1 ]
   end
 
-  shared_examples "contains notes given key" do |scale, degree, key_name, expected_notes|
+  shared_examples "given key" do |scale, degree, key_name, expected_name, expected_notes|
     it "should have the right name" do
       mode = Mode.new(degree, scale, -1)
       mode.to_s.should == expected_name
@@ -29,19 +29,19 @@ describe Mode do
     end
   end
 
-  it_should_behave_like "contains notes given key", DiatonicScaleType::MAJOR, \
+  include_examples "given key", DiatonicScaleType::MAJOR, \
     1, "A", "ionian", "A B C# D E F# G#".split
 
-  it_should_behave_like "contains notes given key", DiatonicScaleType::MELODIC_MINOR, \
+  include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
     2, "B", "2nd degree of mel min", "C# D E F# G# A# B".split
 
-  it_should_behave_like "contains notes given key", DiatonicScaleType::HARMONIC_MINOR, \
+  include_examples "given key", DiatonicScaleType::HARMONIC_MINOR, \
     2, "B", "2nd degree of harm min", "C# D E F# G A# B".split
 
-  it_should_behave_like "contains notes given key", DiatonicScaleType::HARMONIC_MAJOR, \
+  include_examples "given key", DiatonicScaleType::HARMONIC_MAJOR, \
     7, "F", "7th degree of harm maj", "E F G A Bb C Db".split
 
-  shared_examples "notes in mode given starting note" do |scale, degree, start_name, expected_notes|
+  shared_examples "given starting note" do |scale, degree, start_name, expected_notes|
     it "should have the right notes" do
       start_note = Note.by_name(start_name)
       mode = Mode.new(degree, scale, -1)
@@ -50,16 +50,16 @@ describe Mode do
     end
   end
 
-  include_examples "notes in mode given starting note", DiatonicScaleType::MAJOR, \
+  include_examples "given starting note", DiatonicScaleType::MAJOR, \
     1, "Eb", "Eb F G Ab Bb C D".split
 
-  include_examples "notes in mode given starting note", DiatonicScaleType::MELODIC_MINOR, \
+  include_examples "given starting note", DiatonicScaleType::MELODIC_MINOR, \
     3, "Eb", "Eb F G A B C D".split
 
-  include_examples "notes in mode given starting note", DiatonicScaleType::HARMONIC_MINOR, \
+  include_examples "given starting note", DiatonicScaleType::HARMONIC_MINOR, \
     7, "D", "D Eb F Gb Ab Bb Cb".split
 
-  include_examples "notes in mode given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
+  include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
     3, "E#", "E# F# G# A B# C# D#".split
 end
 
