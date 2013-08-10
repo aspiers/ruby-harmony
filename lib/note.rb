@@ -129,6 +129,8 @@ class Note
     pitch <=> other.pitch
   end
 
+  include Comparable
+
   def ==(other)
     letter == other.letter and pitch == other.pitch and accidental == other.accidental
   end
