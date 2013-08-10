@@ -16,3 +16,9 @@ guard 'rspec', guard_opts do
   watch(%r{^Gemfile$})                      { all }
   watch(%r{^Gemfile.lock$})                 { all }
 end
+
+group :bundler do
+  guard 'bundler' do
+    watch('Gemfile')
+  end
+end

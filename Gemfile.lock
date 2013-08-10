@@ -43,6 +43,9 @@ GEM
       lumberjack (>= 1.0.2)
       pry (>= 0.9.10)
       thor (>= 0.14.6)
+    guard-bundler (1.0.0)
+      bundler (~> 1.0)
+      guard (~> 1.1)
     guard-rspec (3.0.2)
       guard (>= 1.8)
       rspec (~> 2.13)
@@ -126,6 +129,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  guard-bundler
   guard-rspec
   jazz_hands
   rspec (~> 2.14.0)
