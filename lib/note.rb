@@ -11,16 +11,16 @@ class Note
   # with C at 0.
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
 
-  def initialize(letter, accidental, pitch)
-    @letter = letter
-    @accidental = accidental
-    @pitch = pitch
+  attr_accessor :letter, :accidental, :pitch
+
+  def initialize(l, a, p)
+    self.letter = l
+    self.accidental = a
+    self.pitch = p
   end
 
   # An Array of Note instances corresponding to the C major scale.
   NATURALS = LETTERS.zip(NATURAL_PITCHES).map { |l, p| new(l, 0, p) }
-
-  attr_accessor :letter, :accidental, :pitch
 
   # Instantiates a Note with the given letter and pitch.
   def Note.by_letter_and_pitch(letter, pitch)

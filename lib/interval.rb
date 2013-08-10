@@ -7,8 +7,8 @@ class Interval
   attr_accessor :degree, :accidental
 
   def initialize(d, a)
-    @degree = d
-    @accidental = a
+    self.degree = d
+    self.accidental = a
   end
 
   def from(from_note)

@@ -11,9 +11,9 @@ class Mode
   attr_accessor :degree, :scale_type, :index
 
   def initialize(d, s, i)
-    @degree = d
-    @scale_type = s
-    @index = i
+    self.degree = d
+    self.scale_type = s
+    self.index = i
   end
 
   # rotate intervallic increments by different degrees of the scale
@@ -58,8 +58,8 @@ class ScaleInKey
   attr_accessor :mode, :key_note
 
   def initialize(mode, key_note)
-    @mode = mode
-    @key_note = key_note
+    self.mode = mode
+    self.key_note = key_note
   end
 
   def to_s
