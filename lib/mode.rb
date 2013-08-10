@@ -17,13 +17,13 @@ class Mode
   end
 
   # rotate intervallic increments by different degrees of the scale
-  # to generate the 7 modes for this scale type
+  # to generate the modes for this scale type
   def increments
     scale_type.increments.rotate(degree - 1)[0...-1]
   end
 
   def degrees
-    (1..7).to_a.rotate(degree - 1)
+    (1..(increments.size+1)).to_a.rotate(degree - 1)
   end
 
   def notes(key_note)
@@ -139,10 +139,10 @@ class ScaleInKey
 end
 
 class ModeInKey < ScaleInKey
-  def ModeInKey.all(starting_note) # builds all 28 modes starting on a given note
+  def ModeInKey.all(starting_note) # builds all modes starting on a given note
     count = 0
     ScaleType.all.map do |scale_type|
-      (1..7).map do |degree|
+      (1..scale_type.num_modes).map do |degree|
         mode = Mode.new(degree, scale_type, count += 1)
         key_note = scale_type.key(starting_note, degree)
         ModeInKey.new(mode, key_note)
