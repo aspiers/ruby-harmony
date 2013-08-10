@@ -1,63 +1,75 @@
+require 'interval'
+
 class ChordType
-  @@all = [ ]
+  @@all = {
+    "maj7"        => %w(   3    5     7                ),
+    "maj9"        => %w(   3    5     7  9             ),
+    "maj7#11"     => %w(   3          7       #11      ),
+    "maj7#5"      => %w(   3   #5     7                ),
+    "maj7#9"      => %w(   3    5     7    #9          ),
+    "maj7#5#9"    => %w(   3   #5     7    #9          ),
+
+    "6"           => %w(   3    5  6                   ),
+    "6 9"         => %w(   3    5  6     9             ),
+
+    "min7"        => %w(  b3    5    b7                ),
+    "min7b5"      => %w(  b3   b5    b7                ),
+    "min9"        => %w(  b3    5    b7  9             ),
+    "min11"       => %w(  b3    5    b7  9     11      ),
+
+    "min6"        => %w(  b3    5  6                   ),
+    "min6 9"      => %w(  b3    5  6     9             ),
+
+    "min/maj7"    => %w(  b3    5     7                ),
+
+    "7"           => %w(   3    5    b7                ),
+    "7#11"        => %w(   3         b7       #11      ),
+    "7b13"        => %w(   3         b7           b13  ),
+    "7#11b13"     => %w(   3         b7       #11 b13  ),
+
+    "7b9"         => %w(   3    5    b7 b9             ),
+    "7b9#11"      => %w(   3         b7 b9    #11      ),
+    "7b9b13"      => %w(   3         b7 b9        b13  ),
+    "7b9#11b13"   => %w(   3         b7 b9    #11 b13  ),
+    "13b9"        => %w(   3         b7 b9         13  ),
+    "13b9#11"     => %w(   3         b7 b9    #11  13  ),
+
+    "9"           => %w(   3    5    b7  9             ),
+    "9#11"        => %w(   3         b7  9    #11      ),
+    "9b13"        => %w(   3         b7  9        b13  ),
+    "9#11b13"     => %w(   3         b7  9    #11 b13  ),
+    "13"          => %w(   3         b7  9         13  ),
+    "13#11"       => %w(   3         b7  9    #11  13  ),
+
+    "7#9"         => %w(   3    5    b7    #9          ),
+    "7#9#11"      => %w(   3         b7    #9 #11      ),
+    "7#9b13"      => %w(   3         b7    #9     b13  ),
+    "7#9#11b13"   => %w(   3         b7    #9 #11 b13  ),
+    "13b9"        => %w(   3         b7 b9         13  ),
+    "13b9#11"     => %w(   3         b7 b9    #11  13  ),
+
+    "7b9#9"       => %w(   3    5    b7 b9 #9          ),
+    "7b9#9#11"    => %w(   3         b7 b9 #9 #11      ),
+    "7b9#9b13"    => %w(   3         b7 b9 #9     b13  ),
+    "7b9#9#11b13" => %w(   3         b7 b9 #9 #11 b13  ),
+    "13b9#9"      => %w(   3         b7 b9 #9      13  ),
+    "13b9#9#11"   => %w(   3         b7 b9 #9 #11  13  ),
+
+    "sus4"        => %w(     4  5                      ),
+    "sus4add2"    => %w( 2   4  5                      ),
+    "sus7"        => %w(     4  5    b7                ),
+    "sus9"        => %w(   3 4  5    b7  9             ),
+    "sus7b9"      => %w(     4  5    b7 b9             ),
+
+    "dim"         => %w(b3     b5  6                   ),
+  }
+
+  def ChordType.names
+    @@all.keys
+  end
 
   def ChordType.get_intervals(chord_type)
-    intervals = []
-
-    case chord_type
-    when /^min\/maj7/
-      intervals += %w(b3 7)
-    when /^maj7/
-      intervals += %w(3 7)
-    when /^min7/
-      intervals += %w(b3 b7)
-    when /^maj9/
-      intervals += %w(3 7 9)
-    when /^min9/
-      intervals += %w(b3 b7 9)
-    when /^min11/
-      intervals += %w(b3 b7 9 11)
-    when /^7/
-      intervals += %w(3 b7)
-    when /^min6/
-      intervals += %w(b3 6)
-    when /^6/
-      intervals += %w(3 6)
-    when /^13/
-      intervals += %w(b3 b7 9)
-    end
-
-    case chord_type
-    when /(b5|b13|#5|#11)/
-      %w(b5 b13 #5 #11).each do |alteration|
-        intervals << alteration if chord_type.include? alteration
-      end
-    else
-      intervals << '5'
-    end
-
-    case chord_type
-    when /(b9|#9)/
-      %w(b9 #9).each do |alteration|
-        intervals << alteration if chord_type.include? alteration
-      end
-    when /9/
-      intervals << '9'
-      intervals << '3'  unless intervals.detect { |i| i.include? '3' }
-      intervals << 'b7' unless intervals.detect { |i| i.include? '6' or i.include? '7' }
-    end
-
-    case chord_type
-    when /sus4/
-      intervals << '4'
-    when /sus7/
-      intervals += %w(4 b7)
-    when /sus9/
-      intervals += %w(4 b7 9)
-    end
-
-    intervals << '2' if chord_type =~ /add2/ and ! intervals.include? '2'
-
-    intervals.map { |name| Interval.by_name(name) }.sort
+    intervals = @@all[chord_type]
+    intervals.map { |name| Interval.by_name(name) }
   end
 end
