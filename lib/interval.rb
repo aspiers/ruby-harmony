@@ -49,6 +49,8 @@ class Interval < Struct.new(:degree, :accidental)
     end
   end
 
+  alias_method :to_s, :name
+
   def Interval.by_name(name)
     if name !~ /^(bb|b||#|x)(\d\d?)$/
       raise "Invalid interval '#{name}'"
