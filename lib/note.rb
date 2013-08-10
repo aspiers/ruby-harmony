@@ -103,6 +103,11 @@ class Note
     pitch / 12
   end
 
+  def octave=(o)
+    return if octave == o
+    self.pitch = o*12 + pitch % 12
+  end
+
   # Return a LilyPond representation of the Note's name to be used
   # in an absolute pitch context.
   def to_ly_abs

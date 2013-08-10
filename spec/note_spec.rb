@@ -154,8 +154,8 @@ describe Note do
     NOTES.each do |name, ly, pitch, accidental|
       context name do
         let(:note1) { Note.new(name[0], accidental, pitch   ) }
-        let(:note2) { Note.new(name[0], accidental, pitch-12) }
-        let(:note3) { Note.new(name[0], accidental, pitch+12) }
+        let(:note2) { n = note1.dup; n.octave -= 1; n         }
+        let(:note3) { n = note1.dup; n.octave += 1; n         }
 
         specify "notes in different octaves should not be equal" do
           note1.should_not == note2
