@@ -3,10 +3,18 @@ require 'note_set'
 require 'active_support/core_ext/integer/inflections'
 require 'active_support/core_ext/string/indent'
 
-class Mode < Struct.new(:degree, :scale_type, :index)
+class Mode
   #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
   DEGREES = %w(ionian dorian phrygian lydian mixo aeolian locrian)
   #DEGREES = %w(ionian dorian phrygian lydian mixolydian aeolian locrian)
+
+  attr_accessor :degree, :scale_type, :index
+
+  def initialize(d, s, i)
+    @degree = d
+    @scale_type = s
+    @index = i
+  end
 
   # rotate intervallic increments by different degrees of the scale
   # to generate the 7 modes for this scale type
@@ -46,7 +54,14 @@ class Mode < Struct.new(:degree, :scale_type, :index)
 
 end
 
-class ScaleInKey < Struct.new(:mode, :key_note)
+class ScaleInKey
+  attr_accessor :mode, :key_note
+
+  def initialize(mode, key_note)
+    @mode = mode
+    @key_note = key_note
+  end
+
   def to_s
     text = ''
     if mode.scale_type == DiatonicScaleType::MAJOR

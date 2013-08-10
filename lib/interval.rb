@@ -3,7 +3,14 @@ require 'active_support/core_ext/integer/inflections'
 require 'scale_type'
 require 'accidental'
 
-class Interval < Struct.new(:degree, :accidental)
+class Interval
+  attr_accessor :degree, :accidental
+
+  def initialize(d, a)
+    @degree = d
+    @accidental = a
+  end
+
   def from(from_note)
     natural = DiatonicScaleType::MAJOR.note(from_note, degree)
     to_note = natural.dup

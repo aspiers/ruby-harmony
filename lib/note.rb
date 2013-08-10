@@ -3,7 +3,7 @@ require 'accidental'
 # A class representing notes which have a numerical
 # pitch (not constrained to a single octave), and a
 # name (i.e. "F#" is considered distinct from "Gb").
-class Note < Struct.new(:letter, :accidental, :pitch)
+class Note
   # An Array of note letters, starting with C.
   LETTERS = %w(C D E F G A B)
 
@@ -11,8 +11,16 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   # with C at 0.
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
 
+  def initialize(letter, accidental, pitch)
+    @letter = letter
+    @accidental = accidental
+    @pitch = pitch
+  end
+
   # An Array of Note instances corresponding to the C major scale.
   NATURALS = LETTERS.zip(NATURAL_PITCHES).map { |l, p| new(l, 0, p) }
+
+  attr_accessor :letter, :accidental, :pitch
 
   # Instantiates a Note with the given letter and pitch.
   def Note.by_letter_and_pitch(letter, pitch)
@@ -101,6 +109,10 @@ class Note < Struct.new(:letter, :accidental, :pitch)
   # Order notes by pitch.
   def <=>(other)
     pitch <=> other.pitch
+  end
+
+  def ==(other)
+    letter == other.letter and pitch == other.pitch and accidental == other.accidental
   end
 
   # Returns true if the notes have the same pitch when transposed to
