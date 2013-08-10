@@ -11,34 +11,47 @@ class Note
   # with C at 0.
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
 
-  attr_accessor :letter, :accidental, :pitch
+  attr_reader   :letter
+  attr_accessor :accidental, :pitch
 
   def initialize(l, a, p)
+    Note.letter_pitch_delta(l, p)
     self.letter = l
     self.accidental = a
     self.pitch = p
   end
 
+  def letter=(l)
+    raise "no such note with letter '#{l}'" unless LETTERS.include? l
+    @letter = l
+  end
+
   # An Array of Note instances corresponding to the C major scale.
-  NATURALS = LETTERS.zip(NATURAL_PITCHES).map { |l, p| new(l, 0, p) }
+  NATURALS = Hash[LETTERS.zip(NATURAL_PITCHES)]
+
+  def Note.letter_pitch_delta(letter, pitch)
+    natural_pitch = NATURALS[letter]
+    raise "no such note with letter '#{letter}'" unless natural_pitch
+    delta = pitch - natural_pitch
+    delta += 12 while delta < -6
+    delta -= 12 while delta >  6
+    if (delta.abs) > 2
+      raise "pitch mismatch for letter '#{letter}' and pitch #{pitch} (natural #{natural_pitch}, delta #{delta})"
+    end
+    return delta
+  end
 
   # Instantiates a Note with the given letter and pitch.
   def Note.by_letter_and_pitch(letter, pitch)
-    natural = NATURALS.find { |n| n.letter == letter }
-    raise "no such note with letter '#{letter}'" unless natural
-    delta = pitch - natural.pitch
-    delta += 12 while delta < -6
-    delta -= 12 while delta >  6
-
-    if (delta.abs) > 2
-      raise "pitch mismatch for letter '#{letter}' and pitch #{pitch} (natural #{natural.pitch}, delta #{delta})"
-    end
+    delta = Note.letter_pitch_delta(letter, pitch)
     new(letter, delta, pitch)
   end
 
   # Instantiates a Note with the given letter in the C major scale.
   def Note.by_letter(letter)
-    NATURALS.find { |n| n.letter == letter }
+    natural_pitch = NATURALS[letter]
+    raise "no such note with letter '#{letter}'" unless natural_pitch
+    new(letter, 0, natural_pitch)
   end
 
   # Shifts a note letter up the C major scale by the given number of

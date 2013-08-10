@@ -1,6 +1,18 @@
 require 'note'
 
 describe Note do
+  context "#new" do
+    it "should raise an exception when given an invalid letter" do
+      lambda { Note.new('H', -1, 3) }.should \
+        raise_exception(RuntimeError, %{no such note with letter 'H'})
+    end
+
+    it "should raise pitch mismatch error" do
+      lambda { Note.new('A', 0, 3) }.should \
+        raise_error(RuntimeError, /pitch mismatch for letter/)
+    end
+  end
+
   shared_examples "a note" do |name, letter, ly, pitch, accidental|
     it "should have the right letter (#{letter})" do
       note.letter.should == letter
@@ -34,8 +46,9 @@ describe Note do
     end
 
     context "invalid letter" do
-      it "should return nil when given an invalid letter" do
-        Note.by_letter('H').should be_nil
+      it "should raise an exception when given an invalid letter" do
+        lambda { Note.by_letter('H') }.should \
+          raise_exception(RuntimeError, %{no such note with letter 'H'})
       end
     end
   end
@@ -140,9 +153,9 @@ describe Note do
   context "equality and equivalence" do
     NOTES.each do |name, ly, pitch, accidental|
       context name do
-        let(:note1) { Note.new(name[0], pitch   , accidental) }
-        let(:note2) { Note.new(name[0], pitch-12, accidental) }
-        let(:note3) { Note.new(name[0], pitch+12, accidental) }
+        let(:note1) { Note.new(name[0], accidental, pitch   ) }
+        let(:note2) { Note.new(name[0], accidental, pitch-12) }
+        let(:note3) { Note.new(name[0], accidental, pitch+12) }
 
         specify "notes in different octaves should not be equal" do
           note1.should_not == note2
