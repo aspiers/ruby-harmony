@@ -44,11 +44,11 @@ describe Interval do
     let(:f_sharp)  { Note.by_name('F#')               }
     let(:g_flat)   { Note.by_name('Gb')               }
 
-    it "should have the right degree" do
+    it "should have degree #{degree}" do
       interval.degree.should == degree
     end
 
-    it "should have the right accidental" do
+    it "should have accidental #{accidental}" do
       interval.accidental.should == accidental
     end
 
