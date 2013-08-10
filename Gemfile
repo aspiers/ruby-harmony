@@ -2,9 +2,14 @@
 
 source 'https://rubygems.org/'
 
-gem 'rspec', '~> 2.14.0'
-gem 'guard-rspec'
-#gem 'guard', github: 'aspiers/guard', branch: 'master'
-gem 'guard-bundler'
+group :development, :test do
+  gem 'rspec', '~> 2.14.0'
 
-gem 'jazz_hands'
+  gem 'guard-rspec'
+  #gem 'guard', github: 'aspiers/guard', branch: 'master'
+  gem 'guard-bundler'
+
+  gem 'jazz_hands'
+
+  gem 'simplecov', require: false
+end
