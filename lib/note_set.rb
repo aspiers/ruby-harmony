@@ -55,6 +55,10 @@ module NoteCollection
     end
     self.class.new(new_notes)
   end
+
+  def contains_equivalent_note?(note)
+    detect { |n| n === note }
+  end
 end
 
 class NoteSet < Set

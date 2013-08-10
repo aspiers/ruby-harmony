@@ -153,14 +153,14 @@ class ScaleFinder
       chords_count = chords.size # number of identifying chords of this size
       @distinctiveness[[chord_size, chords_count]] ||= [ ]
       @distinctiveness[[chord_size, chords_count]].push scale
-      puts "#{chord_size} note chords uniquely identifying #{scale}:"
+      puts "#{chord_size} note combinations uniquely identifying #{scale}:"
       for chord in chords
-        remaining = scale.notes.reject { |note| chord.include? note }
-        alterations = remaining.reject { |note| @fixed_chord_notes.include? note }
+        remaining = scale.notes.reject { |note| chord.contains_equivalent_note? note }
+        alterations = remaining.reject { |note| @fixed_chord_notes.contains_equivalent_note? note }
         chord_in_scale = chord.sort.map { |note|
-          note_in_scale = scale.notes.find { |n| n.pitch == note.pitch }
+          note_in_scale = scale.notes.find { |n| n === note }
           unless note_in_scale
-            raise "Couldn't find note in scale #{scale} for pitch #{pitch}"
+            raise "Couldn't find note in scale #{scale} for pitch #{note.pitch}"
           end
           note_in_scale
         }
