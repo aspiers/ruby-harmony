@@ -4,11 +4,14 @@ require 'note_set'
 class ScaleType
   @@all = [ ]
 
-  attr_reader :name, :increments, :symmetry
+  attr_reader :name, :increments, :modes, :transpositions
 
-  def initialize(name, increments, symmetry)
+  def initialize(name, increments, num_modes, transpositions)
     @name = name
     @increments = increments
+    @num_modes = num_modes
+    @transpositions = transpositions
+
     @@all.push self
     @index = @@all.length - 1
   end
@@ -51,15 +54,23 @@ class DiatonicScaleType < ScaleType
       end
   end
 
-  MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1    ], 7)
-  MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1    ], 7)
-  HARMONIC_MINOR  = new('harm min',        [ 2, 1, 2, 2, 1, 3, 1    ], 7)
-  HARMONIC_MAJOR  = new('harm maj',        [ 2, 2, 1, 2, 1, 3, 1    ], 7)
-  # HUNGARIAN_GYPSY = new('hungarian gypsy', [ 2, 1, 3, 1, 1, 2, 2    ], 7)
-  # DOUBLE_HARMONIC = new('dbl harm',        [ 1, 3, 1, 2, 1, 3, 1    ], 7)
-  # ENIGMATIC       = new('enigmatic',       [ 1, 3, 2, 2, 2, 2, 2    ], 7)
-  # WHOLE_TONE      = new('whole',           [ 2, 2, 2, 2, 2, 2       ], 1)
-  # DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1 ], 2)
-  # AUX_DIMINISHED  = new('aux dim',         [ 1, 2, 1, 2, 1, 2, 1, 2 ], 2)
-  # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1       ], 2)
+  # The number of modes is eqal to the number of notes in the smallest
+  # repeating cycle of increments.  The number of transpositions
+  # (keys) is equal to the number of semitones in the cycle.
+
+  MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1          ], 7, 12)
+  MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1          ], 7, 12)
+  HARMONIC_MINOR  = new('harm min',        [ 2, 1, 2, 2, 1, 3, 1          ], 7, 12)
+  HARMONIC_MAJOR  = new('harm maj',        [ 2, 2, 1, 2, 1, 3, 1          ], 7, 12)
+  # HUNGARIAN_GYPSY = new('hungarian gypsy', [ 2, 1, 3, 1, 1, 2, 2          ], 7, 12)
+  # DOUBLE_HARMONIC = new('dbl harm',        [ 1, 3, 1, 2, 1, 3, 1          ], 7, 12)
+  # ENIGMATIC       = new('enigmatic',       [ 1, 3, 2, 2, 2, 2, 2          ], 7, 12)
+  # WHOLE_TONE      = new('whole',           [ 2, 2, 2, 2, 2, 2             ], 1,  2)
+  # DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
+  # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1             ], 2,  4)
+  # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
+  # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
+  # MESSIAEN_FIFTH    = new("Messian's 5th", [ 1, 4, 1, 1, 4, 1             ], 3, 6)
+  # MESSIAEN_SIXTH    = new("Messian's 6th", [ 2, 2, 2, 1, 2, 2, 2, 1       ], 4, 6)
+  # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
 end
