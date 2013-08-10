@@ -33,9 +33,8 @@ emphasise = \once {
     \remove "Bar_number_engraver"
   } {
     \new Staff {
-      \relative c' {
-        <<%= chord %>>1^\markup { \teeny { "<%= descr %>" } }
-      } \bar "||" |
+      <<%= chord %>>1^\markup { \teeny { "<%= descr %>" } }
+      \bar "||" |
 
       \time 7/4
       \small

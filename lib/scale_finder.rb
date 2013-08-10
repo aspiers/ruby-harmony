@@ -218,7 +218,7 @@ EOF
 
     data = TemplateData.new(
       descr:  Accidental.to_ly_markup(@descr),
-      chord:  @fixed_chord_notes.map(&:to_ly).join(" "),
+      chord:  @fixed_chord_notes.map(&:to_ly_abs).join(" "),
       scales: @ly_scales,
     )
     File.write(ly_out_file, data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
