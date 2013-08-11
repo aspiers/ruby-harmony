@@ -24,10 +24,6 @@ class Mode
     NoteArray.new(degrees.map { |degree| scale_type.note(key_note, degree) })
   end
 
-  def pitches_from(starting_note)
-    NoteArray.new(notes_from(starting_note).map { |note| note.pitch })
-  end
-
   def notes_from(starting_note)
     key_note = scale_type.key(starting_note, degree)
     notes(key_note)
