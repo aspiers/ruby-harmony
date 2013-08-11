@@ -2,7 +2,7 @@
 
 require 'note'
 require 'scale_finder'
-require 'scale_in_key'
+require 'mode_in_key'
 require 'chord_type'
 
 key_name, chord_type, verbosity = ARGV

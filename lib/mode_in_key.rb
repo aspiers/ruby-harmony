@@ -1,7 +1,7 @@
 require 'active_support/core_ext/integer/inflections'
 require 'active_support/core_ext/string/indent'
 
-class ScaleInKey
+class ModeInKey
   attr_accessor :mode, :key_note
 
   def initialize(mode, key_note)
@@ -69,9 +69,7 @@ class ScaleInKey
   def <=>(other)
     [ num_flats - num_sharps ] <=> [ other.num_flats - other.num_sharps ]
   end
-end
 
-class ModeInKey < ScaleInKey
   def ModeInKey.all(starting_note) # builds all modes starting on a given note
     count = 0
     ScaleType.all.map do |scale_type|
