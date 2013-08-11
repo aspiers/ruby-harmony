@@ -43,7 +43,7 @@ class Mode
   # given starting note is C, then it will return Bb major starting on
   # C.
   def notes_from(starting_note)
-    key_note = scale_type.key(starting_note, degree)
+    key_note = scale_type.key(starting_note, degree, self)
     notes(key_note)
   end
 

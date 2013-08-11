@@ -83,7 +83,7 @@ class ModeInKey
     ScaleType.all.map do |scale_type|
       (1..scale_type.num_modes).map do |degree|
         mode = Mode.new(degree, scale_type, count += 1)
-        key_note = scale_type.key(starting_note, degree)
+        key_note = scale_type.key(starting_note, degree, mode)
         ModeInKey.new(mode, key_note)
       end.sort
     end

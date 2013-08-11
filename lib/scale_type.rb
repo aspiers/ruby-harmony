@@ -34,7 +34,7 @@ class DiatonicScaleType < ScaleType
     super(name, increments, 7, 12)
   end
 
-  def key(note, degree)
+  def key(note, degree, mode=nil)
     # Given a note which is a degree of a scale, find the original key.
     # e.g. 'C' and 3 should return Ab
     key_letter = Note.letter_shift(note.letter, 1 - degree)
@@ -100,7 +100,7 @@ class DiatonicScaleType < ScaleType
 end
 
 class SymmetricalScaleType < ScaleType
-  def key(note, degree)
+  def key(note, degree, mode=nil)
     # Given a note which is a degree of a scale, find the original key.
     # e.g. 'C' and 3 should return Ab
     key_letter = Note.letter_shift(note.letter, 1 - degree)
@@ -139,7 +139,7 @@ class SymmetricalScaleType < ScaleType
   # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
 
   class << DIMINISHED
-    def key(note, degree)
+    def key(note, degree, mode)
       # Find the key which results in the most letters and fewest
       # accidentals, whilst still including the given note.
       #candidate_keys = equivalent_key_pitches(note)
