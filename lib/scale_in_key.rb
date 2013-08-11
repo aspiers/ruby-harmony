@@ -86,8 +86,8 @@ class ModeInKey < ScaleInKey
   def ModeInKey.output_modes(starting_note)
     s = ""
 
-    ModeInKey.all(starting_note).each do |modes_in_key|
-      modes_in_key.each do |mode_in_key|
+    for modes_in_key in ModeInKey.all(starting_note)
+      for mode_in_key in modes_in_key
         mode = mode_in_key.mode
         name = mode.name || mode_in_key.generic_description
         s << "%d %-30s %s\n" % [ mode.degree, name, mode_in_key.notes ]
