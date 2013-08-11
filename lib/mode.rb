@@ -2,22 +2,22 @@ require 'scale_type'
 require 'note_set'
 
 class Mode
-  attr_accessor :degree, :scale_type, :index
+  attr_reader :degree, :scale_type, :index
 
   def initialize(d, s, i)
-    self.degree = d
-    self.scale_type = s
-    self.index = i
+    @degree = d
+    @scale_type = s
+    @index = i
   end
 
   # rotate intervallic increments by different degrees of the scale
   # to generate the modes for this scale type
   def increments
-    scale_type.increments.rotate(degree - 1)[0...-1]
+    @increments ||= scale_type.increments.rotate(degree - 1)[0...-1]
   end
 
   def degrees
-    (1..(increments.size+1)).to_a.rotate(degree - 1)
+    @degrees ||= (1..(increments.size+1)).to_a.rotate(degree - 1)
   end
 
   def notes(key_note)
