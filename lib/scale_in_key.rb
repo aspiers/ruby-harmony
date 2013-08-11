@@ -23,7 +23,9 @@ class ScaleInKey
     return special ? "%s %s\n(%s)" % [key_note, special, generic ] : generic
   end
 
-  alias_method :to_s, :name
+  def to_s
+    mode.name || generic_description
+  end
 
   def to_ly
     text = to_s
@@ -87,7 +89,8 @@ class ModeInKey < ScaleInKey
     ModeInKey.all(starting_note).each do |modes_in_key|
       modes_in_key.each do |mode_in_key|
         mode = mode_in_key.mode
-        s << "%d %-20s %s\n" % [ mode.degree, mode, mode_in_key.notes ]
+        name = mode.name || mode_in_key.generic_description
+        s << "%d %-30s %s\n" % [ mode.degree, name, mode_in_key.notes ]
       end
       s << "\n"
     end
