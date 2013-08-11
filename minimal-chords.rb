@@ -2,6 +2,7 @@
 
 require 'mode'
 require 'scale_finder'
+require 'scale_in_key'
 
 puts ModeInKey.output_modes(Note.by_name("C"))
 
