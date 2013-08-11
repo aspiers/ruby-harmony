@@ -18,6 +18,9 @@ class Note
   attr_accessor :accidental, :pitch
 
   def initialize(l, a, p)
+    raise "letter must be a String" unless l.is_a?(String)
+    raise "accidental must be an integer between -2 and +2" unless a >= -2 and a <= 2
+    raise "pitch must be an integer" unless p.is_a?(Fixnum)
     Note.letter_pitch_delta(l, p)
     self.letter = l
     self.accidental = a

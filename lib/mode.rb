@@ -8,6 +8,8 @@ class Mode
   # ordering of modes can be determined by the caller, which is
   # responsible for building the catalogue.
   def initialize(d, s, i)
+    raise "degree must be a positive integer" unless d.is_a?(Fixnum) and d > 0
+    raise "scale_type must be a ScaleType" unless s.is_a?(ScaleType)
     @degree = d
     @scale_type = s
     @index = i
