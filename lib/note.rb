@@ -8,6 +8,8 @@ class Note
   # An Array of note letters, starting with C.
   LETTERS = %w(C D E F G A B)
 
+  STANDARD_KEYS = %w(C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B)
+
   # The numerical pitches corresponding to LETTERS, starting
   # with C at 0.
   NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
@@ -75,6 +77,18 @@ class Note
     natural = by_letter(letter)
     pitch = (natural.pitch + accidental_delta) % 12
     new(letter, accidental_delta, pitch)
+  end
+
+  # Returns all notes representing the given pitch
+  def Note.by_pitch(pitch)
+    notes = [ ]
+    for letter in LETTERS
+      begin
+        notes << Note.by_letter_and_pitch(letter, pitch)
+      rescue NoteExceptions::LetterPitchMismatch
+      end
+    end
+    notes.sort
   end
 
   # Convert a double-sharp or double-flat into its simpler enharmonic

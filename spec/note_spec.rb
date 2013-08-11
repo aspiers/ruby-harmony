@@ -193,6 +193,31 @@ describe Note do
     end
   end
 
+  describe ".by_pitch" do
+    pitches = [
+      [  0, 'C Dbb B#' ],
+      [  1, 'C# Db Bx' ],
+      [  2, 'Cx D Ebb' ],
+      [  3, 'D# Eb Fbb'],
+      [  4, 'Dx E Fb'  ],
+      [  5, 'E# F Gbb' ],
+      [  6, 'Ex F# Gb' ],
+      [  7, 'Fx G Abb' ],
+      [  8,  'G# Ab'   ],
+      [  9, 'Gx A Bbb' ],
+      [ 10, 'Cbb A# Bb'],
+      [ 11, 'Cb Ax B'  ],
+      [ 12, 'C Dbb B#' ],
+      [ 13, 'C# Db Bx' ],
+      [ 14, 'Cx D Ebb' ],
+    ]
+    pitches.each do |pitch, expected|
+      specify "pitch #{pitch} should give #{expected} the right notes" do
+        Note.by_pitch(pitch).join(' ').should == expected
+      end
+    end
+  end
+
   describe "#to_ly_abs" do
     notes = [
       [ "B", -13,  0,  "b,"   ],
