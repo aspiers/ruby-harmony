@@ -33,13 +33,19 @@ describe Mode do
     1, "A", "ionian", "A B C# D E F# G#".split
 
   include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
-    2, "B", "2nd degree of mel min", "C# D E F# G# A# B".split
+    2, "B", nil, "C# D E F# G# A# B".split
+
+  include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
+    6, "D", "locrian natural 2", "B C# D E F G A".split
+
+  include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
+    7, "C", "altered", "B C D Eb F G A".split
 
   include_examples "given key", DiatonicScaleType::HARMONIC_MINOR, \
-    2, "B", "2nd degree of harm min", "C# D E F# G A# B".split
+    2, "B", nil, "C# D E F# G A# B".split
 
   include_examples "given key", DiatonicScaleType::HARMONIC_MAJOR, \
-    7, "F", "7th degree of harm maj", "E F G A Bb C Db".split
+    7, "F", nil, "E F G A Bb C Db".split
 
   shared_examples "given starting note" do |scale, degree, start_name, expected_notes|
     it "should have the right notes" do

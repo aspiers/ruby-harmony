@@ -56,7 +56,7 @@ class DiatonicScaleType < ScaleType
   end
 
   def mode_name(degree)
-    "%s degree of %s" % [ degree.ordinalize, name ]
+    nil
   end
 
   # The number of modes is eqal to the number of notes in the smallest
@@ -86,6 +86,23 @@ class DiatonicScaleType < ScaleType
 
     def mode_name(degree)
       DEGREES[degree - 1]
+    end
+  end
+
+  class << MELODIC_MINOR
+    def mode_name(degree)
+      case degree
+      when 3
+        "lydian augmented"
+      when 4
+        "lydian dominant"
+      when 6
+        "locrian natural 2"
+      when 7
+        "altered"
+      else
+        super
+      end
     end
   end
 end

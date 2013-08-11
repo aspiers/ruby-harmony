@@ -58,29 +58,21 @@ class ScaleInKey
     self.key_note = key_note
   end
 
-  def to_s
-    text = ''
-    if mode.scale_type == DiatonicScaleType::MAJOR
-      text = "%s %s" % [ starting_note, mode ]
-      text += " (#{key_note} major)" if key_note != starting_note
-    elsif mode.scale_type == DiatonicScaleType::MELODIC_MINOR
-      text =
-        case mode.degree
-        when 3
-          "%s lydian augmented" % starting_note
-        when 4
-          "%s lydian dominant" % starting_note
-        when 6
-          "%s locrian natural 2" % starting_note
-        when 7
-          "%s altered" % starting_note
-        else
-          ''
-        end
-      text << "\n(%s)" % description unless text.empty?
+  def generic_description
+    text = '%s %s' % [ key_note, mode.scale_type.name ]
+    if key_note != starting_note
+      text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
     end
-    return text.empty? ? description : text
+    return text
   end
+
+  def name
+    generic = generic_description
+    special = mode.name
+    return special ? "%s %s\n(%s)" % [key_note, special, generic ] : generic
+  end
+
+  alias_method :to_s, :name
 
   def to_ly
     text = to_s
@@ -91,14 +83,6 @@ class ScaleInKey
     lines.push    "}\n"
     lines = lines.map { |line| line.indent(12) }
     return lines.join('')
-  end
-
-  def description
-    text = '%s %s' % [ key_note, mode.scale_type.name ]
-    if key_note != starting_note
-      text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
-    end
-    return text
   end
 
   def inspect
