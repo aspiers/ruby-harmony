@@ -4,6 +4,9 @@ require 'note_set'
 class Mode
   attr_reader :degree, :scale_type, :index
 
+  # Add a new mode to the catalogue.  The index is required so that
+  # ordering of modes can be determined by the caller, which is
+  # responsible for building the catalogue.
   def initialize(d, s, i)
     @degree = d
     @scale_type = s
