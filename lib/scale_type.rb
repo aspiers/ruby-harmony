@@ -30,6 +30,10 @@ class ScaleType
 end
 
 class DiatonicScaleType < ScaleType
+  def initialize(name, increments)
+    super(name, increments, 7, 12)
+  end
+
   def key(note, degree)
     # Given a note which is a degree of a scale, find the original key.
     # e.g. 'C' and 3 should return Ab
@@ -59,21 +63,13 @@ class DiatonicScaleType < ScaleType
     nil
   end
 
-  MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1          ], 7, 12)
-  MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1          ], 7, 12)
-  HARMONIC_MINOR  = new('harm min',        [ 2, 1, 2, 2, 1, 3, 1          ], 7, 12)
-  HARMONIC_MAJOR  = new('harm maj',        [ 2, 2, 1, 2, 1, 3, 1          ], 7, 12)
-  WHOLE_TONE      = new('whole tone',      [ 2, 2, 2, 2, 2, 2             ], 1,  2)
-  DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
-  # HUNGARIAN_GYPSY = new('hungarian gypsy', [ 2, 1, 3, 1, 1, 2, 2          ], 7, 12)
-  # DOUBLE_HARMONIC = new('dbl harm',        [ 1, 3, 1, 2, 1, 3, 1          ], 7, 12)
-  # ENIGMATIC       = new('enigmatic',       [ 1, 3, 2, 2, 2, 2, 2          ], 7, 12)
-  # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1             ], 2,  4)
-  # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
-  # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
-  # MESSIAEN_FIFTH    = new("Messian's 5th", [ 1, 4, 1, 1, 4, 1             ], 3, 6)
-  # MESSIAEN_SIXTH    = new("Messian's 6th", [ 2, 2, 2, 1, 2, 2, 2, 1       ], 4, 6)
-  # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
+  MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1 ])
+  MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1 ])
+  HARMONIC_MINOR  = new('harm min',        [ 2, 1, 2, 2, 1, 3, 1 ])
+  HARMONIC_MAJOR  = new('harm maj',        [ 2, 2, 1, 2, 1, 3, 1 ])
+  # HUNGARIAN_GYPSY = new('hungarian gypsy', [ 2, 1, 3, 1, 1, 2, 2 ])
+  # DOUBLE_HARMONIC = new('dbl harm',        [ 1, 3, 1, 2, 1, 3, 1 ])
+  # ENIGMATIC       = new('enigmatic',       [ 1, 3, 2, 2, 2, 2, 2 ])
 
   class << MAJOR
   #DEGREES = %w(ion dor phryg lyd mixo aeol loc)
@@ -101,8 +97,72 @@ class DiatonicScaleType < ScaleType
       end
     end
   end
+end
+
+class SymmetricalScaleType < ScaleType
+  def key(note, degree)
+    # Given a note which is a degree of a scale, find the original key.
+    # e.g. 'C' and 3 should return Ab
+    key_letter = Note.letter_shift(note.letter, 1 - degree)
+    key_pitch = note.pitch - offset_from_key(degree)
+    key_pitch += 12 if key_pitch < 0
+    return Note.by_letter_and_pitch(key_letter, key_pitch)
+  end
+
+  def offset_from_key(degree)
+    # concatenate as many increments together as we need
+    # to reach the degree, which may be greater than the
+    # number of notes in the scale (e.g. 11, 13)
+    incs = increments * (1 + (degree - 1) / num_modes)
+    increments_from_key = incs.first(degree - 1)
+    return increments_from_key.inject(0) { |a,x| a + x }
+  end
+
+  def equivalent_key_pitches(key_note)
+    equivalent_key_count = 12 / transpositions
+    (0..(equivalent_key_count - 1)).map { |x| key_note.pitch + x * transpositions }
+  end
+
+  def equivalent_keys(key_note)
+    equivalent_key_pitches(key_note).map do |pitch|
+      Note.by_pitch(pitch).find_all { |x| x.simple? }
+    end.flatten
+  end
+
+  WHOLE_TONE      = new('whole tone',      [ 2, 2, 2, 2, 2, 2             ], 1,  2)
+  DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
+  # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1             ], 2,  4)
+  # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
+  # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
+  # MESSIAEN_FIFTH    = new("Messian's 5th", [ 1, 4, 1, 1, 4, 1             ], 3, 6)
+  # MESSIAEN_SIXTH    = new("Messian's 6th", [ 2, 2, 2, 1, 2, 2, 2, 1       ], 4, 6)
+  # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
 
   class << DIMINISHED
+    def key(note, degree)
+      # Find the key which results in the most letters and fewest
+      # accidentals, whilst still including the given note.
+      #candidate_keys = equivalent_key_pitches(note)
+
+      key_letter = Note.letter_shift(note.letter, 1 - degree)
+      key_pitch = note.pitch - offset_from_key(degree)
+      key_pitch += 12 if key_pitch < 0
+      return Note.by_letter_and_pitch(key_letter, key_pitch)
+    end
+
+    def letter_shift(degree)
+      steps_from_key = (degree - 1) % 7
+      return steps_from_key - 1 if degree >= 7
+      return steps_from_key
+    end
+
+    # Return the note which is the given degree of the scale.
+    def note(key_note, degree)
+      letter = Note.letter_shift(key_note.letter, letter_shift(degree))
+      pitch = key_note.pitch + offset_from_key(degree)
+      Note.by_letter_and_pitch(letter, pitch).simplify
+    end
+
     def mode_name(degree)
       return degree == 2 ? 'auxiliary diminished' : nil
     end

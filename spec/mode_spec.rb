@@ -48,7 +48,7 @@ describe Mode do
     7, "F", nil, "E F G A Bb C Db".split
 
   shared_examples "given starting note" do |scale, degree, start_name, expected_notes|
-    it "should have the right notes" do
+    specify "degree #{degree} starting on #{start_name} should have the right notes" do
       start_note = Note.by_name(start_name)
       mode = Mode.new(degree, scale, -1)
       notes = mode.notes_from(start_note)
@@ -56,18 +56,40 @@ describe Mode do
     end
   end
 
-  include_examples "given starting note", DiatonicScaleType::MAJOR, \
-    1, "Eb", "Eb F G Ab Bb C D".split
+  describe "diatonic" do
+    include_examples "given starting note", DiatonicScaleType::MAJOR, \
+      1, "Eb", "Eb F G Ab Bb C D".split
+    include_examples "given starting note", DiatonicScaleType::MELODIC_MINOR, \
+      3, "Eb", "Eb F G A B C D".split
+    include_examples "given starting note", DiatonicScaleType::HARMONIC_MINOR, \
+      7, "D",  "D Eb F Gb Ab Bb Cb".split
+    include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
+      3, "E#", "E# F# G# A B# C# D#".split
+  end
 
-  include_examples "given starting note", DiatonicScaleType::MELODIC_MINOR, \
-    3, "Eb", "Eb F G A B C D".split
+  describe "diminished", broken: true do
+    include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
+      1, "C",  "C D Eb F Gb Ab A B".split
+    include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
+      2, "C",  "C Db Eb E F# G A Bb".split
+    include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
+      1, "C#", "C# D# E F# G A A# C".split
+    include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
+      2, "C#", "C# D E F G G# A# B".split
+    include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
+      1, "Db", "Db Eb E F# G A Bb C".split
+    include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
+      2, "Db", "C# D E F G G# A# B".split
+  end
 
-  include_examples "given starting note", DiatonicScaleType::HARMONIC_MINOR, \
-    7, "D", "D Eb F Gb Ab Bb Cb".split
-
-  include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
-    3, "E#", "E# F# G# A B# C# D#".split
-
-  include_examples "given starting note", DiatonicScaleType::DIMINISHED, \
-    1, "C", "C D Eb F Gb Ab A B".split
+  describe "whole tone", broken: true do
+    include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
+      1, "C", "C D E F# G# A#".split
+    include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
+      1, "C#", "C# D# F G A B".split
+    include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
+      1, "Db", "Db Eb F G A B".split
+    include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
+      1, "D",  "D E F# G# A# C".split
+  end
 end

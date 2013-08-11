@@ -182,4 +182,37 @@ describe DiatonicScaleType do
       DiatonicScaleType::HARMONIC_MINOR.offset_from_key(3).should == 3
     end
   end
+
+  describe "#equivalent_keys" do
+    shared_examples "equivalent keys" do |scale_type, key_name, pitches, notes|
+      specify "#{scale_type} equivalent pitches of #{key_name} should be right" do
+        key_note = Note.by_name(key_name)
+        scale_type.equivalent_key_pitches(key_note).should == pitches
+      end
+
+      specify "#{scale_type} equivalent notes of #{key_name} should be right" do
+        key_note = Note.by_name(key_name)
+        scale_type.equivalent_keys(key_note).map(&:name).should == notes
+      end
+    end
+
+    [
+      [
+        SymmetricalScaleType::DIMINISHED,
+        [
+          [ 'C',  [ 0, 3,  6,  9 ], 'C  D# Eb F# Gb A'  ],
+          [ 'C#', [ 1, 4,  7, 10 ], 'C# Db E  G  A# Bb' ],
+          [ 'Db', [ 1, 4,  7, 10 ], 'C# Db E  G  A# Bb' ],
+          [ 'D',  [ 2, 5,  8, 11 ], 'D  F  G# Ab B'     ],
+          [ 'D#', [ 3, 6,  9, 12 ], 'D# Eb F# Gb A  C'  ],
+          [ 'E',  [ 4, 7, 10, 13 ], 'E  G  A# Bb C# Db' ],
+        ]
+      ],
+    ].each do |scale_type, rest|
+      rest.each do |key_name, pitches, notes|
+        include_examples "equivalent keys", scale_type,
+          key_name, pitches, notes.split
+      end
+    end
+  end
 end
