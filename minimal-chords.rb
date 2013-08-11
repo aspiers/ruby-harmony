@@ -1,36 +1,18 @@
 #!/usr/bin/ruby
 
-require 'mode'
+require 'note'
 require 'scale_finder'
 require 'scale_in_key'
+require 'chord_type'
 
-puts ModeInKey.output_modes(Note.by_name("C"))
+key_name, chord_type, verbosity = ARGV
 
-chords = [
-  [%w(E  G  B   ), 'C', 'maj7'       ],
-  [%w(E  G# B   ), 'C', 'maj7#5'     ],
-  [%w(Eb    B   ), 'C', '-maj7'      ],
-  [%w(E  Gb Bb  ), 'C', '7b5'        ],
-  [%w(E  G  Bb  ), 'C', '7'          ],
-  [%w(Eb G  Bb  ), 'C', '-7'         ],
-  [%w(Eb Gb Bb  ), 'C', '-7b5'       ],
-  [%w(Eb Gb A   ), 'C', 'dim'        ],
-  [%w(E  G  A   ), 'C', '6'          ],
-  [%w(Eb G  A   ), 'C', '-6'         ],
-  [%w(F  G  Bb  ), 'C', 'sus7'       ],
-  [%w(Db F  Bb  ), 'C', 'Csus7b9/G'  ],
-  [%w(D  E  G  A), 'C', '69'         ],
-  [%w(D  F  G   ), 'C', 'sus4add2'   ],
-  [%w(C  D# E G B), 'C', 'maj7#9'     ],
-]
+key = Note.by_name(key_name)
+puts ModeInKey.output_modes(key)
 
-verbosity = ARGV.shift.to_i
-
-chords.each do |chord, root, descr|
-  descr = root + descr unless descr.include? '/'
-  fixed_chord_notes = chord.map { |name| Note.by_name(name) }
-  scalefinder = ScaleFinder.new(fixed_chord_notes, root, descr)
-  scalefinder.set_verbosity(verbosity)
-  scalefinder.run('ly/out.ly')
-  puts
-end
+fixed_chord_notes = ChordType[chord_type].notes(key)
+descr = "%s%s" % [ key_name, chord_type ]
+scalefinder = ScaleFinder.new(fixed_chord_notes, key_name, descr)
+scalefinder.set_verbosity(verbosity.to_i)
+scalefinder.run('ly/out.ly')
+puts

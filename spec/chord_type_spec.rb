@@ -31,11 +31,6 @@ describe ChordType do
 
   describe "getting intervals" do
     shared_examples "chord" do |chord_type, expected|
-      specify "via ChordType.get_intervals" do
-        intervals = ChordType.get_intervals(chord_type)
-        intervals.join(' ').should == expected
-      end
-
       specify "via ChordType#intervals" do
         intervals = ChordType[chord_type].intervals
         intervals.join(' ').should == expected
@@ -44,5 +39,19 @@ describe ChordType do
 
     include_examples 'chord', 'maj7',   '3 5 7'
     include_examples 'chord', '7b9#11', '3 b7 b9 #11'
+  end
+
+  describe "#notes" do
+    shared_examples "chord notes" do |key_name, chord_type, expected|
+      it "should return the right notes" do
+        key = Note.by_name(key_name)
+        notes = ChordType[chord_type].notes(key)
+        notes.join(' ').should == expected
+      end
+    end
+
+    include_examples 'chord notes', 'C', 'maj7',   'C E G B'
+    include_examples 'chord notes', 'D', 'min9',   'D F A C E'
+    include_examples 'chord notes', 'E', '7b9#11', 'E G# D F A#'
   end
 end

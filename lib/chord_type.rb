@@ -90,8 +90,8 @@ class ChordType
     alias_method :[], :by_name
   end
 
-  def ChordType.get_intervals(chord_type)
-    ChordType[chord_type].intervals
+  def notes(key)
+    [key] + intervals.map { |interval| interval.from(key) }
   end
 
   private
