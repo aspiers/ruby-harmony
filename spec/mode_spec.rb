@@ -68,10 +68,3 @@ describe Mode do
   include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
     3, "E#", "E# F# G# A B# C# D#".split
 end
-
-describe ScaleType do
-  it "should be prepopulated with the standard modes" do
-    ScaleType.all.size.should == 4
-  end
-end
-

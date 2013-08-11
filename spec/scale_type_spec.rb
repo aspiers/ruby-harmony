@@ -1,5 +1,11 @@
 require 'scale_type'
 
+describe ScaleType do
+  it "should be prepopulated with the standard modes" do
+    ScaleType.all.size.should == 4
+  end
+end
+
 describe DiatonicScaleType do
   shared_examples "a diatonic scale" do |scale, tests|
     tests.each do |name, degree, key_name|
