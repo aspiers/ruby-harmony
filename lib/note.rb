@@ -82,6 +82,10 @@ class Note
     new(letter, accidental_delta, pitch)
   end
 
+  class << self
+    alias_method :[], :by_name
+  end
+
   STANDARD_KEYS = STANDARD_KEY_NAMES.map { |n| Note.by_name(n) }
   UGLY_NOTES    = UGLY_NOTE_NAMES   .map { |n| Note.by_name(n) }
   DOUBLE_SHARPS = LETTERS.map { |l| Note.by_name(l + "x" ) }

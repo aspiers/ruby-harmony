@@ -124,6 +124,13 @@ describe Note do
     end
   end
 
+  context "constructing by #[]" do
+    shared_examples "a note by name" do |name, ly, pitch, accidental|
+      let(:note) { Note[name] }
+      it_should_behave_like "a note", name, name[0], ly, pitch, accidental
+    end
+  end
+
   context "#letter_shift" do
     it "should shift 0 letters" do
       Note.letter_shift('B', 0).should == 'B'
