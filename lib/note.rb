@@ -91,14 +91,28 @@ class Note
     notes.sort
   end
 
+  SIMPLIFY_SINGLE_ACCIDENTALS = {
+    'E#' => 'F',
+    'B#' => 'C',
+    'Fb' => 'E',
+    'Cb' => 'B',
+  }
+
   # Convert a double-sharp or double-flat into its simpler enharmonic
-  # equivalent.
+  # equivalent, and also simplify E#, B#, Fb, Cb.
   def simplify
-    return self if accidental.abs < 2
-    direction = accidental / accidental.abs
-    new_letter = Note.letter_shift(letter, direction)
-    new_accidental = accidental - direction*2
-    Note.new(new_letter, new_accidental, pitch)
+    case accidental.abs
+    when 0
+      return self
+    when 1
+      simplified = SIMPLIFY_SINGLE_ACCIDENTALS[name]
+      return simplified ? Note.by_name(simplified) : self
+    when 2
+      direction = accidental / accidental.abs
+      new_letter = Note.letter_shift(letter, direction)
+      new_accidental = accidental - direction*2
+      return Note.new(new_letter, new_accidental, pitch)
+    end
   end
 
   # Return a String representation of the Note's name.
