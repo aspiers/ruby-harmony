@@ -17,7 +17,9 @@ class ScaleType
   end
 
   def ScaleType.all; @@all end
-  def inspect;       name  end
+
+  alias_method :inspect, :name
+  alias_method :to_s,    :name
 end
 
 class DiatonicScaleType < ScaleType
