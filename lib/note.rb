@@ -7,8 +7,8 @@ require 'exceptions'
 class Note
   # An Array of note letters, starting with C.
   LETTERS = %w(C D E F G A B)
-
-  STANDARD_KEYS = %w(C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B)
+  STANDARD_KEY_NAMES = %w(C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B)
+  UGLY_NOTE_NAMES = %w(E# B# Fb Cb)
 
   # The numerical pitches corresponding to LETTERS, starting
   # with C at 0.
@@ -82,6 +82,11 @@ class Note
     new(letter, accidental_delta, pitch)
   end
 
+  STANDARD_KEYS = STANDARD_KEY_NAMES.map { |n| Note.by_name(n) }
+  UGLY_NOTES    = UGLY_NOTE_NAMES   .map { |n| Note.by_name(n) }
+  DOUBLE_SHARPS = LETTERS.map { |l| Note.by_name(l + "x" ) }
+  DOUBLE_FLATS  = LETTERS.map { |l| Note.by_name(l + "bb") }
+
   # Returns all notes representing the given pitch
   def Note.by_pitch(pitch)
     notes = [ ]
@@ -116,6 +121,10 @@ class Note
       new_accidental = accidental - direction*2
       return Note.new(new_letter, new_accidental, pitch)
     end
+  end
+
+  def simple?
+    self == self.simplify
   end
 
   # Return a String representation of the Note's name.

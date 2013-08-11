@@ -209,6 +209,21 @@ describe Note do
     end
   end
 
+  describe "#simple?" do
+    Note::STANDARD_KEYS.each do |note|
+      it "should identify #{name} as simple" do
+        note.simple?.should be_true
+      end
+    end
+
+    complex = [ Note::UGLY_NOTES, Note::DOUBLE_SHARPS, Note::DOUBLE_FLATS ]
+    complex.flatten.each do |note|
+      it "should identify #{note} as not simple" do
+        note.simple?.should be_false
+      end
+    end
+  end
+
   describe ".by_pitch" do
     pitches = [
       [  0, 'C Dbb B#' ],
