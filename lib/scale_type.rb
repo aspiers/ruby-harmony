@@ -62,6 +62,9 @@ class DiatonicScaleType < ScaleType
   # The number of modes is eqal to the number of notes in the smallest
   # repeating cycle of increments.  The number of transpositions
   # (keys) is equal to the number of semitones in the cycle.
+  #
+  # Thanks to Messiaen for helping me realise that.
+  # http://en.wikipedia.org/wiki/Modes_of_limited_transposition
 
   MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1          ], 7, 12)
   MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1          ], 7, 12)
