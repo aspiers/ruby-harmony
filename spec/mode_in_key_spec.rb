@@ -53,6 +53,10 @@ describe ModeInKey do
     it "#{mode_in_key} should have the right accidental count pair" do
       mode_in_key.accidentals.should == [ sharps, flats ]
     end
+
+    it "#{mode_in_key} should have the right accidental count" do
+      mode_in_key.num_accidentals.should == sharps + flats
+    end
   end
 
   [
