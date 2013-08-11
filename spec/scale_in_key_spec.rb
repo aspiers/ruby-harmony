@@ -99,9 +99,11 @@ describe ModeInKey do
 
   let(:all) { ModeInKey.all(Note.by_name("C")) }
 
-  it "should have 28 modes" do
-    all.size.should == 4
-    all.each { |modes| modes.size.should == 7 }
+  it "should have at least 28 modes" do
+    all.size.should >= 4
+    all.each do |modes_in_key|
+      modes_in_key.size.should == modes_in_key[0].mode.scale_type.num_modes
+    end
   end
 
   it "should order modes by accidentals" do

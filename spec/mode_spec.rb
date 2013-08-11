@@ -67,4 +67,7 @@ describe Mode do
 
   include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
     3, "E#", "E# F# G# A B# C# D#".split
+
+  include_examples "given starting note", DiatonicScaleType::DIMINISHED, \
+    1, "C", "C D Eb F Gb Ab A B".split
 end

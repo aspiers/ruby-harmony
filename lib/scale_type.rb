@@ -67,11 +67,11 @@ class DiatonicScaleType < ScaleType
   MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1          ], 7, 12)
   HARMONIC_MINOR  = new('harm min',        [ 2, 1, 2, 2, 1, 3, 1          ], 7, 12)
   HARMONIC_MAJOR  = new('harm maj',        [ 2, 2, 1, 2, 1, 3, 1          ], 7, 12)
+  WHOLE_TONE      = new('whole tone',      [ 2, 2, 2, 2, 2, 2             ], 1,  2)
+  DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
   # HUNGARIAN_GYPSY = new('hungarian gypsy', [ 2, 1, 3, 1, 1, 2, 2          ], 7, 12)
   # DOUBLE_HARMONIC = new('dbl harm',        [ 1, 3, 1, 2, 1, 3, 1          ], 7, 12)
   # ENIGMATIC       = new('enigmatic',       [ 1, 3, 2, 2, 2, 2, 2          ], 7, 12)
-  # WHOLE_TONE      = new('whole',           [ 2, 2, 2, 2, 2, 2             ], 1,  2)
-  # DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
   # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1             ], 2,  4)
   # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
   # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
@@ -103,6 +103,12 @@ class DiatonicScaleType < ScaleType
       else
         super
       end
+    end
+  end
+
+  class << DIMINISHED
+    def mode_name(degree)
+      return degree == 2 ? 'auxiliary diminished' : nil
     end
   end
 end

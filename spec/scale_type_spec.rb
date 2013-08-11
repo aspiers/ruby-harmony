@@ -2,7 +2,7 @@ require 'scale_type'
 
 describe ScaleType do
   it "should be prepopulated with the standard modes" do
-    ScaleType.all.size.should == 4
+    ScaleType.all.size.should >= 4
   end
 end
 
