@@ -46,15 +46,6 @@ class DiatonicScaleType < ScaleType
     return Note.by_letter_and_pitch(letter, pitch)
   end
 
-  def notes(key)
-    @notes ||=
-      begin
-        NoteArray[*increments.inject([0]) do |array, note|
-          array.push(array.last + note)
-        end]
-      end
-  end
-
   def mode_name(degree)
     nil
   end
