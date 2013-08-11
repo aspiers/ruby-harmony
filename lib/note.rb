@@ -1,4 +1,5 @@
 require 'accidental'
+require 'exceptions'
 
 # A class representing notes which have a numerical
 # pitch (not constrained to a single octave), and a
@@ -22,7 +23,7 @@ class Note
   end
 
   def letter=(l)
-    raise "no such note with letter '#{l}'" unless LETTERS.include? l
+    raise NoteExceptions::InvalidLetter.new(l) unless LETTERS.include? l
     @letter = l
   end
 
@@ -31,12 +32,12 @@ class Note
 
   def Note.letter_pitch_delta(letter, pitch)
     natural_pitch = NATURALS[letter]
-    raise "no such note with letter '#{letter}'" unless natural_pitch
+    raise NoteExceptions::InvalidLetter.new(letter) unless natural_pitch
     delta = pitch - natural_pitch
     delta += 12 while delta < -6
     delta -= 12 while delta >  6
     if (delta.abs) > 2
-      raise "pitch mismatch for letter '#{letter}' and pitch #{pitch} (natural #{natural_pitch}, delta #{delta})"
+      raise NoteExceptions::LetterPitchMismatch.new(letter, pitch, natural_pitch, delta)
     end
     return delta
   end
@@ -49,9 +50,9 @@ class Note
 
   # Instantiates a Note with the given letter in the C major scale.
   def Note.by_letter(letter)
-    natural_pitch = NATURALS[letter]
-    raise "no such note with letter '#{letter}'" unless natural_pitch
-    new(letter, 0, natural_pitch)
+    pitch = NATURALS[letter]
+    raise NoteExceptions::InvalidLetter.new(letter) unless pitch
+    new(letter, 0, pitch)
   end
 
   # Shifts a note letter up the C major scale by the given number of
@@ -60,7 +61,7 @@ class Note
   # 4 steps results in E.
   def Note.letter_shift(letter, steps)
     index = LETTERS.find_index { |l| l == letter }
-    raise "no such letter '#{letter}'" unless index
+    raise NoteExceptions::InvalidLetter.new(letter) unless index
     return LETTERS[(index + steps) % LETTERS.length]
   end
 
