@@ -71,6 +71,10 @@ module NoteCollection
   def num_accidentals
     num_sharps + num_flats
   end
+
+  def num_letters
+    inject(Set.new) { |set, note| set << note.letter }.size
+  end
 end
 
 class NoteSet < Set
