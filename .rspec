@@ -1,1 +1,3 @@
--rspec_helper --colour
+-rspec_helper
+--colour
+--format Fuubar

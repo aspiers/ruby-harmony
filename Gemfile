@@ -4,6 +4,7 @@ source 'https://rubygems.org/'
 
 group :development, :test do
   gem 'rspec', '~> 2.14.0'
+  gem 'fuubar'
 
   gem 'guard-rspec'
   #gem 'guard', github: 'aspiers/guard', branch: 'master'
