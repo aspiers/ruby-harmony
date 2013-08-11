@@ -1,5 +1,5 @@
 require 'scale_type'
-require 'note_set'
+require 'note_collections'
 
 class Mode
   attr_reader :degree, :scale_type, :index

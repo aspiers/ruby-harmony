@@ -1,5 +1,5 @@
 require 'note'
-require 'note_set'
+require 'note_collections'
 
 class ScaleType
   @@all = [ ]
