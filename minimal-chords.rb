@@ -5,6 +5,14 @@ require 'scale_finder'
 require 'mode_in_key'
 require 'chord_type'
 
+def usage
+  me = File.basename($0)
+  $stderr.puts "Usage: #{me} KEY CHORD-TYPE [VERBOSITY]"
+  exit 1
+end
+
+usage if ARGV.size < 2
+
 key_name, chord_type, verbosity = ARGV
 
 key = Note.by_name(key_name)
