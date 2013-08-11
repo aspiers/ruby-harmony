@@ -59,6 +59,18 @@ module NoteCollection
   def contains_equivalent_note?(note)
     detect { |n| n === note }
   end
+
+  def num_sharps
+    inject(0) { |total, note| note.accidental > 0 ? total += note.accidental : total }
+  end
+
+  def num_flats
+    inject(0) { |total, note| note.accidental < 0 ? total -= note.accidental : total }
+  end
+
+  def num_accidentals
+    num_sharps + num_flats
+  end
 end
 
 class NoteSet < Set
