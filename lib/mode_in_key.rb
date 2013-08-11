@@ -43,7 +43,7 @@ class ModeInKey
   end
 
   def notes
-    mode.notes(key_note)
+    @notes ||= mode.notes(key_note)
   end
 
   def starting_note
