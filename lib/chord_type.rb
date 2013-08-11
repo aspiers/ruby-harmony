@@ -1,75 +1,107 @@
 require 'interval'
 
 class ChordType
-  @@all = {
-    "maj7"        => %w(   3    5     7                ),
-    "maj9"        => %w(   3    5     7  9             ),
-    "maj7#11"     => %w(   3          7       #11      ),
-    "maj7#5"      => %w(   3   #5     7                ),
-    "maj7#9"      => %w(   3    5     7    #9          ),
-    "maj7#5#9"    => %w(   3   #5     7    #9          ),
+  PRESETS = [
+    [ 'maj7'        , '   3    5     7                ' ],
+    [ 'maj9'        , '   3    5     7  9             ' ],
+    [ 'maj7#11'     , '   3          7       #11      ' ],
+    [ 'maj7#5'      , '   3   #5     7                ' ],
+    [ 'maj7#9'      , '   3    5     7    #9          ' ],
+    [ 'maj7#5#9'    , '   3   #5     7    #9          ' ],
 
-    "6"           => %w(   3    5  6                   ),
-    "6 9"         => %w(   3    5  6     9             ),
+    [ '6'           , '   3    5  6                   ' ],
+    [ '6 9'         , '   3    5  6     9             ' ],
 
-    "min7"        => %w(  b3    5    b7                ),
-    "min7b5"      => %w(  b3   b5    b7                ),
-    "min9"        => %w(  b3    5    b7  9             ),
-    "min11"       => %w(  b3    5    b7  9     11      ),
+    [ 'min7'        , '  b3    5    b7                ' ],
+    [ 'min7b5'      , '  b3   b5    b7                ' ],
+    [ 'min9'        , '  b3    5    b7  9             ' ],
+    [ 'min11'       , '  b3    5    b7  9     11      ' ],
 
-    "min6"        => %w(  b3    5  6                   ),
-    "min6 9"      => %w(  b3    5  6     9             ),
+    [ 'min6'        , '  b3    5  6                   ' ],
+    [ 'min6 9'      , '  b3    5  6     9             ' ],
 
-    "min/maj7"    => %w(  b3    5     7                ),
+    [ 'min/maj7'    , '  b3    5     7                ' ],
 
-    "7"           => %w(   3    5    b7                ),
-    "7#11"        => %w(   3         b7       #11      ),
-    "7b13"        => %w(   3         b7           b13  ),
-    "7#11b13"     => %w(   3         b7       #11 b13  ),
+    [ '7'           , '   3    5    b7                ' ],
+    [ '7#11'        , '   3         b7       #11      ' ],
+    [ '7b13'        , '   3         b7           b13  ' ],
+    [ '7#11b13'     , '   3         b7       #11 b13  ' ],
 
-    "7b9"         => %w(   3    5    b7 b9             ),
-    "7b9#11"      => %w(   3         b7 b9    #11      ),
-    "7b9b13"      => %w(   3         b7 b9        b13  ),
-    "7b9#11b13"   => %w(   3         b7 b9    #11 b13  ),
-    "13b9"        => %w(   3         b7 b9         13  ),
-    "13b9#11"     => %w(   3         b7 b9    #11  13  ),
+    [ '7b9'         , '   3    5    b7 b9             ' ],
+    [ '7b9#11'      , '   3         b7 b9    #11      ' ],
+    [ '7b9b13'      , '   3         b7 b9        b13  ' ],
+    [ '7b9#11b13'   , '   3         b7 b9    #11 b13  ' ],
+    [ '13b9'        , '   3         b7 b9         13  ' ],
+    [ '13b9#11'     , '   3         b7 b9    #11  13  ' ],
 
-    "9"           => %w(   3    5    b7  9             ),
-    "9#11"        => %w(   3         b7  9    #11      ),
-    "9b13"        => %w(   3         b7  9        b13  ),
-    "9#11b13"     => %w(   3         b7  9    #11 b13  ),
-    "13"          => %w(   3         b7  9         13  ),
-    "13#11"       => %w(   3         b7  9    #11  13  ),
+    [ '9'           , '   3    5    b7  9             ' ],
+    [ '9#11'        , '   3         b7  9    #11      ' ],
+    [ '9b13'        , '   3         b7  9        b13  ' ],
+    [ '9#11b13'     , '   3         b7  9    #11 b13  ' ],
+    [ '13'          , '   3         b7  9         13  ' ],
+    [ '13#11'       , '   3         b7  9    #11  13  ' ],
 
-    "7#9"         => %w(   3    5    b7    #9          ),
-    "7#9#11"      => %w(   3         b7    #9 #11      ),
-    "7#9b13"      => %w(   3         b7    #9     b13  ),
-    "7#9#11b13"   => %w(   3         b7    #9 #11 b13  ),
-    "13b9"        => %w(   3         b7 b9         13  ),
-    "13b9#11"     => %w(   3         b7 b9    #11  13  ),
+    [ '7#9'         , '   3    5    b7    #9          ' ],
+    [ '7#9#11'      , '   3         b7    #9 #11      ' ],
+    [ '7#9b13'      , '   3         b7    #9     b13  ' ],
+    [ '7#9#11b13'   , '   3         b7    #9 #11 b13  ' ],
+    [ '13b9'        , '   3         b7 b9         13  ' ],
+    [ '13b9#11'     , '   3         b7 b9    #11  13  ' ],
 
-    "7b9#9"       => %w(   3    5    b7 b9 #9          ),
-    "7b9#9#11"    => %w(   3         b7 b9 #9 #11      ),
-    "7b9#9b13"    => %w(   3         b7 b9 #9     b13  ),
-    "7b9#9#11b13" => %w(   3         b7 b9 #9 #11 b13  ),
-    "13b9#9"      => %w(   3         b7 b9 #9      13  ),
-    "13b9#9#11"   => %w(   3         b7 b9 #9 #11  13  ),
+    [ '7b9#9'       , '   3    5    b7 b9 #9          ' ],
+    [ '7b9#9#11'    , '   3         b7 b9 #9 #11      ' ],
+    [ '7b9#9b13'    , '   3         b7 b9 #9     b13  ' ],
+    [ '7b9#9#11b13' , '   3         b7 b9 #9 #11 b13  ' ],
+    [ '13b9#9'      , '   3         b7 b9 #9      13  ' ],
+    [ '13b9#9#11'   , '   3         b7 b9 #9 #11  13  ' ],
 
-    "sus4"        => %w(     4  5                      ),
-    "sus4add2"    => %w( 2   4  5                      ),
-    "sus7"        => %w(     4  5    b7                ),
-    "sus9"        => %w(   3 4  5    b7  9             ),
-    "sus7b9"      => %w(     4  5    b7 b9             ),
+    [ 'sus4'        , '     4  5                      ' ],
+    [ 'sus4add2'    , ' 2   4  5                      ' ],
+    [ 'sus7'        , '     4  5    b7                ' ],
+    [ 'sus9'        , '   3 4  5    b7  9             ' ],
+    [ 'sus7b9'      , '     4  5    b7 b9             ' ],
 
-    "dim"         => %w(b3     b5  6                   ),
-  }
+    [ 'dim'         , 'b3     b5  6                   ' ],
+  ]
+
+  @@names = [ ]
+  @@all   = { }
+
+  attr_accessor :name, :intervals, :index
+
+  def initialize(name, intervals)
+    self.name = name
+    self.intervals = intervals
+    @index = @@names.length
+
+    @@all[name] = self
+    @@names.push name
+  end
 
   def ChordType.names
-    @@all.keys
+    @@names
+  end
+
+  def ChordType.by_name(name)
+    @@all[name]
+  end
+
+  class << self
+    alias_method :[], :by_name
   end
 
   def ChordType.get_intervals(chord_type)
-    intervals = @@all[chord_type]
-    intervals.map { |name| Interval.by_name(name) }
+    ChordType[chord_type].intervals
   end
+
+  private
+  def ChordType.load_presets
+    for preset in PRESETS
+      name, interval_names = preset
+      interval_names = interval_names.strip.split
+      new(name, interval_names.map { |name| Interval.by_name(name) })
+    end
+  end
+
+  ChordType.load_presets
 end
