@@ -15,13 +15,27 @@ describe ModeInKey do
     end
   end
 
-  it "should have the right notes" do
-    mode = Mode.new(6, DiatonicScaleType::HARMONIC_MAJOR, -1)
-    key_note = Note.by_name("E")
-    mode_in_key = ModeInKey.new(mode, key_note)
-    mode_in_key.notes.map { |n| n.to_s }.should == \
-      %w(C D# E F# G# A B)
+  shared_examples "notes" do |degree, scale_type, key_name, expected_notes, expected_pitches|
+    context "#{key_name} #{scale_type} degree #{degree}" do
+      let(:mode)        { Mode.new(degree, scale_type, -1) }
+      let(:key_note)    { Note.by_name(key_name) }
+      let(:mode_in_key) { ModeInKey.new(mode, key_note) }
+
+      it "should have the right notes" do
+        mode_in_key.notes.join(' ').should == expected_notes
+      end
+
+      it "should have the right pitches" do
+        mode_in_key.pitches.should == expected_pitches
+      end
+    end
   end
+
+  include_examples "notes", 4, DiatonicScaleType::MELODIC_MINOR, "Bb",
+    'Eb F G A Bb C Db', [ 3, 5, 7, 9, 10, 12, 13 ]
+
+  include_examples "notes", 6, DiatonicScaleType::HARMONIC_MAJOR, "E",
+    'C D# E F# G# A B', [ 0, 3, 4, 6, 8, 9, 11 ]
 
   shared_examples "counting accidentals" do |degree, scale_type, key_name, sharps, flats|
     mode = Mode.new(degree, scale_type, -1)

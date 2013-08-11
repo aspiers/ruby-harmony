@@ -25,7 +25,15 @@ class Mode
 
   # Returns a NoteArray of the ascending notes of the mode, in the given key.
   def notes(key_note)
-    NoteArray.new(degrees.map { |degree| scale_type.note(key_note, degree) })
+    degrees.inject(NoteArray.new()) do |acc, degree|
+      note = scale_type.note(key_note, degree)
+      note.octave = 0
+      unless acc.empty?
+        note.octave +=1 while note < acc[-1] # ensure ascending
+      end
+      acc << note
+      acc
+    end
   end
 
   # Returns a NoteArray of the ascending notes of the mode, starting
