@@ -3,12 +3,12 @@ require 'note'
 describe Note do
   context "#new" do
     it "should raise an exception when given an invalid letter" do
-      lambda { Note.new('H', -1, 3) }.should \
+      expect { Note.new('H', -1, 3) }.to \
         raise_exception(RuntimeError, %{no such note with letter 'H'})
     end
 
     it "should raise pitch mismatch error" do
-      lambda { Note.new('A', 0, 3) }.should \
+      expect { Note.new('A', 0, 3) }.to \
         raise_error(RuntimeError, /pitch mismatch for letter/)
     end
   end
@@ -47,7 +47,7 @@ describe Note do
 
     context "invalid letter" do
       it "should raise an exception when given an invalid letter" do
-        lambda { Note.by_letter('H') }.should \
+        expect { Note.by_letter('H') }.to \
           raise_exception(RuntimeError, %{no such note with letter 'H'})
       end
     end
@@ -92,13 +92,13 @@ describe Note do
 
     context "invalid input" do
       it "should raise error with invalid letter" do
-        lambda { Note.by_letter_and_pitch('H', 0) }.should \
+        expect { Note.by_letter_and_pitch('H', 0) }.to \
           raise_error(RuntimeError, /no such note with letter/)
       end
 
       shared_examples "pitch mismatch" do |letter, pitch|
         it "should raise error with pitch #{pitch} for #{letter}" do
-          lambda { Note.by_letter_and_pitch(letter, pitch) }.should \
+          expect { Note.by_letter_and_pitch(letter, pitch) }.to \
             raise_error(RuntimeError, /pitch mismatch for letter/)
         end
       end
