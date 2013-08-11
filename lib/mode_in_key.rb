@@ -62,6 +62,10 @@ class ModeInKey
     notes.inject(0) { |total, note| note.accidental < 0 ? total -= note.accidental : total }
   end
 
+  def num_accidentals
+    num_sharps + num_flats
+  end
+
   def accidentals
     [ num_sharps, num_flats ]
   end
