@@ -27,6 +27,7 @@ class ModeInKey
   def name
     generic = generic_description
     special = special_description
+    return generic if generic == special
     return special ? "%s\n(%s)" % [ special, generic ] : generic
   end
 

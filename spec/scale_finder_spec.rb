@@ -38,7 +38,7 @@ describe ScaleFinder do
     "Db lydian dominant\n(4th degree of Ab mel min)",
     "Db altered\n(7th degree of Ebb mel min)",
     "Db altered\n(7th degree of Ebb mel min)",
-    "Db whole tone\n(Db whole tone)",
+    "Db whole tone",
     "6th degree of F dim",
     "6th degree of F dim",
     "6th degree of F dim",

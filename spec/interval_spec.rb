@@ -82,6 +82,10 @@ describe Interval do
       interval.name.should == name
     end
 
+    it "should stringify to its short name" do
+      interval.to_s.should == name
+    end
+
     it "should have the right (long) name" do
       interval.long_name.should == long_name
     end
