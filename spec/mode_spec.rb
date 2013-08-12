@@ -94,4 +94,13 @@ describe Mode do
     include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
       1, "D",  "D E F# G# A# C".split
   end
+
+  describe "name overriding" do
+    it "should allow the name to be overridden" do
+      mode = Mode.new(3, DiatonicScaleType::HARMONIC_MAJOR, -1)
+      new_name = 'new name'
+      mode.name!(new_name)
+      mode.name.should == new_name
+    end
+  end
 end

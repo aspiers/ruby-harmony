@@ -13,6 +13,7 @@ class Mode
     @degree = d
     @scale_type = s
     @index = i
+    @name_override = nil
   end
 
   # rotate intervallic increments by different degrees of the scale
@@ -58,9 +59,13 @@ class Mode
   end
 
   def name
-    scale_type.mode_name(degree)
+    @name_override || scale_type.mode_name(degree)
   end
   alias_method :to_s, :name
+
+  def name!(name)
+    @name_override = name
+  end
 
   def <=>(other)
     index <=> other.index
