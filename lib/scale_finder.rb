@@ -123,6 +123,8 @@ class ScaleFinder
     end
   end
 
+  attr_reader :scales
+
   def identify_modes
     starting_note = Note.by_name(@root)
     scales = ModeInKey.all(starting_note).flatten
@@ -135,6 +137,7 @@ class ScaleFinder
     # map [ chord_size, chords_count ] => [ scale, ... ]
     @distinctiveness = { }
 
+    @scales    = [ ]
     @ly_scales = [ ]
 
     identifiers.sort_by do |mode_in_key, chords_by_size|
@@ -153,7 +156,7 @@ class ScaleFinder
       chords_count = chords.size # number of identifying chords of this size
       @distinctiveness[[chord_size, chords_count]] ||= [ ]
       @distinctiveness[[chord_size, chords_count]].push scale
-      puts "#{chord_size} note combinations uniquely identifying #{scale}:"
+      debug 1, "#{chord_size} note combinations uniquely identifying #{scale}:"
       for chord in chords
         remaining = scale.notes.reject { |note| chord.contains_equivalent_note? note }
         alterations = remaining.reject { |note| @fixed_chord_notes.contains_equivalent_note? note }
@@ -164,7 +167,8 @@ class ScaleFinder
           end
           note_in_scale
         }
-        puts "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
+        debug 2, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
+        @scales << scale
         @ly_scales.push [
           Accidental.to_ly_markup(scale.to_ly),
           ly_notes(scale, chord_in_scale)
