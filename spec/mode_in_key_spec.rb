@@ -3,27 +3,73 @@ require 'scale_type'
 require 'mode'
 
 describe ModeInKey do
-  describe "#name" do
+  describe "#name and #to_ly" do
     [
-      [ 2, "C",  DiatonicScaleType::MAJOR,         "D dorian\n(2nd degree of C maj)"      ],
-      [ 6, "F",  DiatonicScaleType::MAJOR,         "D aeolian\n(6th degree of F maj)"     ],
-      [ 4, "G",  DiatonicScaleType::MELODIC_MINOR, "C lydian dominant\n(4th degree of G mel min)"   ],
-      [ 6, "F",  DiatonicScaleType::MELODIC_MINOR, "D locrian natural 2\n(6th degree of F mel min)" ],
-      [ 2, "Ab", SymmetricalScaleType::DIMINISHED, "Bb auxiliary diminished\n(2nd degree of Ab dim)" ],
-      [ 1, "G",  SymmetricalScaleType::WHOLE_TONE, "G whole tone" ],
-    ].each do |degree, key_name, scale_type, expected|
+      [ 2, "C",  DiatonicScaleType::MAJOR,         "D dorian\n(2nd degree of C maj)",
+        <<-'EOF'
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "D dorian" }
+              \line { "(2nd degree of C maj)" }
+            }
+        EOF
+      ],
+      [ 6, "F",  DiatonicScaleType::MAJOR,         "D aeolian\n(6th degree of F maj)",
+        <<-'EOF'
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "D aeolian" }
+              \line { "(6th degree of F maj)" }
+            }
+        EOF
+      ],
+      [ 4, "G",  DiatonicScaleType::MELODIC_MINOR, "C lydian dominant\n(4th degree of G mel min)",
+        <<-'EOF'
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "C lydian dominant" }
+              \line { "(4th degree of G mel min)" }
+            }
+        EOF
+      ],
+      [ 6, "F",  DiatonicScaleType::MELODIC_MINOR, "D locrian natural 2\n(6th degree of F mel min)",
+        <<-'EOF'
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "D locrian natural 2" }
+              \line { "(6th degree of F mel min)" }
+            }
+        EOF
+      ],
+      [ 2, "Ab", SymmetricalScaleType::DIMINISHED, "Bb auxiliary diminished\n(2nd degree of Ab dim)",
+        <<-'EOF'
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "Bb auxiliary diminished" }
+              \line { "(2nd degree of Ab dim)" }
+            }
+        EOF
+      ],
+      [ 1, "G",  SymmetricalScaleType::WHOLE_TONE, "G whole tone",
+        "            \"G whole tone\"\n"
+      ],
+    ].each do |degree, key_name, scale_type, long_name, ly|
       context "degree #{degree} of #{key_name} #{scale_type}" do
         let(:mode) { Mode.new(degree, scale_type, 0) }
         let(:key)  { Note[key_name]                  }
         let(:mode_in_key) { ModeInKey.new(mode, key) }
-        let(:short_name) { expected.sub(/\n.+/, '')  }
-
-        it "should have the long name" do
-          mode_in_key.name.should == expected
-        end
+        let(:short_name) { long_name.sub(/\n.+/, '')  }
 
         it "should give its short name via #inspect" do
           mode_in_key.inspect.should == short_name
+        end
+
+        it "should have the long name" do
+          mode_in_key.name.should == long_name
+        end
+
+        it "should have the right LilyPond markup" do
+          mode_in_key.to_ly.should == ly
         end
       end
     end

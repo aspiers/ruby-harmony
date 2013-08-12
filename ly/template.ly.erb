@@ -10,6 +10,7 @@
   ragged-last = ##t
   system-system-spacing =
     #'((basic-distance . 9)
+       (padding . 2)
        (minimum-distance . 4))
 }
 
@@ -38,18 +39,25 @@ emphasise = \once {
   \context {
     \Voice
     \remove "Stem_engraver"
-    }
+  }
 }
 
 \score {
   \new Score \with {
+    % This increases horizontal spacing between notes, but is not needed
+    % with \markLengthOn
+    %\override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1/8)
+
+    % By default RehearsalMarks align to barlines, I think.
+    %\override RehearsalMark.break-align-symbols = #'(key-signature)
+    \override RehearsalMark.self-alignment-X = #LEFT
+
     \remove "System_start_delimiter_engraver"
     \remove "Bar_number_engraver"
   }
   {
-    \new Staff \with {
-    }
-    {
+    \new Staff {
+      \markLengthOn
       <<%= chord %>>1^\markup { \teeny { "<%= descr %>" } }
       \bar "||" |
 
@@ -63,8 +71,14 @@ emphasise = \once {
       \break
 <%   end -%>
 <%   last_scale_type = scale_type -%>
-<%   notes[0] += "4^\\markup {\n          \\fontsize #-2 {\n#{description}          }\n        }" -%>
+      \mark \markup {
+        \left-align
+        \teeny {
+<%= description -%>
+        }
+      }
       \relative c' {
+<% notes[0] += "4" -%>
         <%= notes.join " " %> |
       }
 <% end -%>

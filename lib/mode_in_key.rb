@@ -36,7 +36,7 @@ class ModeInKey
   end
 
   def to_ly
-    text = to_s
+    text = name
     return ("\"%s\"\n" % text).indent(12) unless text.include? "\n"
     lines = text.split("\n").map { |line| "  \\line { \"#{line}\" }\n" }
     lines.unshift "\\column {\n"
