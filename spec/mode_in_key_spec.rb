@@ -145,7 +145,8 @@ describe ModeInKey do
   end
 
   describe "#output_modes" do
-    ModeInKey.output_modes(Note['D']).should == <<EOF
+    it "should show all the scales in D" do
+      ModeInKey.output_modes(Note['D']).should == <<EOF
 4 lydian                         D   E   F#  G#  A   B   C# 
 1 ionian                         D   E   F#  G   A   B   C# 
 5 mixo                           D   E   F#  G   A   B   C  
@@ -157,8 +158,8 @@ describe ModeInKey do
 3 lydian augmented               D   E   F#  G#  A#  B   C# 
 4 lydian dominant                D   E   F#  G#  A   B   C  
 1 D mel min                      D   E   F   G   A   B   C# 
-5 5th degree of G mel min        D   E   F#  G   A   Bb  C  
-2 2nd degree of C mel min        D   Eb  F   G   A   B   C  
+5 dominant b13                   D   E   F#  G   A   Bb  C  
+2 dorian b2                      D   Eb  F   G   A   B   C  
 6 locrian natural 2              D   E   F   G   Ab  Bb  C  
 7 altered                        D   Eb  F   Gb  Ab  Bb  C  
 
@@ -184,5 +185,6 @@ describe ModeInKey do
 2 auxiliary diminished           D   Eb  F   Gb  Ab  A   B   C  
 
 EOF
+    end
   end
 end

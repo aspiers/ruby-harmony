@@ -87,10 +87,14 @@ class DiatonicScaleType < ScaleType
   class << MELODIC_MINOR
     def mode_name(degree)
       case degree
+      when 2
+        "dorian b2"
       when 3
         "lydian augmented"
       when 4
         "lydian dominant"
+      when 5
+        "dominant b13"
       when 6
         "locrian natural 2"
       when 7

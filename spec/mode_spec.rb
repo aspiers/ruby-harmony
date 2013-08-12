@@ -33,7 +33,7 @@ describe Mode do
     1, "A", "ionian", "A B C# D E F# G#".split
 
   include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
-    2, "B", nil, "C# D E F# G# A# B".split
+    2, "B", "dorian b2", "C# D E F# G# A# B".split
 
   include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
     6, "D", "locrian natural 2", "B C# D E F G A".split
