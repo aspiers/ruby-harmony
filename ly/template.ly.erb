@@ -38,7 +38,10 @@ emphasise = \once {
   }
   \context {
     \Voice
-    \remove "Stem_engraver"
+
+    % This can cause overlapping notes in the chord, so instead make
+    % stems transparent after chord.
+    %\remove "Stem_engraver"
   }
 }
 
@@ -61,6 +64,8 @@ emphasise = \once {
       \mark \markup { \teeny { "<%= descr %>" } }
       <<%= chord %>>1
       \bar "||" |
+
+      \override Stem #'transparent = ##t
 
       \small
 <% last_scale_type = nil -%>
