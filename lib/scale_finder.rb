@@ -138,7 +138,7 @@ class ScaleFinder
     @distinctiveness = { }
 
     @scales    = [ ]
-    @ly_scales = [ ]
+    @ly_scales = { }
 
     identifiers.sort_by do |mode_in_key, chords_by_size|
       mode_in_key.mode.index
@@ -168,8 +168,9 @@ class ScaleFinder
           note_in_scale
         }
         debug 2, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
-        @scales << scale
-        @ly_scales.push [
+        @scales << [scale, chord_in_scale]
+
+        @ly_scales[scale.name] ||= [
           Accidental.to_ly_markup(scale.to_ly),
           ly_notes(scale, chord_in_scale)
         ]
@@ -223,7 +224,7 @@ EOF
     data = TemplateData.new(
       descr:  Accidental.to_ly_markup(@descr),
       chord:  @fixed_chord_notes.map(&:to_ly_abs).join(" "),
-      scales: @ly_scales,
+      scales: @ly_scales.values,
     )
     File.write(ly_out_file, data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
 

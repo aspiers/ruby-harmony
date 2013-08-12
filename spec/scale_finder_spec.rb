@@ -10,7 +10,7 @@ describe ScaleFinder do
       scalefinder.set_verbosity(0)
       scales = ModeInKey.all(key).flatten
       scalefinder.identify_modes
-      scalefinder.scales.map(&:name).should == expected
+      scalefinder.scales.map { |scale| scale[0].name }.should == expected
     end
   end
 
