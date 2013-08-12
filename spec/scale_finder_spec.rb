@@ -10,9 +10,7 @@ describe ScaleFinder do
       scalefinder.set_verbosity(0)
       scales = ModeInKey.all(key).flatten
       scalefinder.identify_modes
-      # require 'pp'
-      # pp scalefinder.scales
-      scalefinder.scales.map(&:to_s).should == expected
+      scalefinder.scales.map(&:name).should == expected
     end
   end
 
@@ -31,23 +29,22 @@ describe ScaleFinder do
   ]
   include_examples "preset", "C", "min11", \
   [
-    "dorian",
-    "aeolian",
+    "C dorian\n(2nd degree of Bb maj)",
+    "C aeolian\n(6th degree of Eb maj)",
   ]
 
   shared_examples "custom" do |key_name, descr, notes, expected|
     fixed_chord_notes = notes.split.map { |n| Note[n] }
-    p fixed_chord_notes
     include_examples "scalefinder", Note[key_name], descr, fixed_chord_notes, expected
   end
 
   include_examples "custom", "C", "Ab/C", "C Eb Ab", \
   [
-    "phrygian",
-    "aeolian",
-    "locrian",
-    "locrian natural 2",
-    "altered",
+    "C phrygian\n(3rd degree of Ab maj)",
+    "C aeolian\n(6th degree of Eb maj)",
+    "C locrian\n(7th degree of Db maj)",
+    "C locrian natural 2\n(6th degree of Eb mel min)",
+    "C altered\n(7th degree of Db mel min)",
     "C harm min",
     "7th degree of Db harm min",
     "3rd degree of Ab harm maj",

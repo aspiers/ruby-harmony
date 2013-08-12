@@ -5,9 +5,10 @@ require 'mode'
 describe ModeInKey do
   describe "#name" do
     [
-      [ 2, "C", DiatonicScaleType::MAJOR,         "C dorian\n(2nd degree of C maj)"      ],
-      [ 6, "F", DiatonicScaleType::MAJOR,         "F aeolian\n(6th degree of F maj)"     ],
-      [ 6, "F", DiatonicScaleType::MELODIC_MINOR, "F locrian natural 2\n(6th degree of F mel min)" ],
+      [ 2, "C", DiatonicScaleType::MAJOR,         "D dorian\n(2nd degree of C maj)"      ],
+      [ 6, "F", DiatonicScaleType::MAJOR,         "D aeolian\n(6th degree of F maj)"     ],
+      [ 4, "G", DiatonicScaleType::MELODIC_MINOR, "C lydian dominant\n(4th degree of G mel min)"   ],
+      [ 6, "F", DiatonicScaleType::MELODIC_MINOR, "D locrian natural 2\n(6th degree of F mel min)" ],
     ].each do |degree, key_name, scale_type, expected_name|
       it "should have the right name" do
         ModeInKey.new(Mode.new(degree, scale_type, 0), Note.by_name(key_name)).name.should == expected_name

@@ -19,14 +19,19 @@ class ModeInKey
     return text
   end
 
+  def special_description
+    special = mode.name
+    return special ? "%s %s" % [ starting_note, special ] : nil
+  end
+
   def name
     generic = generic_description
-    special = mode.name
-    return special ? "%s %s\n(%s)" % [key_note, special, generic ] : generic
+    special = special_description
+    return special ? "%s\n(%s)" % [ special, generic ] : generic
   end
 
   def to_s
-    mode.name || generic_description
+    special_description || generic_description
   end
 
   def to_ly
