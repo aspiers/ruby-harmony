@@ -15,27 +15,27 @@ describe Note do
   end
 
   shared_examples "a note" do |name, letter, ly, pitch, accidental|
-    it "should have the right letter (#{letter})" do
+    it "should have the right letter" do
       note.letter.should == letter
     end
 
-    it "should have the right pitch (#{pitch})" do
+    it "should have the right pitch" do
       note.pitch.should == pitch
     end
 
-    it "should have the right name (#{name})" do
+    it "should have the right name" do
       note.name.should == name
     end
 
-    it "should have the right LilyPond code (#{ly})" do
+    it "should have the right LilyPond code" do
       note.to_ly.should == ly
     end
 
-    it "should have the right LilyPond absolute code (#{ly})" do
+    it "should have the right LilyPond absolute code" do
       note.to_ly_abs.should == ly + "'"
     end
 
-    it "should have the right accidental (#{accidental})" do
+    it "should have the right accidental" do
       note.accidental.should == accidental
     end
   end
