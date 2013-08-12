@@ -49,50 +49,59 @@ describe Mode do
   include_examples "given key", DiatonicScaleType::HARMONIC_MAJOR, \
     7, "F", nil, "E F G A Bb C Db".split
 
-  shared_examples "given starting note" do |scale, degree, start_name, expected_notes|
-    specify "degree #{degree} starting on #{start_name} should have the right notes" do
-      start_note = Note.by_name(start_name)
-      mode = Mode.new(degree, scale, -1)
-      notes = mode.notes_from(start_note)
-      notes.map { |n| n.name }.should == expected_notes
+  shared_examples "given starting note" do
+    |scale, degree, start_name, expected_notes, expected_name|
+
+    context "degree #{degree} of #{scale} starting on #{start_name}" do
+      let(:start_note) { Note.by_name(start_name)    }
+      let(:mode)       { Mode.new(degree, scale, -1) }
+
+      it "should have the right name" do
+        mode.to_s.should == expected_name
+      end
+
+      it "should have the right notes" do
+        notes = mode.notes_from(start_note)
+        notes.map { |n| n.name }.should == expected_notes.split
+      end
     end
   end
 
   describe "diatonic" do
     include_examples "given starting note", DiatonicScaleType::MAJOR, \
-      1, "Eb", "Eb F G Ab Bb C D".split
+      1, "Eb", "Eb F  G  Ab Bb C  D",  "ionian"
     include_examples "given starting note", DiatonicScaleType::MELODIC_MINOR, \
-      3, "Eb", "Eb F G A B C D".split
+      3, "Eb", "Eb F  G  A  B  C  D",  "lydian augmented"
     include_examples "given starting note", DiatonicScaleType::HARMONIC_MINOR, \
-      7, "D",  "D Eb F Gb Ab Bb Cb".split
+      7, "D",  "D  Eb F  Gb Ab Bb Cb", nil
     include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
-      3, "E#", "E# F# G# A B# C# D#".split
+      3, "E#", "E# F# G# A  B# C# D#", nil
   end
 
   describe "diminished" do
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      1, "C",  "C D Eb F Gb Ab A B".split
+      1, "C",  "C D Eb F Gb Ab A B",  nil
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      2, "C",  "C Db Eb E F# G A Bb".split
+      2, "C",  "C Db Eb E F# G A Bb", "auxiliary diminished"
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      1, "C#", "C# D# E F# G A Bb C".split
+      1, "C#", "C# D# E F# G A Bb C", nil
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      2, "C#", "C# D E F G G# A# B".split
+      2, "C#", "C# D E F G G# A# B",  "auxiliary diminished"
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      1, "Db", "Db Eb E F# G A Bb C".split
+      1, "Db", "Db Eb E F# G A Bb C", nil
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      2, "Db", "Db D E F G Ab Bb B".split
+      2, "Db", "Db D E F G Ab Bb B",  "auxiliary diminished"
   end
 
-  describe "whole tone", broken: true do
+  describe "whole tone" do
     include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
-      1, "C", "C D E F# G# A#".split
+      1, "C",  "C D E F# G# A#", "whole tone"
     include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
-      1, "C#", "C# D# F G A B".split
+      1, "C#", "C# D# F G A B",  "whole tone"
     include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
-      1, "Db", "Db Eb F G A B".split
+      1, "Db", "Db Eb F G A B",  "whole tone"
     include_examples "given starting note", SymmetricalScaleType::WHOLE_TONE, \
-      1, "D",  "D E F# G# A# C".split
+      1, "D",  "D E F# G# A# C", "whole tone"
   end
 
   describe "name overriding" do
