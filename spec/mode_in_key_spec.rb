@@ -145,44 +145,44 @@ describe ModeInKey do
   end
 
   describe "#output_modes" do
-    it "should show all the scales in D" do
-      ModeInKey.output_modes(Note['D']).should == <<EOF
-4 lydian                         D   E   F#  G#  A   B   C# 
-1 ionian                         D   E   F#  G   A   B   C# 
-5 mixo                           D   E   F#  G   A   B   C  
-2 dorian                         D   E   F   G   A   B   C  
-6 aeolian                        D   E   F   G   A   Bb  C  
-3 phrygian                       D   Eb  F   G   A   Bb  C  
-7 locrian                        D   Eb  F   G   Ab  Bb  C  
+    it "should show all the scales in C" do
+      ModeInKey.output_modes(Note['C']).should == <<EOF
+4 C lydian                       C   D   E   F#  G   A   B  
+1 C ionian                       C   D   E   F   G   A   B  
+5 C mixo                         C   D   E   F   G   A   Bb 
+2 C dorian                       C   D   Eb  F   G   A   Bb 
+6 C aeolian                      C   D   Eb  F   G   Ab  Bb 
+3 C phrygian                     C   Db  Eb  F   G   Ab  Bb 
+7 C locrian                      C   Db  Eb  F   Gb  Ab  Bb 
 
-3 lydian augmented               D   E   F#  G#  A#  B   C# 
-4 lydian dominant                D   E   F#  G#  A   B   C  
-1 D mel min                      D   E   F   G   A   B   C# 
-5 dominant b13                   D   E   F#  G   A   Bb  C  
-2 dorian b2                      D   Eb  F   G   A   B   C  
-6 locrian natural 2              D   E   F   G   Ab  Bb  C  
-7 altered                        D   Eb  F   Gb  Ab  Bb  C  
+3 C lydian augmented             C   D   E   F#  G#  A   B  
+4 C lydian dominant              C   D   E   F#  G   A   Bb 
+1 C mel min                      C   D   Eb  F   G   A   B  
+5 C dominant b13                 C   D   E   F   G   Ab  Bb 
+2 C dorian b2                    C   Db  Eb  F   G   A   Bb 
+6 C locrian natural 2            C   D   Eb  F   Gb  Ab  Bb 
+7 C altered                      C   Db  Eb  Fb  Gb  Ab  Bb 
 
-6 6th degree of F# harm min      D   E#  F#  G#  A   B   C# 
-3 3rd degree of B harm min       D   E   F#  G   A#  B   C# 
-4 4th degree of A harm min       D   E   F   G#  A   B   C  
-1 D harm min                     D   E   F   G   A   Bb  C# 
-5 5th degree of G harm min       D   Eb  F#  G   A   Bb  C  
-2 2nd degree of C harm min       D   Eb  F   G   Ab  B   C  
-7 7th degree of Eb harm min      D   Eb  F   Gb  Ab  Bb  Cb 
+6 C lydian #2                    C   D#  E   F#  G   A   B  
+3 C major #5                     C   D   E   F   G#  A   B  
+4 C dorian #4                    C   D   Eb  F#  G   A   Bb 
+1 C harm min                     C   D   Eb  F   G   Ab  B  
+5 C dominant b9 b13              C   Db  E   F   G   Ab  Bb 
+2 C locrian natural 6            C   Db  Eb  F   Gb  A   Bb 
+7 7th degree of Db harm min      C   Db  Eb  Fb  Gb  Ab  Bbb
 
-6 6th degree of F# harm maj      D   E#  F#  G#  A#  B   C# 
-4 4th degree of A harm maj       D   E   F   G#  A   B   C# 
-1 D harm maj                     D   E   F#  G   A   Bb  C# 
-5 5th degree of G harm maj       D   Eb  F#  G   A   B   C  
-2 2nd degree of C harm maj       D   E   F   G   Ab  B   C  
-3 3rd degree of Bb harm maj      D   Eb  F   Gb  A   Bb  C  
-7 7th degree of Eb harm maj      D   Eb  F   G   Ab  Bb  Cb 
+6 C lydian #2 #5                 C   D#  E   F#  G#  A   B  
+4 C melodic min #4               C   D   Eb  F#  G   A   B  
+1 C harm maj                     C   D   E   F   G   Ab  B  
+5 C dominant b9                  C   Db  E   F   G   A   Bb 
+2 2nd degree of Bb harm maj      C   D   Eb  F   Gb  A   Bb 
+3 3rd degree of Ab harm maj      C   Db  Eb  Fb  G   Ab  Bb 
+7 7th degree of Db harm maj      C   Db  Eb  F   Gb  Ab  Bbb
 
-1 whole tone                     D   E   F#  G#  A#  B# 
+1 C whole tone                   C   D   E   F#  G#  A# 
 
-1 D dim                          D   E   F   G   Ab  Bb  B   C# 
-2 auxiliary diminished           D   Eb  F   Gb  Ab  A   B   C  
+4 4th degree of G dim            C   Db  Eb  E   F#  G   A   Bb 
+1 C dim                          C   D   Eb  F   Gb  Ab  A   B  
 
 EOF
     end

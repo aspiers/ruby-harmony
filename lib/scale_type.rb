@@ -104,6 +104,42 @@ class DiatonicScaleType < ScaleType
       end
     end
   end
+
+  class << HARMONIC_MINOR
+    def mode_name(degree)
+      case degree
+      when 2
+        "locrian natural 6"
+      when 3
+        "major #5"
+      when 4
+        # "dorian / lydian"
+        "dorian #4"
+      when 5
+        "dominant b9 b13"
+      when 6
+        "lydian #2"
+      else
+        super
+      end
+    end
+  end
+
+  class << HARMONIC_MAJOR
+    def mode_name(degree)
+      case degree
+      when 4
+        # "lydian mel min"
+        "melodic min #4"
+      when 5
+        "dominant b9"
+      when 6
+        "lydian #2 #5"
+      else
+        super
+      end
+    end
+  end
 end
 
 class SymmetricalScaleType < ScaleType

@@ -100,7 +100,8 @@ class ModeInKey
     for modes_in_key in ModeInKey.all(starting_note)
       for mode_in_key in modes_in_key
         mode = mode_in_key.mode
-        name = mode.name || mode_in_key.generic_description
+        name = mode.name ? "%s %s" % [ starting_note, mode.name ]
+                         : mode_in_key.generic_description
         s << "%d %-30s %s\n" % [ mode.degree, name, mode_in_key.notes ]
       end
       s << "\n"

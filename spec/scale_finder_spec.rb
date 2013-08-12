@@ -40,9 +40,11 @@ describe ScaleFinder do
 
   include_examples "preset", "C", "7b9", false, \
   [
-    [ "5th degree of F harm min" , "C Db E F G Ab Bb"   , "F Ab"  ],
+    [ "C dominant b9 b13\n(5th degree of F harm min)",
+                                   "C Db E F G Ab Bb"   , "F Ab"  ],
     [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb" , "Eb Ab" ],
-    [ "5th degree of F harm maj" , "C Db E F G A Bb"    , "F A"   ],
+    [ "C dominant b9\n(5th degree of F harm maj)",
+                                   "C Db E F G A Bb"    , "F A"   ],
     [ "4th degree of G dim"      , "C Db Eb E F# G A Bb", "F#"    ],
   ]
   include_examples "preset", "C", "min11", false, \
@@ -85,7 +87,8 @@ describe ScaleFinder do
     [ "7th degree of Db harm min", "C Db Eb Fb Gb Ab Bbb", "Db Fb Bbb"  ],
 
     [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb",   "Fb G"       ],
-    [ "6th degree of E harm maj",  "C D# E F# G# A B",     "E B"        ],
+    [ "C lydian #2 #5\n(6th degree of E harm maj)",
+                                   "C D# E F# G# A B",     "E B"        ],
     [ "7th degree of Db harm maj", "C Db Eb F Gb Ab Bbb",  "Db F Bbb"   ],
 
     [ "C dim",                     "C D Eb F Gb Ab A B",   "D A"        ],

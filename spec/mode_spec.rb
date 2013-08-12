@@ -16,16 +16,18 @@ describe Mode do
   end
 
   shared_examples "given key" do |scale, degree, key_name, expected_name, expected_notes|
-    it "should have the right name" do
-      mode = Mode.new(degree, scale, -1)
-      mode.to_s.should == expected_name
-    end
+    context "degree #{degree} of #{key_name} #{scale}" do
+      it "should have the right name" do
+        mode = Mode.new(degree, scale, -1)
+        mode.to_s.should == expected_name
+      end
 
-    it "should have the right notes" do
-      key_note = Note.by_name(key_name)
-      mode = Mode.new(degree, scale, -1)
-      notes = mode.notes(key_note)
-      notes.map { |n| n.name }.should == expected_notes
+      it "should have the right notes" do
+        key_note = Note.by_name(key_name)
+        mode = Mode.new(degree, scale, -1)
+        notes = mode.notes(key_note)
+        notes.map { |n| n.name }.should == expected_notes
+      end
     end
   end
 
@@ -42,7 +44,7 @@ describe Mode do
     7, "C", "altered", "B C D Eb F G A".split
 
   include_examples "given key", DiatonicScaleType::HARMONIC_MINOR, \
-    2, "B", nil, "C# D E F# G A# B".split
+    2, "B", "locrian natural 6", "C# D E F# G A# B".split
 
   include_examples "given key", DiatonicScaleType::HARMONIC_MAJOR, \
     7, "F", nil, "E F G A Bb C Db".split
