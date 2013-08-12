@@ -67,19 +67,19 @@ describe Mode do
       3, "E#", "E# F# G# A B# C# D#".split
   end
 
-  describe "diminished", broken: true do
+  describe "diminished" do
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
       1, "C",  "C D Eb F Gb Ab A B".split
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
       2, "C",  "C Db Eb E F# G A Bb".split
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      1, "C#", "C# D# E F# G A A# C".split
+      1, "C#", "C# D# E F# G A Bb C".split
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
       2, "C#", "C# D E F G G# A# B".split
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
       1, "Db", "Db Eb E F# G A Bb C".split
     include_examples "given starting note", SymmetricalScaleType::DIMINISHED, \
-      2, "Db", "C# D E F G G# A# B".split
+      2, "Db", "Db D E F G Ab Bb B".split
   end
 
   describe "whole tone", broken: true do

@@ -1,3 +1,4 @@
+require 'mode'
 require 'scale_type'
 
 describe ScaleType do
@@ -11,7 +12,9 @@ describe DiatonicScaleType do
     tests.each do |name, degree, key_name|
       note = Note.by_name(name)
       it "should have the right key (#{key_name}) when #{note} is degree #{degree}" do
-        scale.key(note, degree).name.should == key_name
+        k, d = scale.key_and_degree(note, degree)
+        k.name.should == key_name
+        degree.should == d
       end
 
       specify "degree #{degree} of #{key_name} is #{name}" do
@@ -182,7 +185,9 @@ describe DiatonicScaleType do
       DiatonicScaleType::HARMONIC_MINOR.offset_from_key(3).should == 3
     end
   end
+end
 
+describe SymmetricalScaleType do
   describe "#equivalent_keys" do
     shared_examples "equivalent keys" do |scale_type, key_name, pitches, notes|
       specify "#{scale_type} equivalent pitches of #{key_name} should be right" do
@@ -208,11 +213,43 @@ describe DiatonicScaleType do
           [ 'E',  [ 4, 7, 10, 13 ], 'E  G  A# Bb C# Db' ],
         ]
       ],
+      [
+        SymmetricalScaleType::WHOLE_TONE,
+        [
+          [ 'C',  [ 0, 2, 4, 6, 8, 10 ], 'C D E F# Gb G# Ab A# Bb'  ],
+        ]
+      ]
     ].each do |scale_type, rest|
       rest.each do |key_name, pitches, notes|
         include_examples "equivalent keys", scale_type,
           key_name, pitches, notes.split
       end
+    end
+  end
+
+  describe SymmetricalScaleType::DIMINISHED do
+    # annoyingly necessary, presumably because it's an instance not a class
+    subject { SymmetricalScaleType::DIMINISHED }
+
+    shared_examples "good key" do |starting_note, degree, expected|
+      it "should choose a good key for #{starting_note} degree #{degree}" do
+        mode = Mode.new(degree, subject, -1)
+        k, d = subject.key_and_degree(Note[starting_note], mode.degree)
+        k.name.should == expected
+      end
+    end
+
+    [
+      [ 'C',  'C',  'G'  ],
+      [ 'C#', 'E',  'B'  ],
+      [ 'Db', 'G',  'F'  ],
+      [ 'D',  'D',  'C'  ],
+      [ 'D#', 'D#', 'E'  ],
+      [ 'Eb', 'Eb', 'G'  ],
+      [ 'E',  'E',  'D'  ],
+    ].each do |starting_note, expected_primary_key, expected_aux_key|
+      include_examples "good key", starting_note, 1, expected_primary_key
+      include_examples "good key", starting_note, 2, expected_aux_key
     end
   end
 end

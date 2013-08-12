@@ -43,8 +43,13 @@ class Mode
   # given starting note is C, then it will return Bb major starting on
   # C.
   def notes_from(starting_note)
-    key_note = scale_type.key(starting_note, degree, self)
-    notes(key_note)
+    # We have to allow the ScaleType to choose which (key, degree)
+    # combination is going to allow the best way of representing the
+    # notes; some ScaleTypes need to be fussy about this
+    # (e.g. diminished).
+    key_note, best_degree = scale_type.key_and_degree(starting_note, degree)
+    mode = best_degree == degree ? self : Mode.new(best_degree, scale_type, index)
+    mode.notes(key_note)
   end
 
   # Returns a ModeInKey instance representing this mode in the given key.
