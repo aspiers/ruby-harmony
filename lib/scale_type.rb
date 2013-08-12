@@ -311,5 +311,9 @@ class SymmetricalScaleType < ScaleType
     def mode_name(degree)
       return name
     end
+
+    def note(key_note, degree)
+      super(key_note, degree).simplify
+    end
   end
 end
