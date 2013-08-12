@@ -3,10 +3,27 @@ require 'scale_type'
 require 'mode'
 
 describe ModeInKey do
-  describe "#name and #to_ly" do
+  describe "standard methods" do
     [
-      [ 2, "C",  DiatonicScaleType::MAJOR,         "D dorian\n(2nd degree of C maj)",
-        <<-'EOF'
+      [
+        1, "F#",  DiatonicScaleType::MAJOR,
+        "F# ionian\n(F# maj)",
+        'F# G# A# B C# D# E#',
+        [ 6, 8, 10, 11, 13, 15, 17 ],
+        <<-'EOF',
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "F# ionian" }
+              \line { "(F# maj)" }
+            }
+        EOF
+      ],
+      [
+        2, "C",  DiatonicScaleType::MAJOR,
+        "D dorian\n(2nd degree of C maj)",
+        "D E F G A B C",
+        [ 2, 4, 5, 7, 9, 11, 12 ],
+        <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
               \line { "D dorian" }
@@ -14,8 +31,12 @@ describe ModeInKey do
             }
         EOF
       ],
-      [ 6, "F",  DiatonicScaleType::MAJOR,         "D aeolian\n(6th degree of F maj)",
-        <<-'EOF'
+      [
+        6, "F",  DiatonicScaleType::MAJOR,
+        "D aeolian\n(6th degree of F maj)",
+        "D E F G A Bb C",
+        [ 2, 4, 5, 7, 9, 10, 12 ],
+        <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
               \line { "D aeolian" }
@@ -23,8 +44,12 @@ describe ModeInKey do
             }
         EOF
       ],
-      [ 4, "G",  DiatonicScaleType::MELODIC_MINOR, "C lydian dominant\n(4th degree of G mel min)",
-        <<-'EOF'
+      [
+        4, "G",  DiatonicScaleType::MELODIC_MINOR,
+        "C lydian dominant\n(4th degree of G mel min)",
+        "C D E F# G A Bb",
+        [ 0, 2, 4, 6, 7, 9, 10 ],
+        <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
               \line { "C lydian dominant" }
@@ -32,8 +57,12 @@ describe ModeInKey do
             }
         EOF
       ],
-      [ 6, "F",  DiatonicScaleType::MELODIC_MINOR, "D locrian natural 2\n(6th degree of F mel min)",
-        <<-'EOF'
+      [
+        6, "F",  DiatonicScaleType::MELODIC_MINOR,
+        "D locrian natural 2\n(6th degree of F mel min)",
+        "D E F G Ab Bb C",
+        [ 2, 4, 5, 7, 8, 10, 12 ],
+        <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
               \line { "D locrian natural 2" }
@@ -41,8 +70,38 @@ describe ModeInKey do
             }
         EOF
       ],
-      [ 2, "Ab", SymmetricalScaleType::DIMINISHED, "Bb auxiliary diminished\n(2nd degree of Ab diminished)",
-        <<-'EOF'
+      [
+        4, "Bb", DiatonicScaleType::MELODIC_MINOR,
+        "Eb lydian dominant\n(4th degree of Bb mel min)",
+        "Eb F G A Bb C Db",
+        [ 3, 5, 7, 9, 10, 12, 13 ],
+        <<-'EOF',
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "Eb lydian dominant" }
+              \line { "(4th degree of Bb mel min)" }
+            }
+        EOF
+      ],
+      [
+        6, "E", DiatonicScaleType::HARMONIC_MAJOR,
+        "C lydian #2 #5\n(6th degree of E harm maj)",
+        "C D# E F# G# A B",
+        [ 0, 3, 4, 6, 8, 9, 11 ],
+        <<-'EOF',
+            \override #'(baseline-skip . 2)
+            \column {
+              \line { "C lydian #2 #5" }
+              \line { "(6th degree of E harm maj)" }
+            }
+        EOF
+      ],
+      [
+        2, "Ab", SymmetricalScaleType::DIMINISHED,
+        "Bb auxiliary diminished\n(2nd degree of Ab diminished)",
+        "Bb B Db D E F G Ab",
+        [ 10, 11, 13, 14, 16, 17, 19, 20 ],
+        <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
               \line { "Bb auxiliary diminished" }
@@ -50,52 +109,45 @@ describe ModeInKey do
             }
         EOF
       ],
-      [ 1, "G",  SymmetricalScaleType::WHOLE_TONE, "G whole tone",
+      [
+        1, "G",  SymmetricalScaleType::WHOLE_TONE,
+        "G whole tone",
+        "G A B C# D# F",
+        [ 7, 9, 11, 13, 15, 17 ],
         "            \"G whole tone\"\n"
       ],
-    ].each do |degree, key_name, scale_type, long_name, ly|
+    ].each do
+      |degree, key_name, scale_type,
+       exp_long_name, exp_notes, exp_pitches, exp_ly|
+
       context "degree #{degree} of #{key_name} #{scale_type}" do
-        let(:mode) { Mode.new(degree, scale_type, 0) }
-        let(:key)  { Note[key_name]                  }
-        let(:mode_in_key) { ModeInKey.new(mode, key) }
-        let(:short_name) { long_name.sub(/\n.+/, '')  }
+        let(:mode)        { Mode.new(degree, scale_type, 0) }
+        let(:key)         { Note[key_name]                  }
+        let(:mode_in_key) { ModeInKey.new(mode, key)        }
+        let(:short_name)  { exp_long_name.sub(/\n.+/, '')   }
 
         it "should give its short name via #inspect" do
           mode_in_key.inspect.should == short_name
         end
 
         it "should have the long name" do
-          mode_in_key.name.should == long_name
+          mode_in_key.name.should == exp_long_name
         end
 
         it "should have the right LilyPond markup" do
-          mode_in_key.to_ly.should == ly
+          mode_in_key.to_ly.should == exp_ly
+        end
+
+        it "should have the right note names" do
+          mode_in_key.notes.join(' ').should == exp_notes
+        end
+
+        it "should have the right pitches" do
+          mode_in_key.pitches.should == exp_pitches
         end
       end
     end
   end
-
-  shared_examples "notes" do |degree, scale_type, key_name, expected_notes, expected_pitches|
-    context "#{key_name} #{scale_type} degree #{degree}" do
-      let(:mode)        { Mode.new(degree, scale_type, -1) }
-      let(:key_note)    { Note.by_name(key_name) }
-      let(:mode_in_key) { ModeInKey.new(mode, key_note) }
-
-      it "should have the right notes" do
-        mode_in_key.notes.join(' ').should == expected_notes
-      end
-
-      it "should have the right pitches" do
-        mode_in_key.pitches.should == expected_pitches
-      end
-    end
-  end
-
-  include_examples "notes", 4, DiatonicScaleType::MELODIC_MINOR, "Bb",
-    'Eb F G A Bb C Db', [ 3, 5, 7, 9, 10, 12, 13 ]
-
-  include_examples "notes", 6, DiatonicScaleType::HARMONIC_MAJOR, "E",
-    'C D# E F# G# A B', [ 0, 3, 4, 6, 8, 9, 11 ]
 
   shared_examples "counting accidentals" do |degree, scale_type, key_name, sharps, flats|
     mode = Mode.new(degree, scale_type, -1)
