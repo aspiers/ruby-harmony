@@ -19,11 +19,19 @@ class ScaleType
 
   attr_reader :name, :increments, :num_modes, :transpositions
 
-  # The number of modes is eqal to the number of notes in the smallest
-  # repeating cycle of increments.  The number of transpositions
-  # (keys) is equal to the number of semitones in the cycle.
-  #
-  # Thanks to Messiaen for helping me realise that.
+  # The number of modes is equal to the number of notes in the
+  # smallest repeating cycle of increments.
+  def symmetrical_modes?
+    num_modes < increments.size
+  end
+
+  # The number of transpositions (keys) is equal to the number of
+  # semitones in the cycle.
+  def symmetrical_keys?
+    transpositions < 12
+  end
+
+  # Thanks to Messiaen for helping me realise those facts:
   # http://en.wikipedia.org/wiki/Modes_of_limited_transposition
 
   def initialize(name, increments, num_modes, transpositions)

@@ -12,6 +12,20 @@ describe DiatonicScaleType do
     DiatonicScaleType.all_in_subclass.size.should == 4
   end
 
+  describe "#symmetrical?" do
+    DiatonicScaleType.all_in_subclass.each do |type|
+      context type do
+        it "should not be symmetrical by mode" do
+          type.symmetrical_modes?.should be_false
+        end
+
+        it "should not be symmetrical by transposition" do
+          type.symmetrical_keys?.should be_false
+        end
+      end
+    end
+  end
+
   shared_examples "a diatonic scale" do |scale, tests|
     tests.each do |name, degree, key_name|
       note = Note.by_name(name)
@@ -194,6 +208,20 @@ end
 describe SymmetricalScaleType do
   it "should be prepopulated with 2 types" do
     SymmetricalScaleType.all_in_subclass.size.should == 2
+  end
+
+  describe "symmetrical?" do
+    SymmetricalScaleType.all_in_subclass.each do |type|
+      context type do
+        it "should be symmetrical by mode" do
+          type.symmetrical_modes?.should be_true
+        end
+
+        it "should be symmetrical by transposition" do
+          type.symmetrical_keys?.should be_true
+        end
+      end
+    end
   end
 
   describe "#equivalent_keys" do
