@@ -58,7 +58,8 @@ emphasise = \once {
   {
     \new Staff {
       \markLengthOn
-      <<%= chord %>>1^\markup { \teeny { "<%= descr %>" } }
+      \mark \markup { \teeny { "<%= descr %>" } }
+      <<%= chord %>>1
       \bar "||" |
 
       \small
