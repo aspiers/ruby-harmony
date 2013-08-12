@@ -250,8 +250,16 @@ describe Note do
       [ 14, 'Cx D Ebb' ],
     ]
     pitches.each do |pitch, expected|
-      specify "pitch #{pitch} should give #{expected} the right notes" do
-        Note.by_pitch(pitch).join(' ').should == expected
+      context "pitch #{pitch}" do
+        let(:notes) { Note.by_pitch(pitch) }
+
+        it "should return Note instances" do
+          notes.each { |n| n.is_a?(Note).should be_true }
+        end
+
+        specify "pitch #{pitch} should give #{expected} the right notes" do
+          notes.join(' ').should == expected
+        end
       end
     end
   end
