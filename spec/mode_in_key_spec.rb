@@ -130,4 +130,46 @@ describe ModeInKey do
     all[0][1].accidentals.should == [ 0, 0 ]
     all[0][6].accidentals.should == [ 0, 5 ]
   end
+
+  describe "#output_modes" do
+    ModeInKey.output_modes(Note['D']).should == <<EOF
+4 lydian                         D   E   F#  G#  A   B   C# 
+1 ionian                         D   E   F#  G   A   B   C# 
+5 mixo                           D   E   F#  G   A   B   C  
+2 dorian                         D   E   F   G   A   B   C  
+6 aeolian                        D   E   F   G   A   Bb  C  
+3 phrygian                       D   Eb  F   G   A   Bb  C  
+7 locrian                        D   Eb  F   G   Ab  Bb  C  
+
+3 lydian augmented               D   E   F#  G#  A#  B   C# 
+4 lydian dominant                D   E   F#  G#  A   B   C  
+1 D mel min                      D   E   F   G   A   B   C# 
+5 5th degree of G mel min        D   E   F#  G   A   Bb  C  
+2 2nd degree of C mel min        D   Eb  F   G   A   B   C  
+6 locrian natural 2              D   E   F   G   Ab  Bb  C  
+7 altered                        D   Eb  F   Gb  Ab  Bb  C  
+
+6 6th degree of F# harm min      D   E#  F#  G#  A   B   C# 
+3 3rd degree of B harm min       D   E   F#  G   A#  B   C# 
+4 4th degree of A harm min       D   E   F   G#  A   B   C  
+1 D harm min                     D   E   F   G   A   Bb  C# 
+5 5th degree of G harm min       D   Eb  F#  G   A   Bb  C  
+2 2nd degree of C harm min       D   Eb  F   G   Ab  B   C  
+7 7th degree of Eb harm min      D   Eb  F   Gb  Ab  Bb  Cb 
+
+6 6th degree of F# harm maj      D   E#  F#  G#  A#  B   C# 
+4 4th degree of A harm maj       D   E   F   G#  A   B   C# 
+1 D harm maj                     D   E   F#  G   A   Bb  C# 
+5 5th degree of G harm maj       D   Eb  F#  G   A   B   C  
+2 2nd degree of C harm maj       D   E   F   G   Ab  B   C  
+3 3rd degree of Bb harm maj      D   Eb  F   Gb  A   Bb  C  
+7 7th degree of Eb harm maj      D   Eb  F   G   Ab  Bb  Cb 
+
+1 whole tone                     D   E   F#  G#  A#  B# 
+
+1 D dim                          D   E   F   G   Ab  Bb  B   C# 
+2 auxiliary diminished           D   Eb  F   Gb  Ab  A   B   C  
+
+EOF
+  end
 end
