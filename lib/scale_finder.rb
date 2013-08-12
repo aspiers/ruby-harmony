@@ -174,7 +174,8 @@ class ScaleFinder
 
         @ly_scales[scale.name] ||= [
           Accidental.to_ly_markup(scale.to_ly),
-          ly_notes(scale, chord_in_scale)
+          ly_notes(scale, chord_in_scale),
+          scale.mode.scale_type.name
         ]
       end
     end

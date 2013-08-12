@@ -3,8 +3,8 @@
 
 \paper {
   indent = #0
-  paper-width = 15\cm
-  paper-height = 20\cm
+  paper-width = 20\cm
+  paper-height = 50\cm
   ragged-right = ##t
   ragged-last = ##t
 }
@@ -37,14 +37,20 @@ emphasise = \once {
       \bar "||" |
 
       \small
-      <% for description, notes in scales -%>
+<% last_scale_type = nil -%>
+<% for description, notes, scale_type in scales %>
       \time <%= notes.size %>/4
-      <%   notes[0] += "4^\\markup {\n          \\fontsize #-2 {\n#{description}          }\n        }" %>
+      % scale type: <%= scale_type %>
+<%   if last_scale_type and scale_type != last_scale_type -%>
+      % scale type changing from <%= last_scale_type %> to <%= scale_type %>
+      \break
+<%   end -%>
+<%   last_scale_type = scale_type -%>
+<%   notes[0] += "4^\\markup {\n          \\fontsize #-2 {\n#{description}          }\n        }" -%>
       \relative c' {
         <%= notes.join " " %> |
       }
-      <% end %>
-      \break
+<% end -%>
     }
   }
 }
