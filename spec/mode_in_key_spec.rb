@@ -97,15 +97,24 @@ describe ModeInKey do
         EOF
       ],
       [
-        2, "Ab", SymmetricalScaleType::DIMINISHED,
-        "Bb auxiliary diminished\n(2nd degree of Ab diminished)",
-        "Bb B Db D E F G Ab",
-        [ 10, 11, 13, 14, 16, 17, 19, 20 ],
+        1, "Ab", SymmetricalScaleType::DIMINISHED,
+        "Ab diminished",
+        "Ab Bb B Db D E F G",
+        [ 8, 10, 11, 13, 14, 16, 17, 19 ],
+        <<-'EOF',
+            "Ab diminished"
+        EOF
+      ],
+      [
+        2, "Bb", SymmetricalScaleType::DIMINISHED,
+        "C auxiliary diminished\n(2nd degree of Bb diminished)",
+        "C Db Eb E Gb G A Bb",
+        [ 0, 1, 3, 4, 6, 7, 9, 10 ],
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
-              \line { "Bb auxiliary diminished" }
-              \line { "(2nd degree of Ab diminished)" }
+              \line { "C auxiliary diminished" }
+              \line { "(2nd degree of Bb diminished)" }
             }
         EOF
       ],
