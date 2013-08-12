@@ -17,14 +17,14 @@ describe Mode do
 
   shared_examples "given key" do |scale, degree, key_name, expected_name, expected_notes|
     context "degree #{degree} of #{key_name} #{scale}" do
+      let(:mode) { Mode.new(degree, scale, -1) }
+
       it "should have the right name" do
-        mode = Mode.new(degree, scale, -1)
         mode.to_s.should == expected_name
       end
 
       it "should have the right notes" do
         key_note = Note.by_name(key_name)
-        mode = Mode.new(degree, scale, -1)
         notes = mode.notes(key_note)
         notes.map { |n| n.name }.should == expected_notes
       end
