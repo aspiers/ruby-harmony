@@ -41,11 +41,11 @@ describe ScaleFinder do
   include_examples "preset", "C", "7b9", false, \
   [
     [ "C dominant b9 b13\n(5th degree of F harm min)",
-                                   "C Db E F G Ab Bb"   , "F Ab"  ],
-    [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb" , "Eb Ab" ],
+                                    "C Db E F G Ab Bb"   , "F Ab"  ],
+    [ "3rd degree of Ab harm maj",  "C Db Eb Fb G Ab Bb" , "Eb Ab" ],
     [ "C dominant b9\n(5th degree of F harm maj)",
-                                   "C Db E F G A Bb"    , "F A"   ],
-    [ "4th degree of G dim"      , "C Db Eb E F# G A Bb", "F#"    ],
+                                    "C Db E F G A Bb"    , "F A"   ],
+    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F#"    ],
   ]
   include_examples "preset", "C", "min11", false, \
   [
@@ -59,10 +59,10 @@ describe ScaleFinder do
     [ "Db altered\n(7th degree of Ebb mel min)",  "Db Ebb Fb Gbb Abb Bbb Cb", "Ebb Bbb" ],
     [ "Db altered\n(7th degree of Ebb mel min)",  "Db Ebb Fb Gbb Abb Bbb Cb", "Fb Bbb"  ],
     [ "Db whole tone", "Db Eb F G A B", "Eb A" ],
-    [ "6th degree of F dim", "Db D E F G Ab Bb B", "D Ab" ],
-    [ "6th degree of F dim", "Db D E F G Ab Bb B", "D Bb" ],
-    [ "6th degree of F dim", "Db D E F G Ab Bb B", "E Ab" ],
-    [ "6th degree of F dim", "Db D E F G Ab Bb B", "E Bb" ],
+    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "D Ab" ],
+    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "D Bb" ],
+    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "E Ab" ],
+    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "E Bb" ],
   ]
   include_examples "preset", "Db", "7b9#9#11b13", true, \
   [
@@ -91,6 +91,6 @@ describe ScaleFinder do
                                    "C D# E F# G# A B",     "E B"        ],
     [ "7th degree of Db harm maj", "C Db Eb F Gb Ab Bbb",  "Db F Bbb"   ],
 
-    [ "C dim",                     "C D Eb F Gb Ab A B",   "D A"        ],
+    [ "C diminished",              "C D Eb F Gb Ab A B",   "D A"        ],
   ]
 end

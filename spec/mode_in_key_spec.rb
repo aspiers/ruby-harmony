@@ -41,12 +41,12 @@ describe ModeInKey do
             }
         EOF
       ],
-      [ 2, "Ab", SymmetricalScaleType::DIMINISHED, "Bb auxiliary diminished\n(2nd degree of Ab dim)",
+      [ 2, "Ab", SymmetricalScaleType::DIMINISHED, "Bb auxiliary diminished\n(2nd degree of Ab diminished)",
         <<-'EOF'
             \override #'(baseline-skip . 2)
             \column {
               \line { "Bb auxiliary diminished" }
-              \line { "(2nd degree of Ab dim)" }
+              \line { "(2nd degree of Ab diminished)" }
             }
         EOF
       ],
@@ -227,8 +227,8 @@ describe ModeInKey do
 
 1 C whole tone                   C   D   E   F#  G#  A# 
 
-4 4th degree of G dim            C   Db  Eb  E   F#  G   A   Bb 
-1 C dim                          C   D   Eb  F   Gb  Ab  A   B  
+4 4th degree of G diminished     C   Db  Eb  E   F#  G   A   Bb 
+1 C diminished                   C   D   Eb  F   Gb  Ab  A   B  
 
 EOF
     end

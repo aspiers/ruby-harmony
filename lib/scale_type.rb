@@ -164,7 +164,7 @@ class SymmetricalScaleType < ScaleType
   end
 
   WHOLE_TONE      = new('whole tone',      [ 2, 2, 2, 2, 2, 2             ], 1,  2)
-  DIMINISHED      = new('dim',             [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
+  DIMINISHED      = new('diminished',      [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
   # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1             ], 2,  4)
   # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
   # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
