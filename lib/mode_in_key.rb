@@ -5,8 +5,14 @@ class ModeInKey
   attr_accessor :mode, :key_note
 
   def initialize(mode, key_note)
-    raise "mode must be a Mode" unless mode.is_a?(Mode)
-    raise "key_note must be a Note" unless key_note.is_a?(Note)
+    unless mode.is_a?(Mode)
+      raise "mode must be a Mode not #{mode.class}"
+    end
+    # is_a? isn't reliable due to Rails reloading :-/
+    #unless key_note.is_a?(Note)
+    unless key_note.class.ancestors.map(&:to_s).include?('Note')
+      raise "key_note must be a Note not #{key_note.class}"
+    end
     self.mode = mode
     self.key_note = key_note
   end
