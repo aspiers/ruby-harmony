@@ -4,7 +4,7 @@ require 'note'
 describe Interval do
   INTERVALS = [
     [  1,  0,   "1", "C" , 0, "F#", 0, "Gb" , 0, "unison"           ],
-    [  1, +1,  "#1", "C#", 0, "Fx", 0, "G"  , 0, "aug unison" ],
+    [  1, +1,  "#1", "C#", 0, "Fx", 0, "G"  , 0, "aug unison"       ],
 
     [  2, -1,  "b2", "Db", 0, "G" , 0, "Abb", 0, "minor 2nd"        ],
     [  2,  0,   "2", "D" , 0, "G#", 0, "Ab" , 0, "major 2nd"        ],
@@ -37,6 +37,12 @@ describe Interval do
     [ 13, -1, "b13", "Ab", 1, "D" , 2, "Ebb", 2, "flat 13th"        ],
 
   ]
+
+  describe ".by_name" do
+    it "should raise an exception when passed an invalid interval" do
+      expect { Interval.by_name('blah') }.to raise_exception "Invalid interval 'blah'"
+    end
+  end
 
   shared_examples "an interval" do
     |degree, accidental, name, e1, o1, e2, o2, e3, o3, long_name|
@@ -88,6 +94,13 @@ describe Interval do
 
     it "should have the right (long) name" do
       interval.long_name.should == long_name
+    end
+
+    it "should have the right adjective" do
+      words = long_name.split
+      if words.size == 2 and degree < 9
+        words[0].should == interval.adjective
+      end
     end
 
     it "should be constructable by name" do
