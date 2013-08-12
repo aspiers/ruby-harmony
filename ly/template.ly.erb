@@ -66,7 +66,7 @@ emphasise = \once {
 <% for description, notes, scale_type in scales %>
       \time <%= notes.size %>/4
       % scale type: <%= scale_type %>
-<%   if last_scale_type and scale_type != last_scale_type -%>
+<%   if scales.size > 4 and last_scale_type and scale_type != last_scale_type -%>
       % scale type changing from <%= last_scale_type %> to <%= scale_type %>
       \break
 <%   end -%>
