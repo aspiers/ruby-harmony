@@ -104,6 +104,23 @@ describe Mode do
       1, "D",  "D E F# G# A# C", "whole tone"
   end
 
+  describe "#best_display_key_and_mode" do
+    [
+      [ DiatonicScaleType::MAJOR,         'C', 2, 'Bb', 2 ],
+      [ SymmetricalScaleType::DIMINISHED, 'C', 2, 'G',  4 ],
+    ].each do |scale_type, starting_note, degree, best_key, best_degree|
+      context "degree #{degree} of #{scale_type} as #{starting_note}" do
+        let(:mode) { Mode.new(degree, scale_type, -1) }
+
+        it "should return the right key and mode" do
+          key_note, display_mode = mode.best_display_key_and_mode(Note[starting_note])
+          key_note.name.should == best_key
+          display_mode.degree.should == best_degree
+        end
+      end
+    end
+  end
+
   describe "name overriding" do
     it "should allow the name to be overridden" do
       mode = Mode.new(3, DiatonicScaleType::HARMONIC_MAJOR, -1)
