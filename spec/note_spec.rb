@@ -278,4 +278,22 @@ describe Note do
       end
     end
   end
+
+  describe "#to_ly_markup" do
+    notes = [
+      [ "A",   "A\\raise #0.5 \\fontsize #-3 \\natural"     ],
+      [ "B",   "B\\raise #0.5 \\fontsize #-3 \\natural"     ],
+      [ "C",   "C\\raise #0.5 \\fontsize #-3 \\natural"     ],
+      [ "Ab",  "A\\raise #0.5 \\fontsize #-3 \\flat"        ],
+      [ "Abb", "A\\raise #0.5 \\fontsize #-3 \\doubleflat"  ],
+      [ "G#",  "G\\raise #0.5 \\fontsize #-3 \\sharp"       ],
+      [ "Gx",  "G\\raise #0.5 \\fontsize #-3 \\doublesharp" ],
+    ]
+
+    notes.each do |name, markup|
+      it "should have the right markup" do
+        Note[name].to_ly_markup.should == markup
+      end
+    end
+  end
 end
