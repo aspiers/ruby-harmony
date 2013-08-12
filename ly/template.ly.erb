@@ -2,18 +2,21 @@
 \include "english.ly"
 
 \paper {
+  % annotate-spacing = ##t
   indent = #0
   paper-width = 20\cm
   paper-height = 50\cm
   ragged-right = ##t
   ragged-last = ##t
+  system-system-spacing =
+    #'((basic-distance . 9)
+       (minimum-distance . 4))
 }
 
 emphasisColor = #(x11-color 'ForestGreen)
 emphasisColor = #red
 
 emphasise = \once {
-  \large
   \override NoteHead.color = \emphasisColor
   \override Stem.color = \emphasisColor
 
@@ -23,16 +26,30 @@ emphasise = \once {
   \override Staff.LedgerLineSpanner.color = \emphasisColor
 }
 
-  \header {
-    tagline = ""
+\header {
+  tagline = ""
+}
+
+\layout {
+  \context {
+    \Staff
+    \remove "Time_signature_engraver"
   }
+  \context {
+    \Voice
+    \remove "Stem_engraver"
+    }
+}
 
 \score {
   \new Score \with {
     \remove "System_start_delimiter_engraver"
     \remove "Bar_number_engraver"
-  } {
-    \new Staff {
+  }
+  {
+    \new Staff \with {
+    }
+    {
       <<%= chord %>>1^\markup { \teeny { "<%= descr %>" } }
       \bar "||" |
 
@@ -52,12 +69,5 @@ emphasise = \once {
       }
 <% end -%>
     }
-  }
-}
-
-\layout {
-  \context {
-    \Staff
-    \remove "Time_signature_engraver"
   }
 }
