@@ -54,15 +54,18 @@ class ScaleType
   end
 
   # Given a note which is a degree of a scale, find the original key.
-  # e.g. 'C' and 3 should return Ab.  The degree is also returned
-  # unchanged, to be consistent with other ScaleTypes
-  # (e.g. diminished) which have to be able to suggest a different
-  # mode.
-  def key_and_degree(note, degree)
+  # e.g. 'C' and 3 should return Ab.
+  def key(note, degree)
     key_letter = Note.letter_shift(note.letter, 1 - degree)
     key_pitch = note.pitch - offset_from_key(degree)
-    key_pitch += 12 if key_pitch < 0
-    return Note.by_letter_and_pitch(key_letter, key_pitch), degree
+    return Note.by_letter_and_pitch(key_letter, key_pitch)
+  end
+
+  # Same as #key, but the degree is also returned unchanged, to be
+  # consistent with other ScaleTypes (e.g. diminished) which have to
+  # be able to suggest a different mode.
+  def key_and_degree(note, degree)
+    return key(note, degree).octave_squash, degree
   end
 
   alias_method :inspect, :name
@@ -259,9 +262,7 @@ class SymmetricalScaleType < ScaleType
     #      given that a typical use for this scale would be over a
     #      C7b9#11, we want a Db rather than a C#.
     def best_key_and_degree(note, degree)
-      key_letter = Note.letter_shift(note.letter, 1 - degree)
-      key_pitch = note.pitch - offset_from_key(degree)
-      primary_key = Note.by_letter_and_pitch(key_letter, key_pitch)
+      primary_key = key(note, degree)
       primary_key.octave = 0
       candidates = [ ]
 
