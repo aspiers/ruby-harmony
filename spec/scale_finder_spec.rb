@@ -4,7 +4,9 @@ require 'mode_in_key'
 require 'note'
 
 describe ScaleFinder do
-  shared_examples "scalefinder" do |key, descr, fixed_chord_notes, simplify, expected|
+  shared_examples "scalefinder" do
+    |key, descr, fixed_chord_notes, simplify, exp_total, expected|
+
     context "finds #{simplify ? 'simplified ' : ''}scales including: #{fixed_chord_notes.join(' ')}" do
       let(:scalefinder) { ScaleFinder.new(fixed_chord_notes, key.name, descr) }
       before {
@@ -13,6 +15,10 @@ describe ScaleFinder do
         scales = ModeInKey.all(key).flatten
         scalefinder.identify_modes
       }
+
+      it "should find the right number of scales" do
+        scalefinder.scales.size.should == exp_total
+      end
 
       it "should find the right scales" do
         names = scalefinder.scales.map { |scale, notes, chord| scale.name }
@@ -31,14 +37,14 @@ describe ScaleFinder do
     end
   end
 
-  shared_examples "preset" do |key_name, chord_type, simplify, expected|
+  shared_examples "preset" do |key_name, chord_type, simplify, exp_total, expected|
     key = Note[key_name]
     fixed_chord_notes = ChordType[chord_type].notes(key)
     include_examples "scalefinder",
-      key, key_name + chord_type, fixed_chord_notes, simplify, expected
+      key, key_name + chord_type, fixed_chord_notes, simplify, exp_total, expected
   end
 
-  include_examples "preset", "C", "7b9", false, \
+  include_examples "preset", "C", "7b9", false, 7, \
   [
     [ "C altered\n(7th degree of Db mel min)",
                                     "C Db Eb Fb Gb Ab Bb", "Gb Ab"   ],
@@ -51,7 +57,7 @@ describe ScaleFinder do
     [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# G"    ],
     [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# A"    ],
   ]
-  include_examples "preset", "C", "min11", false, \
+  include_examples "preset", "C", "min11", false, 4, \
   [
     [ "C dorian\n(2nd degree of Bb maj)",  "C D Eb F G  A Bb" , "G  A"  ],
     [ "C aeolian\n(6th degree of Eb maj)", "C D Eb F G  Ab Bb", "G  Ab" ],
@@ -59,7 +65,7 @@ describe ScaleFinder do
                                            "C D Eb F Gb Ab Bb", "Gb Ab" ],
     [ "2nd degree of Bb harm maj",         "C D Eb F Gb A  Bb", "Gb A"  ],
   ]
-  include_examples "preset", "Db", "7#11", false, \
+  include_examples "preset", "Db", "7#11", false, 9, \
   [
     [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db Eb F G Ab Bb Cb", "Eb Ab"   ],
     [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db Eb F G Ab Bb Cb", "Eb Bb"   ],
@@ -71,17 +77,18 @@ describe ScaleFinder do
     [ "6th degree of F diminished", "Db D E F G Ab Bb B", "E Ab" ],
     [ "6th degree of F diminished", "Db D E F G Ab Bb B", "E Bb" ],
   ]
-  include_examples "preset", "Db", "7b9#9#11b13", true, \
+  include_examples "preset", "Db", "7b9#9#11b13", true, 1, \
   [
     [ "Db altered\n(7th degree of Ebb mel min)",  "Db D E F G A B", "" ],
   ]
 
-  shared_examples "custom" do |key_name, descr, notes, simplify, expected|
+  shared_examples "custom" do |key_name, descr, notes, simplify, exp_total, expected|
     fixed_chord_notes = notes.split.map { |n| Note[n] }
-    include_examples "scalefinder", Note[key_name], descr, fixed_chord_notes, simplify, expected
+    include_examples "scalefinder", Note[key_name], descr, \
+      fixed_chord_notes, simplify, exp_total, expected
   end
 
-  include_examples "custom", "C", "Ab/C", "C Eb Ab", false, \
+  include_examples "custom", "C", "Ab/C", "C Eb Ab", false, 15, \
   [
     [ "C phrygian\n(3rd degree of Ab maj)",              "C Db Eb F G Ab Bb",    "Db F G"     ],
     [ "C aeolian\n(6th degree of Eb maj)",               "C D Eb F G Ab Bb",     "D G Bb"     ],
