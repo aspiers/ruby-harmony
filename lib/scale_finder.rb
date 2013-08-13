@@ -13,7 +13,7 @@ class ScaleFinder
 
   @@verbosity = 0
 
-  attr_reader :debug_file
+  attr_reader :debug_file, :scales, :ly_scales
 
   def initialize(fixed_chord_notes, root, descr)
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
