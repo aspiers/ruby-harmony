@@ -20,6 +20,11 @@ class ModeInKey
     new_mode = Mode.new(new_degree, mode.scale_type, mode.index)
     original_key = new_mode.scale_type.note(key_note, new_degree - mode.degree + 1).octave_squash
 
+    # if starting_note.name == 'C' && mode.degree == 2 && mode.scale_type.name == 'augmented'
+    #   puts "#{starting_note} as deg #{mode.degree} of #{original_key} #{mode.scale_type} " + \
+    #        "=> #{new_degree} deg of #{key_note}"
+    # end
+
     mode_in_key          = ModeInKey.new(new_mode, key_note)
     original = mode_in_key.original = ModeInKey.new(mode, original_key)
 
@@ -132,9 +137,11 @@ class ModeInKey
     for modes_in_key in ModeInKey.all(starting_note)
       for mode_in_key in modes_in_key
         mode = mode_in_key.mode
-        name = mode.name ? "%s %s" % [ starting_note, mode.name ]
-                         : mode_in_key.generic_description
-        s << "%d %-30s %s\n" % [ mode.degree, name, mode_in_key.notes ]
+        orig = mode_in_key.original
+        special_name = orig.mode.name
+        name = special_name ? "%s %s" % [ starting_note, special_name ]
+                            : orig.generic_description
+        s << "%d %-30s %s\n" % [ orig.mode.degree, name, mode_in_key.notes ]
       end
       s << "\n"
     end

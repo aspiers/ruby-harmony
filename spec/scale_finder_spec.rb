@@ -25,8 +25,8 @@ describe ScaleFinder do
       end
 
       it "should find the identifying notes" do
-        notes = scalefinder.scales.map { |scale, notes, chord| chord.map(&:to_s) }
-        notes.should == expected.map { |ename, enotes, eidents| eidents.split    }
+        notes = scalefinder.scales.map { |scale, notes, chord| chord.join(' ') + "\n" }.join
+        notes.should == expected.map { |ename, enotes, eidents| eidents.gsub(/ +/, ' ') + "\n" }.join
       end
     end
   end
@@ -90,14 +90,19 @@ describe ScaleFinder do
     [ "C locrian natural 2\n(6th degree of Eb mel min)", "C D Eb F Gb Ab Bb",    "D Gb Bb"    ],
     [ "C altered\n(7th degree of Db mel min)",           "C Db Eb Fb Gb Ab Bb",  "Fb Gb Bb"   ],
 
-    [ "C harm min",                "C D Eb F G Ab B",      "G B"        ],
+    [ "C harm min",                "C D Eb F G Ab B",      "D G B"      ],
+    [ "C harm min",                "C D Eb F G Ab B",      "F G B"      ],
     [ "7th degree of Db harm min", "C Db Eb Fb Gb Ab Bbb", "Db Fb Bbb"  ],
 
-    [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb",   "Fb G"       ],
+    [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb",   "Db Fb G"    ],
+    [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb",   "Fb G Bb"    ],
     [ "C lydian #2 #5\n(6th degree of E harm maj)",
-                                   "C D# E F# G# A B",     "E B"        ],
+                                   "C D# E F# G# A B",     "E F# B"     ],
+    [ "C lydian #2 #5\n(6th degree of E harm maj)",
+                                   "C D# E F# G# A B",     "E A B"      ],
     [ "7th degree of Db harm maj", "C Db Eb F Gb Ab Bbb",  "Db F Bbb"   ],
 
     [ "C diminished",              "C D Eb F Gb Ab A B",   "D A"        ],
+    [ "C augmented",               "C D# E G Ab B",        "E G B"      ],
   ]
 end

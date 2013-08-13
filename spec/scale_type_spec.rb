@@ -3,7 +3,7 @@ require 'scale_type'
 
 describe ScaleType do
   it "should be prepopulated with the catalogue" do
-    ScaleType.all.size.should == 6
+    ScaleType.all.size.should == 7
   end
 
   describe "#degree_of" do
@@ -221,7 +221,7 @@ end
 
 describe SymmetricalScaleType do
   it "should be prepopulated with 2 types" do
-    SymmetricalScaleType.all_in_subclass.size.should == 2
+    SymmetricalScaleType.all_in_subclass.size.should == 3
   end
 
   describe "symmetrical?" do

@@ -46,6 +46,10 @@ class ScaleType
     @index = @@all.length - 1
   end
 
+  def mode_name(degree)
+    nil
+  end
+
   # Return the number of letters to shift the key note by in order to
   # reach the letter which the given degree should have.  Some
   # non-diatonic scales will need to override this to provide a
@@ -103,10 +107,6 @@ class DiatonicScaleType < ScaleType
     incs = increments * (1 + (degree - 1) / num_modes)
     increments_from_key = incs.first(degree - 1)
     return increments_from_key.inject(0) { |a,x| a + x }
-  end
-
-  def mode_name(degree)
-    nil
   end
 
   MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1 ])
@@ -206,17 +206,6 @@ class SymmetricalScaleType < ScaleType
     end.flatten
   end
 
-  WHOLE_TONE      = new('whole tone',      [ 2, 2, 2, 2, 2, 2             ], 1,  2)
-  DIMINISHED      = new('diminished',      [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
-  # AUGMENTED       = new('aug',             [ 3, 1, 3, 1, 3, 1             ], 2,  4)
-  # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
-  # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
-  # MESSIAEN_FIFTH    = new("Messian's 5th", [ 1, 4, 1, 1, 4, 1             ], 3, 6)
-  # MESSIAEN_SIXTH    = new("Messian's 6th", [ 2, 2, 2, 1, 2, 2, 2, 1       ], 4, 6)
-  # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
-
-  class << DIMINISHED
-
     # Memoized version of best_key_and_degree
     def key_and_degree(note, degree)
       n = note.name
@@ -285,14 +274,27 @@ class SymmetricalScaleType < ScaleType
       primary_key.octave = 0
       candidates = [ ]
 
+      debug = false
+      #debug = name == "augmented" && degree == 2 && note.name == 'C'
+
       equivalent_keys(primary_key).each do |candidate_key|
-        # Use a disposable Mode just to calculate the notes rendered
-        # relative to each candidate replacement key.  Its degree has
-        # no impact on the ranking.  Once we know the notes, we can
-        # calculate the degree of this new scale which the original
-        # note corresponds to.
-        candidate_degree = degree_of(note, candidate_key)
-        notes = Mode.new(candidate_degree, self, -1).notes(candidate_key).octave_squash
+        # In this new candidate key, the starting note is the same,
+        # therefore the degree of the mode has changed, and we need to
+        # know what it is in order to instantiate a Mode for
+        # calculating the note spellings which we will then use to
+        # rank the suitability of all candidates.
+        begin
+          candidate_degree = degree_of(note, candidate_key)
+          notes = Mode.new(candidate_degree, self, -1).notes(candidate_key).octave_squash
+        rescue NoteExceptions::LetterPitchMismatch
+          # We were probably trying to figure out the 6th degree of A#
+          # whole tone or something like that, so scratch this key
+          # from the candidate list.
+          if debug
+            puts "rejected candidate key #{candidate_key}"
+          end
+          next
+        end
 
         candidates << [
           [
@@ -316,9 +318,11 @@ class SymmetricalScaleType < ScaleType
       end
 
       candidates.sort!
-      # require 'pp'
-      # puts "searching #{self} candidates where degree #{degree} is #{note} ..."
-      # pp candidates
+      if debug
+        require 'pp'
+        puts "searching #{self} candidates where degree #{degree} is #{note} ..."
+        pp candidates
+      end
 
       best = candidates[0]
       key, degree, notes = best[1]
@@ -326,6 +330,16 @@ class SymmetricalScaleType < ScaleType
       return key, degree
     end
 
+  WHOLE_TONE      = new('whole tone',      [ 2, 2, 2, 2, 2, 2             ], 1,  2)
+  DIMINISHED      = new('diminished',      [ 2, 1, 2, 1, 2, 1, 2, 1       ], 2,  3)
+  AUGMENTED       = new('augmented',       [ 3, 1, 3, 1, 3, 1             ], 2,  4)
+  # MESSIAEN_THREE    = new("Messian's 3rd", [ 2, 1, 1, 2, 1, 1, 2, 1, 1    ], 3, 4)
+  # MESSIAEN_FOURTH   = new("Messian's 4th", [ 1, 1, 3, 1, 1, 1, 3, 1       ], 3, 4)
+  # MESSIAEN_FIFTH    = new("Messian's 5th", [ 1, 4, 1, 1, 4, 1             ], 3, 6)
+  # MESSIAEN_SIXTH    = new("Messian's 6th", [ 2, 2, 2, 1, 2, 2, 2, 1       ], 4, 6)
+  # MESSIAEN_SEVENTH  = new("Messian's 7th", [ 1, 1, 1, 2, 1, 1, 1, 1, 2, 1 ], 5, 6)
+
+  class << DIMINISHED
     def letter_shift(degree)
       steps_from_key = (degree - 1) % 7
       return steps_from_key - 1 if degree >= 7
@@ -350,5 +364,17 @@ class SymmetricalScaleType < ScaleType
     def note(key_note, degree)
       super(key_note, degree).simplify
     end
+  end
+
+  class << AUGMENTED
+    def letter_shift(degree)
+      steps_from_key = (degree - 1) % 7
+      return steps_from_key + 1 if degree >= 4
+      return steps_from_key
+    end
+
+    # def note(key_note, degree)
+    #   super(key_note, degree).simplify
+    # end
   end
 end

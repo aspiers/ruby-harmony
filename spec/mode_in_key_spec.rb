@@ -354,8 +354,11 @@ describe ModeInKey do
 
 1 C whole tone                   C   D   E   F#  G#  A# 
 
-4 4th degree of G diminished     C   Db  Eb  E   F#  G   A   Bb 
+2 C auxiliary diminished         C   Db  Eb  E   F#  G   A   Bb 
 1 C diminished                   C   D   Eb  F   Gb  Ab  A   B  
+
+1 C augmented                    C   D#  E   G   Ab  B  
+2 2nd degree of A augmented      C   Db  E   F   G#  A  
 
 EOF
     end
