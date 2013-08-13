@@ -2,7 +2,20 @@ require 'note'
 require 'note_collections'
 
 class ScaleType
-  @@all = [ ]
+  @@all = [ ] # all scale types instantiated in any subclass
+  def ScaleType.all; @@all end
+
+  class << self
+    def initialize_class
+      # all scale types instantiated by a particular subclass
+      @all_in_subclass  = [ ]
+    end
+    attr_reader :all_in_subclass
+
+    def inherited(subclass)
+      subclass.initialize_class
+    end
+  end
 
   attr_reader :name, :increments, :num_modes, :transpositions
 
@@ -19,7 +32,9 @@ class ScaleType
     @num_modes = num_modes
     @transpositions = transpositions
 
-    @@all.push self
+    @@all.push(self)
+    self.class.all_in_subclass.push(self)
+
     @index = @@all.length - 1
   end
 
@@ -41,8 +56,6 @@ class ScaleType
     key_pitch += 12 if key_pitch < 0
     return Note.by_letter_and_pitch(key_letter, key_pitch), degree
   end
-
-  def ScaleType.all; @@all end
 
   alias_method :inspect, :name
   alias_method :to_s,    :name

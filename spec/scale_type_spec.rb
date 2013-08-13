@@ -2,12 +2,16 @@ require 'mode'
 require 'scale_type'
 
 describe ScaleType do
-  it "should be prepopulated with the standard modes" do
-    ScaleType.all.size.should >= 4
+  it "should be prepopulated with the catalogue" do
+    ScaleType.all.size.should == 6
   end
 end
 
 describe DiatonicScaleType do
+  it "should be prepopulated with 4 types" do
+    DiatonicScaleType.all_in_subclass.size.should == 4
+  end
+
   shared_examples "a diatonic scale" do |scale, tests|
     tests.each do |name, degree, key_name|
       note = Note.by_name(name)
@@ -188,6 +192,10 @@ describe DiatonicScaleType do
 end
 
 describe SymmetricalScaleType do
+  it "should be prepopulated with 2 types" do
+    SymmetricalScaleType.all_in_subclass.size.should == 2
+  end
+
   describe "#equivalent_keys" do
     shared_examples "equivalent keys" do |scale_type, key_name, pitches, notes|
       specify "#{scale_type} equivalent pitches of #{key_name} should be right" do
