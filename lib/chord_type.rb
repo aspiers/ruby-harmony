@@ -100,7 +100,8 @@ class ChordType
   end
 
   def notes(key)
-    [key] + intervals.map { |interval| interval.from(key) }
+    arr = [key] + intervals.map { |interval| interval.from(key) }
+    NoteArray[*arr]
   end
 
   def modified_fifth?

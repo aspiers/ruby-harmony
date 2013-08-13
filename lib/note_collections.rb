@@ -75,6 +75,23 @@ module NoteCollection
   def num_letters
     inject(Set.new) { |set, note| set << note.letter }.size
   end
+
+  # Convert the collection to a chord in LilyPond syntax.  We have to
+  # take extra care to add advisory accidentals to any note which
+  # shares its letter with any other note in the same chord, thanks to
+  # this bug: https://code.google.com/p/lilypond/issues/detail?id=2236
+  def to_ly_abs
+    dupe_letters = group_by { |note| note.letter }.select { |k, v| v.size > 1 }.map(&:first)
+    ly_notes = [ ]
+    each do |note|
+      ly = note.to_ly_abs
+      if dupe_letters.include?(note.letter)
+        ly += "!" if note.accidental == 0
+      end
+      ly_notes << ly
+    end
+    ly_notes.join(' ')
+  end
 end
 
 class NoteSet < Set

@@ -21,4 +21,25 @@ describe NoteSet do
       include_examples "letter set", expected, letters
     end
   end
+
+  describe "#to_ly_abs" do
+    shared_examples "chord" do |note_names, expected|
+      context note_names do
+        let(:notes) { note_names.split.map { |name| Note[name] } }
+        let(:chord) { NoteSet[*notes] }
+
+        it "should convert a chord to LilyPond format" do
+          chord.to_ly_abs.should == expected
+        end
+      end
+    end
+
+    [
+      [ "C Eb G"   ,     "c' ef' g'"     ],
+      [ "C E  Eb G",     "c' e'! ef' g'" ],
+      [ "C Eb E G" ,     "c' ef' e'! g'" ],
+    ].each do |data|
+      include_examples "chord", *data
+    end
+  end
 end
