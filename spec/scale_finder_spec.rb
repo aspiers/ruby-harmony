@@ -20,13 +20,13 @@ describe ScaleFinder do
       end
 
       it "should find scales with the right notes" do
-        notes = scalefinder.scales.map { |scale, notes, chord| notes.join(' ') }
-        notes.should == expected.map { |ename, enotes, eidents| enotes }
+        notes = scalefinder.scales.map { |scale, notes, chord| notes.map(&:name) }
+        notes.should == expected.map { |ename, enotes, eidents| enotes.split     }
       end
 
       it "should find the identifying notes" do
-        notes = scalefinder.scales.map { |scale, notes, chord| chord.join(' ') }
-        notes.should == expected.map { |ename, enotes, eidents| eidents }
+        notes = scalefinder.scales.map { |scale, notes, chord| chord.map(&:to_s) }
+        notes.should == expected.map { |ename, enotes, eidents| eidents.split    }
       end
     end
   end
@@ -40,17 +40,24 @@ describe ScaleFinder do
 
   include_examples "preset", "C", "7b9", false, \
   [
+    [ "C altered\n(7th degree of Db mel min)",
+                                    "C Db Eb Fb Gb Ab Bb", "Gb Ab"   ],
     [ "C dominant b9 b13\n(5th degree of F harm min)",
-                                    "C Db E F G Ab Bb"   , "F Ab"  ],
-    [ "3rd degree of Ab harm maj",  "C Db Eb Fb G Ab Bb" , "Eb Ab" ],
+                                    "C Db E F G Ab Bb"   , "F Ab"    ],
+    [ "3rd degree of Ab harm maj",  "C Db Eb Fb G Ab Bb" , "Eb G Ab" ],
     [ "C dominant b9\n(5th degree of F harm maj)",
-                                    "C Db E F G A Bb"    , "F A"   ],
-    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F#"    ],
+                                    "C Db E F G A Bb"    , "F A"     ],
+    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "Eb A"    ],
+    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# G"    ],
+    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# A"    ],
   ]
   include_examples "preset", "C", "min11", false, \
   [
-    [ "C dorian\n(2nd degree of Bb maj)",  "C D Eb F G A Bb" , "A"  ],
-    [ "C aeolian\n(6th degree of Eb maj)", "C D Eb F G Ab Bb", "Ab" ],
+    [ "C dorian\n(2nd degree of Bb maj)",  "C D Eb F G  A Bb" , "G  A"  ],
+    [ "C aeolian\n(6th degree of Eb maj)", "C D Eb F G  Ab Bb", "G  Ab" ],
+    [ "C locrian natural 2\n(6th degree of Eb mel min)",
+                                           "C D Eb F Gb Ab Bb", "Gb Ab" ],
+    [ "2nd degree of Bb harm maj",         "C D Eb F Gb A  Bb", "Gb A"  ],
   ]
   include_examples "preset", "Db", "7#11", false, \
   [

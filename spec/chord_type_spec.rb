@@ -37,7 +37,7 @@ describe ChordType do
       end
     end
 
-    include_examples 'chord', 'maj7',   '3 5 7'
+    include_examples 'chord', 'maj7',   '3 7'
     include_examples 'chord', '7b9#11', '3 b7 b9 #11'
   end
 
@@ -50,8 +50,8 @@ describe ChordType do
       end
     end
 
-    include_examples 'chord notes', 'C', 'maj7',   'C E G B'
-    include_examples 'chord notes', 'D', 'min9',   'D F A C E'
+    include_examples 'chord notes', 'C', 'maj7',   'C E B'
+    include_examples 'chord notes', 'D', 'min9',   'D F C E'
     include_examples 'chord notes', 'E', '7b9#11', 'E G# D F A#'
   end
 end
