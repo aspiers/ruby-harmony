@@ -13,4 +13,6 @@ group :development, :test do
   gem 'jazz_hands'
 
   gem 'simplecov', require: false
+
+  gem 'capistrano'
 end
