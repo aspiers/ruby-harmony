@@ -13,16 +13,27 @@ class ScaleFinder
 
   @@verbosity = 0
 
+  attr_reader :debug_file
+
   def initialize(fixed_chord_notes, root, descr)
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @root = root
     @descr = descr
     @simplify = false
+    @debug_file = $stdout
   end
 
   def set_verbosity(verbosity)
     @@verbosity = verbosity
+  end
+
+  def set_debug_file(path)
+    @debug_file = File.open(path, 'w')
+  end
+
+  def close_debug_file
+    @debug_file.close
   end
 
   def enable_simplification
@@ -30,7 +41,7 @@ class ScaleFinder
   end
 
   def debug(level, msg)
-    puts msg if level <= @@verbosity
+    @debug_file.puts(msg) if level <= @@verbosity
   end
 
   def scales_matching_chord(scales, chord)
@@ -113,8 +124,8 @@ class ScaleFinder
     debug 1, ''
     chord = @fixed_chord_notes.to_s.strip.gsub(/\s+/, ' ')
     header = "%s: %s" % [ @descr, chord ] # + #{@variable_chord_notes.to_s.strip}"
-    puts header
-    puts "=" * header.size, "\n"
+    debug 1, header
+    debug 1, "=" * header.size
   end
 
   class TemplateData < OpenStruct
@@ -189,7 +200,7 @@ class ScaleFinder
   end
 
   def output_uniqueness
-    puts <<EOF
+    debug 1, <<EOF
 
   Modes sorted by "uniqueness" (ease of identification)
   -----------------------------------------------------
@@ -198,12 +209,12 @@ EOF
 
     for sizes, modes in @distinctiveness.sort_by { |s, m| [s[0], -s[1]] }
       chord_size, num_chords = sizes
-      puts "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
+      debug 1, "modes uniquely identified by #{num_chords} #{chord_size}-note chord#{num_chords == 1 ? '' : 's'}: " + modes.join(', ')
     end
   end
 
   def output_notes_needed(modes_by_chord_size)
-    puts <<EOF
+    debug 1, <<EOF
 
   How many notes are needed?
   --------------------------
@@ -212,9 +223,9 @@ EOF
 
     for size, modes in modes_by_chord_size.sort
       if size == 0
-        puts "modes with no unique identifier found: " + modes.join(', ')
+        debug 1, "modes with no unique identifier found: " + modes.join(', ')
       else
-        puts "#{modes.length} mode#{modes.length == 1 ? '' : 's'} uniquely identified by #{size} notes: " + modes.join(', ')
+        debug 1, "#{modes.length} mode#{modes.length == 1 ? '' : 's'} uniquely identified by #{size} notes: " + modes.join(', ')
       end
     end
   end
