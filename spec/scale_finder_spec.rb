@@ -60,6 +60,10 @@ describe ScaleFinder do
                                            "C D Eb F Gb Ab Bb", "Gb Ab" ],
     [ "2nd degree of Bb harm maj",         "C D Eb F Gb A  Bb", "Gb A"  ],
   ]
+  include_examples "preset", "C", "min/maj7", false, 10, \
+  [
+    [ "C augmented", "C D# E G Ab B" , "E G Ab" ],
+  ]
   include_examples "preset", "Db", "7#11", false, 9, \
   [
     [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db Eb F G Ab Bb Cb", "Eb Ab"   ],
