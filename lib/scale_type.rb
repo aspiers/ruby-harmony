@@ -53,6 +53,17 @@ class ScaleType
     return Note.by_letter_and_pitch(letter, pitch)
   end
 
+  # Find the degree of the given note in the given key.
+  def degree_of(search_note, key_note)
+    degree = (1..(@increments.size + 1)).find { |d|
+      note(key_note, d).octave_squash === search_note.octave_squash
+    }
+    unless degree
+      raise "Couldn't find #{note} in #{key_note} #{self}"
+    end
+    return degree
+  end
+
   # Given a note which is a degree of a scale, find the original key.
   # e.g. 'C' and 3 should return Ab.
   def key(note, degree)
@@ -272,12 +283,8 @@ class SymmetricalScaleType < ScaleType
         # no impact on the ranking.  Once we know the notes, we can
         # calculate the degree of this new scale which the original
         # note corresponds to.
-        tmp_mode = Mode.new(1, self, -1)
-        notes = tmp_mode.notes(candidate_key).octave_squash
-        candidate_degree = 1 + notes.find_index { |n| n === note }
-        if degree != candidate_degree
-          notes = Mode.new(degree, self, -1).notes(candidate_key).octave_squash
-        end
+        candidate_degree = degree_of(note, candidate_key)
+        notes = Mode.new(candidate_degree, self, -1).notes(candidate_key).octave_squash
 
         candidates << [
           [

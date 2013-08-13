@@ -5,6 +5,20 @@ describe ScaleType do
   it "should be prepopulated with the catalogue" do
     ScaleType.all.size.should == 6
   end
+
+  describe "#degree_of" do
+    [
+      [ DiatonicScaleType::MAJOR,         'Bb', 'Bb', 1 ],
+      [ DiatonicScaleType::MELODIC_MINOR, 'C',  'B',  7 ],
+      [ SymmetricalScaleType::DIMINISHED, 'C',  'G#', 6 ],
+    ].each do |scale_type, key_name, note_name, expected_degree|
+      context "#{key_name} #{scale_type}" do
+        it "should return the right degree for #{note_name}" do
+          scale_type.degree_of(Note[note_name], Note[key_name]).should == expected_degree
+        end
+      end
+    end
+  end
 end
 
 describe DiatonicScaleType do
