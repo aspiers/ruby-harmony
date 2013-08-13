@@ -140,6 +140,8 @@ GEM
     rspec-instafail (0.2.4)
     rspec-mocks (2.14.1)
     ruby-progressbar (1.1.1)
+    rvm-capistrano (1.4.3)
+      capistrano (>= 2.15.4)
     simplecov (0.7.1)
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
@@ -162,4 +164,5 @@ DEPENDENCIES
   guard-rspec
   jazz_hands
   rspec (~> 2.14.0)
+  rvm-capistrano
   simplecov

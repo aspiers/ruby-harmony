@@ -16,4 +16,5 @@ group :development, :test do
 
   gem 'capistrano'
   gem 'capistrano-unicorn'
+  gem 'rvm-capistrano'
 end
