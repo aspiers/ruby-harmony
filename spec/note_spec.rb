@@ -264,6 +264,30 @@ describe Note do
     end
   end
 
+  describe "#octave_squash" do
+    let(:note) { Note['Bb'] }
+
+    it "should leave a note in octave 0" do
+      note.octave_squash.object_id.should == note.object_id
+    end
+
+    it "should move a note down to octave 0" do
+      note.octave = 2
+      note.pitch.should > 12
+      squashed = note.octave_squash
+      squashed.octave.should == 0
+      squashed.object_id.should_not == note.object_id
+    end
+
+    it "should move a note up to octave 0" do
+      note.octave = -3
+      note.pitch.should < 0
+      squashed = note.octave_squash
+      squashed.octave.should == 0
+      squashed.object_id.should_not == note.object_id
+    end
+  end
+
   describe "#to_ly_abs" do
     notes = [
       [ "B", -13,  0,  "b,"   ],
