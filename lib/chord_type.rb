@@ -103,6 +103,15 @@ class ChordType
     [key] + intervals.map { |interval| interval.from(key) }
   end
 
+  def modified_fifth?
+    ! (intervals.map(&:name) & %w(5 b5 #5 #11 b13)).empty?
+  end
+
+  def maybe_add_fifth
+    return self if modified_fifth?
+    self.class.new(name + ' (with 5th)', (intervals + [ Interval['5'] ]).sort)
+  end
+
   private
   def ChordType.load_presets
     for preset in PRESETS

@@ -54,4 +54,22 @@ describe ChordType do
     include_examples 'chord notes', 'D', 'min9',   'D F C E'
     include_examples 'chord notes', 'E', '7b9#11', 'E G# D F A#'
   end
+
+  describe "#maybe_add_fifth" do
+    it "should add a fifth" do
+      ct = ChordType['min7']
+      ct.intervals.should_not include(Interval['5'])
+      ct.maybe_add_fifth.intervals.join(' ').should == 'b3 5 b7'
+    end
+
+    it "should not add a fifth" do
+      ct = ChordType['min7b5']
+      ct.maybe_add_fifth.intervals.join(' ').should == 'b3 b5 b7'
+    end
+
+    it "should not add a fifth twice" do
+      ct = ChordType['min7']
+      ct.maybe_add_fifth.maybe_add_fifth.intervals.join(' ').should == 'b3 5 b7'
+    end
+  end
 end
