@@ -3,6 +3,28 @@ require 'active_support/core_ext/string/indent'
 
 class ModeInKey
   attr_accessor :mode, :key_note
+  attr_writer   :original
+
+  def ModeInKey.by_start_note(mode, starting_note)
+    key_note, new_degree = mode.scale_type.key_and_degree(starting_note, mode.degree)
+
+    if new_degree == mode.degree
+      @original = nil
+      return ModeInKey.new(mode, key_note)
+    end
+
+    # ScaleType instance has recommended shifting to a different
+    # degree for better spelling of the notes.  So we construct a
+    # new ModeInKey for obtaining the notes, but save the old one
+    # inside it so we can still generate the same name.
+    new_mode = Mode.new(new_degree, mode.scale_type, mode.index)
+    original_key = new_mode.scale_type.note(key_note, new_degree - mode.degree + 1).octave_squash
+
+    mode_in_key          = ModeInKey.new(new_mode, key_note)
+    original = mode_in_key.original = ModeInKey.new(mode, original_key)
+
+    return mode_in_key
+  end
 
   def initialize(mode, key_note)
     unless mode.is_a?(Mode)
@@ -15,6 +37,12 @@ class ModeInKey
     end
     self.mode = mode
     self.key_note = key_note
+
+    @original = nil
+  end
+
+  def original
+    @original || self
   end
 
   def generic_description
@@ -92,10 +120,8 @@ class ModeInKey
     count = 0
     ScaleType.all.map do |scale_type|
       (1..scale_type.num_modes).map do |degree|
-        mode = Mode.new(degree, scale_type, count += 1)
-        key_note, deg = scale_type.key_and_degree(starting_note, degree)
-        mode = Mode.new(deg, scale_type, count += 1) if deg != degree
-        ModeInKey.new(mode, key_note)
+        orig_mode = Mode.new(degree, scale_type, count += 1)
+        ModeInKey.by_start_note(orig_mode, starting_note)
       end.sort
     end
   end

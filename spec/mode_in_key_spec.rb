@@ -158,6 +158,72 @@ describe ModeInKey do
     end
   end
 
+  shared_examples "key choice" do
+    |scale_type, starting_note_name, degree,
+     exp_original_key, exp_degree, exp_key, exp_notes, exp_name|
+
+    context "degree #{degree} as #{starting_note_name}" do
+      let(:mode)          { Mode.new(degree, scale_type, -1) }
+      let(:starting_note) { Note[starting_note_name] }
+      let(:mode_in_key)   { ModeInKey.by_start_note(mode, starting_note) }
+
+      it "should calculate the right original key" do
+        mode_in_key.original.key_note.name.should == exp_original_key
+      end
+
+      it "should calculate the right degree" do
+        mode_in_key.mode.degree.should == exp_degree
+      end
+      
+      it "should choose the right key" do
+        mode_in_key.key_note.name.should == exp_key
+      end
+
+      it "should calculate the right original degree" do
+        mode_in_key.original.mode.degree.should == mode.degree
+      end
+
+      it "should return the right notes" do
+        mode_in_key.notes.map(&:to_s).should == exp_notes.split
+      end
+
+      it "should return the name" do
+        mode_in_key.original.name.should == exp_name
+      end
+    end
+  end
+
+  describe "key choice in symmetrical scales" do
+    [
+      [
+        'C',  1, 'C',  1, 'C',  'C  D  Eb F  Gb Ab A  B' ,
+        "C diminished"
+      ],
+      [
+        'C',  2, 'Bb', 4, 'G',  'C  Db Eb E  F# G  A  Bb',
+        "C auxiliary diminished\n(2nd degree of Bb diminished)"
+      ],
+      [
+        'C#', 1, 'C#', 7, 'E',  'C# D# E  F# G  A  Bb C',
+        "C# diminished"
+      ],
+      [
+        'C#', 2, 'B',  2, 'B',  'C# D  E  F  G  G#  A# B',
+        "C# auxiliary diminished\n(2nd degree of B diminished)"
+      ],
+      [
+        'D',  1, 'D',  1, 'D',  'D  E  F  G  Ab Bb B  C#',
+        "D diminished",
+      ],
+      [
+        'D',  2, 'C',  2, 'C',  'D  Eb F  Gb Ab A  B  C',
+        "D auxiliary diminished\n(2nd degree of C diminished)",
+      ],
+    ].each do |data|
+      include_examples "key choice", SymmetricalScaleType::DIMINISHED, *data
+    end
+  end
+
   shared_examples "counting accidentals" do |degree, scale_type, key_name, sharps, flats|
     mode = Mode.new(degree, scale_type, -1)
     key_note = Note.by_name(key_name)
