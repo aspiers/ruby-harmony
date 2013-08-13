@@ -46,9 +46,17 @@ class ScaleType
     @index = @@all.length - 1
   end
 
+  # Return the number of letters to shift the key note by in order to
+  # reach the letter which the given degree should have.  Some
+  # non-diatonic scales will need to override this to provide a
+  # non-linear progression of letters as the scale ascends.
+  def letter_shift(degree)
+    degree - 1
+  end
+
   # Return the note which is the given degree of the scale.
   def note(key_note, degree)
-    letter = Note.letter_shift(key_note.letter, degree - 1)
+    letter = Note.letter_shift(key_note.letter, letter_shift(degree))
     pitch = key_note.pitch + offset_from_key(degree)
     return Note.by_letter_and_pitch(letter, pitch)
   end
@@ -326,9 +334,7 @@ class SymmetricalScaleType < ScaleType
 
     # Return the note which is the given degree of the scale.
     def note(key_note, degree)
-      letter = Note.letter_shift(key_note.letter, letter_shift(degree))
-      pitch = key_note.pitch + offset_from_key(degree)
-      Note.by_letter_and_pitch(letter, pitch).simplify
+      super(key_note, degree).simplify
     end
 
     def mode_name(degree)
