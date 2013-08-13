@@ -20,19 +20,13 @@ describe ScaleFinder do
         scalefinder.scales.size.should == exp_total
       end
 
-      it "should find the right scales" do
-        names = scalefinder.scales.map { |scale, notes, chord| scale.name }
-        names.should == expected.map { |ename, enotes, eidents| ename }
-      end
-
-      it "should find scales with the right notes" do
-        notes = scalefinder.scales.map { |scale, notes, chord| notes.map(&:name) }
-        notes.should == expected.map { |ename, enotes, eidents| enotes.split     }
-      end
-
-      it "should find the identifying notes" do
-        notes = scalefinder.scales.map { |scale, notes, chord| chord.join(' ') + "\n" }.join
-        notes.should == expected.map { |ename, enotes, eidents| eidents.gsub(/ +/, ' ') + "\n" }.join
+      it "should find the right scales and identifiers" do
+        results = scalefinder.scales.map do |scale, notes, chord|
+          [ scale.name, notes.join(' '), chord.join(' ') ]
+        end
+        expected.each do |ename, enotes, eidents|
+          results.should include([ ename, enotes.split.join(' '), eidents.split.join(' ') ])
+        end
       end
     end
   end
@@ -55,7 +49,8 @@ describe ScaleFinder do
                                     "C Db E F G A Bb"    , "F A"     ],
     [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "Eb A"    ],
     [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# G"    ],
-    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# A"    ],
+    # Don't need this since partial expectations are allowed.
+    #[ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# A"    ],
   ]
   include_examples "preset", "C", "min11", false, 4, \
   [
