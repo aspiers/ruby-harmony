@@ -67,6 +67,10 @@ class Interval
     return new(degree, accidental)
   end
 
+  class << self
+    alias_method :[], :by_name
+  end
+
   def <=>(other)
     c = Note.by_name('C')
     [degree, from(c).pitch] <=> [other.degree, other.from(c).pitch]

@@ -38,9 +38,13 @@ describe Interval do
 
   ]
 
-  describe ".by_name" do
+  describe ".by_name and .[]" do
     it "should raise an exception when passed an invalid interval" do
       expect { Interval.by_name('blah') }.to raise_exception "Invalid interval 'blah'"
+    end
+
+    it "should raise an exception when passed an invalid interval" do
+      expect { Interval['blah'] }.to raise_exception "Invalid interval 'blah'"
     end
   end
 
@@ -103,8 +107,12 @@ describe Interval do
       end
     end
 
-    it "should be constructable by name" do
+    it "should be constructable #by_name" do
       Interval.by_name(name).name.should == name
+    end
+
+    it "should be constructable by .[]" do
+      Interval[name].name.should == name
     end
   end
 
