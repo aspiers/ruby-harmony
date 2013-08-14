@@ -17,4 +17,5 @@ group :development, :test do
   gem 'capistrano'
   gem 'capistrano-unicorn'
   gem 'rvm-capistrano'
+#  gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'master'
 end
