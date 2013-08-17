@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/aspiers/capistrano.git
-  revision: 8b1a5ca834e9d6054325e4e7b4d72415459b04b3
+  revision: 24afe6a9362de51d910c9103baa45184ebe10610
   branch: app_subdir
   specs:
     capistrano (2.15.4)
