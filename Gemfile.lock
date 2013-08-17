@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/aspiers/capistrano-unicorn.git
+  revision: 709cd93f61b1a627d8b8e9e60dabfdee3f855e32
+  branch: app_subdir
+  specs:
+    capistrano-unicorn (0.1.10)
+      capistrano
+
+GIT
   remote: git://github.com/aspiers/capistrano.git
   revision: 8b1a5ca834e9d6054325e4e7b4d72415459b04b3
   branch: app_subdir
@@ -51,8 +59,6 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.1.4)
-    capistrano-unicorn (0.1.10)
-      capistrano
     coderay (1.0.9)
     coffee-rails (4.0.0)
       coffee-script (>= 2.2.0)
@@ -248,7 +254,7 @@ PLATFORMS
 
 DEPENDENCIES
   capistrano!
-  capistrano-unicorn
+  capistrano-unicorn!
   coffee-rails (~> 4.0.0)
   fuubar
   guard-bundler

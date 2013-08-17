@@ -18,7 +18,7 @@ group :development, :test do
   # gem 'debugger'
 
   gem 'capistrano', github: 'aspiers/capistrano', branch: 'app_subdir'
-  gem 'capistrano-unicorn'
+  gem 'capistrano-unicorn', github: 'aspiers/capistrano-unicorn', branch: 'app_subdir'
   gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'rvm-user'
 end
 
