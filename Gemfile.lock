@@ -257,6 +257,7 @@ DEPENDENCIES
   jazz_hands
   jquery-rails
   rails (= 4.0.0)
+  rake
   rspec (~> 2.14.0)
   rvm-capistrano!
   sass-rails (~> 4.0.0)
