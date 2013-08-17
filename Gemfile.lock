@@ -1,3 +1,12 @@
+
+GIT
+  remote: git://github.com/aspiers/rvm-capistrano.git
+  revision: 9c8095bc832c54aacd35723227f57d6652b6ce6d
+  branch: rvm-user
+  specs:
+    rvm-capistrano (1.4.4)
+      capistrano (>= 2.15.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -140,8 +149,6 @@ GEM
     rspec-instafail (0.2.4)
     rspec-mocks (2.14.3)
     ruby-progressbar (1.2.0)
-    rvm-capistrano (1.4.4)
-      capistrano (>= 2.15.4)
     simplecov (0.7.1)
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
@@ -164,5 +171,5 @@ DEPENDENCIES
   guard-rspec
   jazz_hands
   rspec (~> 2.14.0)
-  rvm-capistrano
+  rvm-capistrano!
   simplecov
