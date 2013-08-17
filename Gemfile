@@ -14,7 +14,7 @@ group :development, :test do
 
   gem 'simplecov', require: false
 
-  gem 'capistrano'
+  gem 'capistrano' #, github: 'aspiers/capistrano', branch: 'master'
   gem 'capistrano-unicorn'
   gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'rvm-user'
 end
