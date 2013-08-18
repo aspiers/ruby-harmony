@@ -1,4 +1,4 @@
-\version "2.17.9"
+\version "2.16.0"
 \include "english.ly"
 
 \paper {
@@ -18,13 +18,13 @@ emphasisColor = #(x11-color 'ForestGreen)
 emphasisColor = #red
 
 emphasise = \once {
-  \override NoteHead.color = \emphasisColor
-  \override Stem.color = \emphasisColor
+  \override NoteHead #'color = \emphasisColor
+  \override Stem     #'color = \emphasisColor
 
   % Would need to stop/restart staff for this to work; see
   % example of how to do that here:
   % http://lsr.dsi.unimi.it/LSR/Item?id=700 
-  \override Staff.LedgerLineSpanner.color = \emphasisColor
+  \override Staff.LedgerLineSpanner #'color = \emphasisColor
 }
 
 \header {
@@ -49,11 +49,11 @@ emphasise = \once {
   \new Score \with {
     % This increases horizontal spacing between notes, but is not needed
     % with \markLengthOn
-    %\override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1/8)
+    %\override SpacingSpanner #'base-shortest-duration = #(ly:make-moment 1/8)
 
     % By default RehearsalMarks align to barlines, I think.
-    %\override RehearsalMark.break-align-symbols = #'(key-signature)
-    \override RehearsalMark.self-alignment-X = #LEFT
+    %\override RehearsalMark #'break-align-symbols = #'(key-signature)
+    \override RehearsalMark #'self-alignment-X = #LEFT
 
     \remove "System_start_delimiter_engraver"
     \remove "Bar_number_engraver"
