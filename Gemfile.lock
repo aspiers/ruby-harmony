@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/aspiers/rvm-capistrano.git
-  revision: 73c7b38ba7eaf0a24834f1f5a48359d150885551
+  revision: b5d3ae909a775ee9948bd3e36ad554cf72b59fc4
   branch: rvm-user
   specs:
     rvm-capistrano (1.4.4)
