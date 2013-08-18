@@ -35,6 +35,7 @@ group :development, :test, :staging, :production, :rails, :assets do
   gem 'jquery-rails'
 
   gem 'twitter-bootstrap-rails', github: 'seyhunak/twitter-bootstrap-rails'
+  gem 'less-rails'
 
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   #gem 'turbolinks'
