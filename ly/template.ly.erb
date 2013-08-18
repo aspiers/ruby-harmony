@@ -60,7 +60,9 @@ emphasise = \once {
   }
   {
     \new Staff {
-      \markLengthOn
+      % requires 2.17 :-/
+      %\markLengthOn
+
       \mark \markup { \teeny { "<%= descr %>" } }
       <<%= chord %>>1
       \bar "||" |
