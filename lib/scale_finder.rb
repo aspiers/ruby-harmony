@@ -154,7 +154,7 @@ class ScaleFinder
     debug 1, ''
 
     find_identifiers.sort_by do |mode_in_key, chords_by_size|
-      mode_in_key.mode
+      [ mode_in_key.scale_type.index, mode_in_key.mode.degree ]
     end.each do |scale, chords_by_size|
       if chords_by_size.empty?
         @scales_by_chord_size[0] ||= [ ]
