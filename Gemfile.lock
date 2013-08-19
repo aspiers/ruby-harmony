@@ -98,6 +98,7 @@ GEM
       rspec (~> 2.0)
       rspec-instafail (~> 0.2.0)
       ruby-progressbar (~> 1.0)
+    google-analytics-rails (0.0.4)
     grit (2.5.0)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
@@ -273,6 +274,7 @@ DEPENDENCIES
   capistrano-unicorn!
   coffee-rails (~> 4.0.0)
   fuubar
+  google-analytics-rails
   guard-bundler
   guard-rspec
   haml

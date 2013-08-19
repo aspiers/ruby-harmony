@@ -4,6 +4,7 @@ source 'https://rubygems.org/'
 
 gem 'jazz_hands'
 gem 'rake'
+gem 'google-analytics-rails'
 
 group :development, :test do
   gem 'rspec', '~> 2.14.0'
