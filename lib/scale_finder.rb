@@ -80,7 +80,7 @@ class ScaleFinder
 
       chords_seen = Hash.new(false)
 
-      debug 1, "Checking all #{num_variable_notes}-note chords ..."
+      debug 2, "Checking all #{num_variable_notes}-note chords ..."
       for pitches in (0..11).to_a.combination(num_variable_notes)
         identifier_candidate_chord = PitchSet.to_note_set(pitches)
         chord_to_match = @fixed_chord_notes + identifier_candidate_chord
@@ -97,10 +97,10 @@ class ScaleFinder
 
         case matches.length
         when 0
-          debug 2, "    #{chord_text} didn't match any modes"
+          debug 3, "    #{chord_text} didn't match any modes"
         when 1
           identified_mode = matches[0]
-          debug 1, "*   #{chord_text} uniquely identified: #{identified_mode}"
+          debug 2, "*   #{chord_text} uniquely identified: #{identified_mode}"
           identifiers[identified_mode][chord_size] ||= [ ]
           identifiers[identified_mode][chord_size].push identifier_candidate_chord
         else
@@ -109,19 +109,19 @@ class ScaleFinder
             matches_to_show = matches.first(2)
             matches_to_show += [ '...' ] if matches.length > 2
           end
-          debug 2, ".   #{chord_text} matched #{matches.length} modes: " + \
+          debug 3, ".   #{chord_text} matched #{matches.length} modes: " + \
           matches_to_show.join(', ')
         end
       end
-      debug 1, ''
+      debug 2, ''
     end
 
     return identifiers
   end
 
   def output_summary_header
-    debug 1, "-" * 72
-    debug 1, ''
+    debug 2, "-" * 72
+    debug 2, ''
     chord = @fixed_chord_notes.to_s.strip.gsub(/\s+/, ' ')
     header = "%s: %s" % [ @descr, chord ] # + #{@variable_chord_notes.to_s.strip}"
     debug 1, header
@@ -151,6 +151,8 @@ class ScaleFinder
     @scales    = [ ]
     @ly_scales = { }
 
+    debug 1, ''
+
     identifiers.sort_by do |mode_in_key, chords_by_size|
       mode_in_key.mode.index
     end.each do |scale, chords_by_size|
@@ -178,7 +180,7 @@ class ScaleFinder
           end
           note_in_scale
         }
-        debug 2, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
+        debug 1, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
         notes = scale.notes
         notes = notes.map(&:simplify) if @simplify
         @scales << [scale, notes, chord_in_scale]
