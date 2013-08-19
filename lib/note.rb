@@ -17,6 +17,10 @@ class Note
   attr_reader   :letter
   attr_accessor :accidental, :pitch
 
+  def Note.valid?(name)
+    name =~ /^[A-G](|bb?|\#|x)$/
+  end
+
   def initialize(l, a, p)
     raise "letter must be a String" unless l.is_a?(String)
     raise "accidental must be an integer between -2 and +2" unless a >= -2 and a <= 2

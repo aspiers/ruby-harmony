@@ -2,6 +2,16 @@ require 'note'
 require 'exceptions'
 
 describe Note do
+  context "#valid?" do
+    it "should identify 'H' as invalid" do
+      Note.valid?('H').should be_false
+    end
+
+    it "should identify 'a' as invalid" do
+      Note.valid?('a').should be_false
+    end
+  end
+
   context "#new" do
     it "should raise an exception when given an invalid letter" do
       expect { Note.new('H', -1, 3) }.to \
@@ -15,6 +25,10 @@ describe Note do
   end
 
   shared_examples "a note" do |name, letter, ly, pitch, accidental|
+    it "should be valid" do
+      Note.valid?(name).should be_true
+    end
+
     it "should have the right letter" do
       note.letter.should == letter
     end
