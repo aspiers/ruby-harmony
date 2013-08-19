@@ -121,13 +121,29 @@ class ModeInKey
     [ num_flats - num_sharps ] <=> [ other.num_flats - other.num_sharps ]
   end
 
-  def ModeInKey.all(starting_note) # builds all modes starting on a given note
+  # Builds an Array of modes of the given scale type starting on the
+  # given note.
+  def ModeInKey.all_for_scale_type(scale_type, starting_note)
+    (1..scale_type.num_modes).map do |degree|
+      orig_mode = Mode.new(degree, scale_type)
+      ModeInKey.by_start_note(orig_mode, starting_note)
+    end.sort
+  end
+
+  # Builds an Array of Arrays representing all modes of all registered
+  # scales, starting on the given note:
+  #
+  #   [
+  #     [ ... modes of 1st scale type ... ],
+  #     [ ... modes of 2nd scale type ... ],
+  #     ...
+  #   ]
+  def ModeInKey.all(starting_note)
     count = 0
     ScaleType.all.map do |scale_type|
-      (1..scale_type.num_modes).map do |degree|
-        orig_mode = Mode.new(degree, scale_type, count += 1)
-        ModeInKey.by_start_note(orig_mode, starting_note)
-      end.sort
+      modes_in_key = ModeInKey.all_for_scale_type(scale_type, starting_note)
+      #modes_in_key.each { |mode| mode.index = (count += 1) }
+      modes_in_key
     end
   end
 

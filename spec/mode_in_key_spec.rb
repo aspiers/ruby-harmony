@@ -302,6 +302,26 @@ describe ModeInKey do
     include_examples "counting accidentals", 4, DiatonicScaleType::HARMONIC_MAJOR, key_name, sharps, flats
   end
 
+  describe ".all_for_scale_type" do
+    let(:all) { ModeInKey.all_for_scale_type(DiatonicScaleType::MELODIC_MINOR, Note["C"]) }
+
+    it "should have 7 modes" do
+      all.size.should == 7
+    end
+
+    it "should order modes by accidentals" do
+      all[0].accidentals.should == [ 2, 0 ]
+      all[1].accidentals.should == [ 1, 1 ]
+      all[6].accidentals.should == [ 0, 6 ]
+      all[0].generic_description.should == '3rd degree of A mel min'
+      all[1].generic_description.should == '4th degree of G mel min'
+      all[6].generic_description.should == '7th degree of Db mel min'
+      all[0].notes.join(' ').should == 'C D E F# G# A B'
+      all[1].notes.join(' ').should == 'C D E F# G A Bb'
+      all[6].notes.join(' ').should == 'C Db Eb Fb Gb Ab Bb'
+    end
+  end
+
   describe ".all" do
     let(:all) { ModeInKey.all(Note.by_name("C")) }
 
@@ -310,12 +330,6 @@ describe ModeInKey do
       all.each do |modes_in_key|
         modes_in_key.size.should == modes_in_key[0].mode.scale_type.num_modes
       end
-    end
-
-    it "should order modes by accidentals" do
-      all[0][0].accidentals.should == [ 1, 0 ]
-      all[0][1].accidentals.should == [ 0, 0 ]
-      all[0][6].accidentals.should == [ 0, 5 ]
     end
   end
 
