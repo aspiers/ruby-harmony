@@ -15,11 +15,12 @@ class ScaleFinder
 
   attr_reader :debug_file, :scales_matched, :ly_scales
 
-  def initialize(fixed_chord_notes, root, descr)
+  def initialize(fixed_chord_notes, descr, scales_catalogue)
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
-    @root = root
     @descr = descr
+    @scales_catalogue = scales_catalogue
+
     @simplify = false
     @debug_file = $stdout
   end
@@ -68,8 +69,8 @@ class ScaleFinder
   # 
   # Returns nested Hash:
   #   { uniquely_identified_scale => { chord_size => [ chord, ... ] }
-  def find_identifiers(scales)
-    identifiers = Hash[ scales.map { |scale| [scale, {}] } ]
+  def find_identifiers
+    identifiers = Hash[ @scales_catalogue.map { |scale| [scale, {}] } ]
 
     # @fixed_chord_notes might be enough to uniquely identify a mode
     for num_variable_notes in 0..(@variable_chord_notes.size)
@@ -93,7 +94,7 @@ class ScaleFinder
         next if chords_seen[chord_text]
         chords_seen[chord_text] = true
 
-        matches = scales_matching_chord(scales, chord_to_match)
+        matches = scales_matching_chord(@scales_catalogue, chord_to_match)
 
         case matches.length
         when 0
@@ -137,10 +138,6 @@ class ScaleFinder
   attr_reader :scales
 
   def identify_modes
-    starting_note = Note.by_name(@root)
-    scales = ModeInKey.all(starting_note).flatten
-    identifiers = find_identifiers(scales)
-
     # map chord size to an Array of all scales which need that number of
     # notes to uniquely identify the scale.
     @scales_by_chord_size = { }
@@ -153,7 +150,7 @@ class ScaleFinder
 
     debug 1, ''
 
-    identifiers.sort_by do |mode_in_key, chords_by_size|
+    find_identifiers.sort_by do |mode_in_key, chords_by_size|
       mode_in_key.mode.index
     end.each do |scale, chords_by_size|
       if chords_by_size.empty?

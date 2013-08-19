@@ -18,10 +18,11 @@ verbosity = verbosity.empty? ? 1 : verbosity.to_i
 
 key = Note.by_name(key_name)
 puts ModeInKey.output_modes(key) if verbosity > 1
+scales = ModeInKey.all(starting_note).flatten
 
 fixed_chord_notes = ChordType[chord_type].notes(key)
 descr = "%s%s" % [ key_name, chord_type ]
-scalefinder = ScaleFinder.new(fixed_chord_notes, key_name, descr)
+scalefinder = ScaleFinder.new(fixed_chord_notes, descr, scales)
 scalefinder.set_verbosity(verbosity)
 scalefinder.run('ly/out.ly')
 puts

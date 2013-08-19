@@ -8,11 +8,11 @@ describe ScaleFinder do
     |key, descr, fixed_chord_notes, simplify, exp_total, expected|
 
     context "finds #{simplify ? 'simplified ' : ''}scales including: #{fixed_chord_notes.join(' ')}" do
-      let(:scalefinder) { ScaleFinder.new(fixed_chord_notes, key.name, descr) }
+      let(:scales_catalogue) { ModeInKey.all(key).flatten }
+      let(:scalefinder) { ScaleFinder.new(fixed_chord_notes, descr, scales_catalogue) }
       before {
         scalefinder.set_verbosity(0)
         scalefinder.enable_simplification if simplify
-        scales = ModeInKey.all(key).flatten
         scalefinder.identify_modes
       }
 
