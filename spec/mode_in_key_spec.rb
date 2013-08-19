@@ -302,19 +302,21 @@ describe ModeInKey do
     include_examples "counting accidentals", 4, DiatonicScaleType::HARMONIC_MAJOR, key_name, sharps, flats
   end
 
-  let(:all) { ModeInKey.all(Note.by_name("C")) }
+  describe ".all" do
+    let(:all) { ModeInKey.all(Note.by_name("C")) }
 
-  it "should have at least 28 modes" do
-    all.size.should >= 4
-    all.each do |modes_in_key|
-      modes_in_key.size.should == modes_in_key[0].mode.scale_type.num_modes
+    it "should have at least 28 modes" do
+      all.size.should >= 4
+      all.each do |modes_in_key|
+        modes_in_key.size.should == modes_in_key[0].mode.scale_type.num_modes
+      end
     end
-  end
 
-  it "should order modes by accidentals" do
-    all[0][0].accidentals.should == [ 1, 0 ]
-    all[0][1].accidentals.should == [ 0, 0 ]
-    all[0][6].accidentals.should == [ 0, 5 ]
+    it "should order modes by accidentals" do
+      all[0][0].accidentals.should == [ 1, 0 ]
+      all[0][1].accidentals.should == [ 0, 0 ]
+      all[0][6].accidentals.should == [ 0, 5 ]
+    end
   end
 
   describe "#output_modes" do
