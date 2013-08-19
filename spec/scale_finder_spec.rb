@@ -17,11 +17,11 @@ describe ScaleFinder do
       }
 
       it "should find the right number of scales" do
-        scalefinder.scales.size.should == exp_total
+        scalefinder.scales_matched.size.should == exp_total
       end
 
       it "should find the right scales and identifiers" do
-        results = scalefinder.scales.map do |scale, notes, chord|
+        results = scalefinder.scales_matched.map do |scale, notes, chord|
           [ scale.name, notes.join(' '), chord.join(' ') ]
         end
         expected.each do |ename, enotes, eidents|

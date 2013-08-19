@@ -13,7 +13,7 @@ class ScaleFinder
 
   @@verbosity = 0
 
-  attr_reader :debug_file, :scales, :ly_scales
+  attr_reader :debug_file, :scales_matched, :ly_scales
 
   def initialize(fixed_chord_notes, root, descr)
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
@@ -148,7 +148,7 @@ class ScaleFinder
     # map [ chord_size, chords_count ] => [ scale, ... ]
     @distinctiveness = { }
 
-    @scales    = [ ]
+    @scales_matched = [ ]
     @ly_scales = { }
 
     debug 1, ''
@@ -183,7 +183,7 @@ class ScaleFinder
         debug 1, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
         notes = scale.notes
         notes = notes.map(&:simplify) if @simplify
-        @scales << [scale, notes, chord_in_scale]
+        @scales_matched << [scale, notes, chord_in_scale]
 
         @ly_scales[scale.name] ||= [
           Accidental.to_ly_markup(scale.original.to_ly),
