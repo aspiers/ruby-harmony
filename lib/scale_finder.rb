@@ -15,6 +15,9 @@ class ScaleFinder
 
   attr_reader :debug_file, :scales_matched, :ly_scales
 
+  # fixed_chord_notes - NoteSet of chord notes which must be in every matching scale
+  # descr - textual description of the chord
+  # scales_catalogue - Array of ModeInKey instances to use for matching against
   def initialize(fixed_chord_notes, descr, scales_catalogue)
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
