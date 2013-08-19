@@ -13,15 +13,15 @@ end
 
 usage if ARGV.size < 2
 
-key_name, chord_type, verbosity = ARGV
+starting_note_name, chord_type, verbosity = ARGV
 verbosity = verbosity.empty? ? 1 : verbosity.to_i
 
-key = Note.by_name(key_name)
-puts ModeInKey.output_modes(key) if verbosity > 1
+starting_note = Note.by_name(starting_note_name)
+puts ModeInKey.output_modes(starting_note) if verbosity > 1
 scales = ModeInKey.all(starting_note).flatten
 
-fixed_chord_notes = ChordType[chord_type].notes(key)
-descr = "%s%s" % [ key_name, chord_type ]
+fixed_chord_notes = ChordType[chord_type].notes(starting_note)
+descr = "%s%s" % [ starting_note_name, chord_type ]
 scalefinder = ScaleFinder.new(fixed_chord_notes, descr, scales)
 scalefinder.set_verbosity(verbosity)
 scalefinder.run('ly/out.ly')
