@@ -23,6 +23,8 @@ group :development, :test do
   gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'rvm-user'
 end
 
+gem 'jquery-ui-rails'
+
 group :development, :test, :staging, :production, :rails, :assets do
   gem 'rails', '4.0.0'
   gem 'sass-rails', '~> 4.0.0'
