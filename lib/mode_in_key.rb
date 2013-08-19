@@ -17,7 +17,7 @@ class ModeInKey
     # degree for better spelling of the notes.  So we construct a
     # new ModeInKey for obtaining the notes, but save the old one
     # inside it so we can still generate the same name.
-    new_mode = Mode.new(new_degree, mode.scale_type, mode.index)
+    new_mode = Mode.new(new_degree, mode.scale_type)
     original_key = new_mode.scale_type.note(key_note, new_degree - mode.degree + 1).octave_squash
 
     # if starting_note.name == 'C' && mode.degree == 2 && mode.scale_type.name == 'augmented'

@@ -283,7 +283,7 @@ describe SymmetricalScaleType do
 
     shared_examples "good key" do |starting_note, degree, expected|
       it "should choose a good key for #{starting_note} degree #{degree}" do
-        mode = Mode.new(degree, subject, -1)
+        mode = Mode.new(degree, subject)
         k, d = subject.key_and_degree(Note[starting_note], mode.degree)
         k.name.should == expected
       end

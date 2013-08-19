@@ -2,22 +2,22 @@ require 'mode'
 
 describe Mode do
   it "should have the right increments" do
-    Mode.new(1, DiatonicScaleType::MAJOR, -1).increments.should == [ 2, 2, 1, 2, 2, 2 ]
-    Mode.new(2, DiatonicScaleType::MAJOR, -1).increments.should == [ 2, 1, 2, 2, 2, 1 ]
-    Mode.new(7, DiatonicScaleType::MAJOR, -1).increments.should == [ 1, 2, 2, 1, 2, 2 ]
+    Mode.new(1, DiatonicScaleType::MAJOR).increments.should == [ 2, 2, 1, 2, 2, 2 ]
+    Mode.new(2, DiatonicScaleType::MAJOR).increments.should == [ 2, 1, 2, 2, 2, 1 ]
+    Mode.new(7, DiatonicScaleType::MAJOR).increments.should == [ 1, 2, 2, 1, 2, 2 ]
 
-    Mode.new(1, DiatonicScaleType::HARMONIC_MINOR, -1).increments.should == [ 2, 1, 2, 2, 1, 3 ]
-    Mode.new(2, DiatonicScaleType::HARMONIC_MINOR, -1).increments.should == [ 1, 2, 2, 1, 3, 1 ]
+    Mode.new(1, DiatonicScaleType::HARMONIC_MINOR).increments.should == [ 2, 1, 2, 2, 1, 3 ]
+    Mode.new(2, DiatonicScaleType::HARMONIC_MINOR).increments.should == [ 1, 2, 2, 1, 3, 1 ]
   end
 
   it "should have the right degrees" do
-    Mode.new(1, DiatonicScaleType::MAJOR, -1).degrees.should == [ 1, 2, 3, 4, 5, 6, 7 ]
-    Mode.new(2, DiatonicScaleType::MAJOR, -1).degrees.should == [ 2, 3, 4, 5, 6, 7, 1 ]
+    Mode.new(1, DiatonicScaleType::MAJOR).degrees.should == [ 1, 2, 3, 4, 5, 6, 7 ]
+    Mode.new(2, DiatonicScaleType::MAJOR).degrees.should == [ 2, 3, 4, 5, 6, 7, 1 ]
   end
 
   shared_examples "given key" do |scale, degree, key_name, expected_name, expected_notes|
     context "degree #{degree} of #{key_name} #{scale}" do
-      let(:mode) { Mode.new(degree, scale, -1) }
+      let(:mode) { Mode.new(degree, scale) }
 
       it "should have the right name" do
         mode.to_s.should == expected_name
@@ -54,7 +54,7 @@ describe Mode do
 
     context "degree #{degree} of #{scale} starting on #{start_name}" do
       let(:start_note) { Note.by_name(start_name)    }
-      let(:mode)       { Mode.new(degree, scale, -1) }
+      let(:mode)       { Mode.new(degree, scale) }
 
       it "should have the right name" do
         mode.to_s.should == expected_name
@@ -110,7 +110,7 @@ describe Mode do
       [ SymmetricalScaleType::DIMINISHED, 'C', 2, 'G',  4 ],
     ].each do |scale_type, starting_note, degree, best_key, best_degree|
       context "degree #{degree} of #{scale_type} as #{starting_note}" do
-        let(:mode) { Mode.new(degree, scale_type, -1) }
+        let(:mode) { Mode.new(degree, scale_type) }
 
         it "should return the right key and mode" do
           key_note, display_mode = mode.best_display_key_and_mode(Note[starting_note])
@@ -123,7 +123,7 @@ describe Mode do
 
   describe "name overriding" do
     it "should allow the name to be overridden" do
-      mode = Mode.new(3, DiatonicScaleType::HARMONIC_MAJOR, -1)
+      mode = Mode.new(3, DiatonicScaleType::HARMONIC_MAJOR)
       new_name = 'new name'
       mode.name!(new_name)
       mode.name.should == new_name

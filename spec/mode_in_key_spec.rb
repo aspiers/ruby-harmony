@@ -130,10 +130,10 @@ describe ModeInKey do
        exp_long_name, exp_notes, exp_pitches, exp_ly|
 
       context "degree #{degree} of #{key_name} #{scale_type}" do
-        let(:mode)        { Mode.new(degree, scale_type, 0) }
-        let(:key)         { Note[key_name]                  }
-        let(:mode_in_key) { ModeInKey.new(mode, key)        }
-        let(:short_name)  { exp_long_name.sub(/\n.+/, '')   }
+        let(:mode)        { Mode.new(degree, scale_type)  }
+        let(:key)         { Note[key_name]                }
+        let(:mode_in_key) { ModeInKey.new(mode, key)      }
+        let(:short_name)  { exp_long_name.sub(/\n.+/, '') }
 
         it "should give its short name via #inspect" do
           mode_in_key.inspect.should == short_name
@@ -163,7 +163,7 @@ describe ModeInKey do
      exp_original_key, exp_degree, exp_key, exp_notes, exp_name|
 
     context "degree #{degree} as #{starting_note_name}" do
-      let(:mode)          { Mode.new(degree, scale_type, -1) }
+      let(:mode)          { Mode.new(degree, scale_type) }
       let(:starting_note) { Note[starting_note_name] }
       let(:mode_in_key)   { ModeInKey.by_start_note(mode, starting_note) }
 
@@ -225,7 +225,7 @@ describe ModeInKey do
   end
 
   shared_examples "counting accidentals" do |degree, scale_type, key_name, sharps, flats|
-    mode = Mode.new(degree, scale_type, -1)
+    mode = Mode.new(degree, scale_type)
     key_note = Note.by_name(key_name)
     mode_in_key = ModeInKey.new(mode, key_note)
 

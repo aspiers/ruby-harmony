@@ -285,7 +285,7 @@ class SymmetricalScaleType < ScaleType
         # rank the suitability of all candidates.
         begin
           candidate_degree = degree_of(note, candidate_key)
-          notes = Mode.new(candidate_degree, self, -1).notes(candidate_key).octave_squash
+          notes = Mode.new(candidate_degree, self).notes(candidate_key).octave_squash
         rescue NoteExceptions::LetterPitchMismatch
           # We were probably trying to figure out the 6th degree of A#
           # whole tone or something like that, so scratch this key

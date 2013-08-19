@@ -2,17 +2,16 @@ require 'scale_type'
 require 'note_collections'
 
 class Mode
-  attr_reader :degree, :scale_type, :index
+  attr_reader :degree, :scale_type
 
   # Add a new mode to the catalogue.  The index is required so that
   # ordering of modes can be determined by the caller, which is
   # responsible for building the catalogue.
-  def initialize(d, s, i)
+  def initialize(d, s)
     raise "degree must be a positive integer" unless d.is_a?(Fixnum) and d > 0
     raise "scale_type must be a ScaleType" unless s.is_a?(ScaleType)
     @degree = d
     @scale_type = s
-    @index = i
     @name_override = nil
   end
 
@@ -58,7 +57,7 @@ class Mode
   # instance.
   def best_display_key_and_mode(starting_note)
     key_note, best_degree = scale_type.key_and_degree(starting_note, degree)
-    mode = best_degree == degree ? self : Mode.new(best_degree, scale_type, index)
+    mode = best_degree == degree ? self : Mode.new(best_degree, scale_type)
     return key_note, mode
   end
 
@@ -90,7 +89,7 @@ class Mode
   end
 
   def <=>(other)
-    index <=> other.index
+    degree <=> other.degree
   end
 
 end
