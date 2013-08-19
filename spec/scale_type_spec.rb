@@ -2,8 +2,21 @@ require 'mode'
 require 'scale_type'
 
 describe ScaleType do
-  it "should be prepopulated with the catalogue" do
-    ScaleType.all.size.should == 7
+  describe ".all" do
+    it "should be prepopulated with the catalogue" do
+      ScaleType.all.size.should == 7
+    end
+
+    specify "catalogue should be sorted by order of registration" do
+      ScaleType.all[ 0].should == DiatonicScaleType::MAJOR
+      ScaleType.all[-1].should == SymmetricalScaleType::AUGMENTED
+    end
+
+    it "should have the right index for sorting" do
+      ScaleType.all.each_with_index do |st, i|
+        st.index.should == i
+      end
+    end
   end
 
   describe "#degree_of" do

@@ -17,7 +17,7 @@ class ScaleType
     end
   end
 
-  attr_reader :name, :increments, :num_modes, :transpositions
+  attr_reader :name, :increments, :num_modes, :transpositions, :index
 
   # The number of modes is equal to the number of notes in the
   # smallest repeating cycle of increments.
