@@ -51,7 +51,7 @@ class ModeInKey
   end
 
   def generic_description
-    text = '%s %s' % [ key_note, mode.scale_type.name ]
+    text = '%s %s' % [ key_note, scale_type.name ]
     if key_note != starting_note
       text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
     end
@@ -68,6 +68,10 @@ class ModeInKey
     special = special_description
     return generic if generic == special
     return special ? "%s\n(%s)" % [ special, generic ] : generic
+  end
+
+  def scale_type
+    mode.scale_type
   end
 
   def to_s
