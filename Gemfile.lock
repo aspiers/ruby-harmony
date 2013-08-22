@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/aspiers/capistrano-unicorn.git
-  revision: 0e2d476f0b4cf2c5972091448371ace727f2cbff
-  branch: app_subdir
+  revision: 014544f9c138f3bcd51ce0e704c6e8d1117f071f
+  branch: variables
   specs:
-    capistrano-unicorn (0.1.10)
+    capistrano-unicorn (0.2.0)
       capistrano
 
 GIT
