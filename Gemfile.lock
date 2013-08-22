@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/aspiers/capistrano-unicorn.git
-  revision: 014544f9c138f3bcd51ce0e704c6e8d1117f071f
+  revision: 0eb909adad402d5f6b6f77fb7b3107a66eb660c5
   branch: variables
   specs:
     capistrano-unicorn (0.2.0)
@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/aspiers/capistrano.git
-  revision: 24afe6a9362de51d910c9103baa45184ebe10610
+  revision: d601a6b911a61220414e4cc4e71691f2d9ce6437
   branch: app_subdir
   specs:
     capistrano (2.15.4)
@@ -90,8 +90,7 @@ GEM
     diff-lcs (1.2.4)
     diffy (3.0.1)
     erubis (2.7.0)
-    execjs (1.4.0)
-      multi_json (~> 1.0)
+    execjs (2.0.0)
     ffi (1.9.0)
     formatador (0.2.4)
     fuubar (1.2.1)
@@ -147,7 +146,7 @@ GEM
     less-rails (2.3.3)
       actionpack (>= 3.1)
       less (~> 2.3.1)
-    libv8 (3.11.8.17)
+    libv8 (3.16.14.3)
     listen (1.3.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -249,8 +248,8 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    therubyracer (0.11.4)
-      libv8 (~> 3.11.8.12)
+    therubyracer (0.12.0)
+      libv8 (~> 3.16.14.0)
       ref
     thor (0.18.1)
     thread_safe (0.1.2)
