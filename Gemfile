@@ -20,7 +20,7 @@ group :development, :test do
 
   gem 'capistrano', github: 'aspiers/capistrano', branch: 'app_subdir'
   gem 'capistrano-unicorn', github: 'aspiers/capistrano-unicorn', branch: 'variables'
-  gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'rvm-user'
+  gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'master'
 end
 
 gem 'jquery-ui-rails'

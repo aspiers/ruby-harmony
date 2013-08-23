@@ -20,10 +20,10 @@ GIT
 
 GIT
   remote: git://github.com/aspiers/rvm-capistrano.git
-  revision: b5d3ae909a775ee9948bd3e36ad554cf72b59fc4
-  branch: rvm-user
+  revision: b931b196912d9bc80f8de2489578e5db6ecc4fc6
+  branch: master
   specs:
-    rvm-capistrano (1.4.4)
+    rvm-capistrano (1.5.0.rc1)
       capistrano (>= 2.15.4)
 
 GIT
