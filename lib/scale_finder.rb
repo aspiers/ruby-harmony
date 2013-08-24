@@ -18,10 +18,11 @@ class ScaleFinder
   # fixed_chord_notes - NoteSet of chord notes which must be in every matching scale
   # descr - textual description of the chord
   # scales_catalogue - Array of ModeInKey instances to use for matching against
-  def initialize(fixed_chord_notes, descr, scales_catalogue)
+  def initialize(fixed_chord_notes, descr, clef_name, scales_catalogue)
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @descr = descr
+    @clef_name = clef_name
     @scales_catalogue = scales_catalogue
 
     @simplify = false
@@ -240,6 +241,7 @@ EOF
     data = TemplateData.new(
       descr:  Accidental.to_ly_markup(@descr),
       chord:  @fixed_chord_notes.to_ly_abs,
+      clef:   @clef_name,
       scales: @ly_scales.values,
     )
     File.write(ly_out_file, data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))

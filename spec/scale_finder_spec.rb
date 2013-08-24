@@ -5,11 +5,11 @@ require 'note'
 
 describe ScaleFinder do
   shared_examples "scalefinder" do
-    |key, descr, fixed_chord_notes, simplify, exp_total, expected|
+    |key, descr, fixed_chord_notes, clef, simplify, exp_total, expected|
 
     context "finds #{simplify ? 'simplified ' : ''}scales including: #{fixed_chord_notes.join(' ')}" do
       let(:scales_catalogue) { ModeInKey.all(key).flatten }
-      let(:scalefinder) { ScaleFinder.new(fixed_chord_notes, descr, scales_catalogue) }
+      let(:scalefinder) { ScaleFinder.new(fixed_chord_notes, descr, clef, scales_catalogue) }
       before {
         scalefinder.set_verbosity(0)
         scalefinder.enable_simplification if simplify
@@ -35,7 +35,7 @@ describe ScaleFinder do
     key = Note[key_name]
     fixed_chord_notes = ChordType[chord_type].notes(key)
     include_examples "scalefinder",
-      key, key_name + chord_type, fixed_chord_notes, simplify, exp_total, expected
+      key, key_name + chord_type, fixed_chord_notes, 'treble', simplify, exp_total, expected
   end
 
   include_examples "preset", "C", "7b9", false, 7, \
@@ -84,7 +84,7 @@ describe ScaleFinder do
   shared_examples "custom" do |key_name, descr, notes, simplify, exp_total, expected|
     fixed_chord_notes = notes.split.map { |n| Note[n] }
     include_examples "scalefinder", Note[key_name], descr, \
-      fixed_chord_notes, simplify, exp_total, expected
+      fixed_chord_notes, 'treble', simplify, exp_total, expected
   end
 
   include_examples "custom", "C", "Ab/C", "C Eb Ab", false, 15, \
