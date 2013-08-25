@@ -118,4 +118,33 @@ describe ScaleFinder, slow: true do
     [ "C diminished",              "C4 D4 Eb4 F4 Gb4 Ab4 A4 B4",  "D4 A4"         ],
     [ "C augmented",               "C4 D#4 E4 G4 Ab4 B4",         "E4 G4 B4"      ],
   ]
+
+  context "correct positioning with alternate tonic" do
+    include_examples "treble preset", "B", "min7", false, 12, \
+    [
+      [ "B dorian\n(2nd degree of A maj)", "B4 C#5 D5 E5 F#5 G#5 A5" , "C#5 E5 F#5 G#5" ],
+    ]
+  end
+
+  context "correct positioning with alternate clefs" do
+    include_examples "preset", "Db", "7b9#9#11b13", 'bass', false, true, 1, \
+    [
+      [ "Db altered\n(7th degree of Ebb mel min)",  "Db3 D3 E3 F3 G3 A3 B3", "" ],
+    ]
+
+    include_examples "preset", "D", "min11b5", 'bass', false, true, 2, \
+    [
+      [ "2nd degree of C harm maj",  "D3 E3 F3 G3 Ab3 B3 C4", "B3" ],
+    ]
+
+    include_examples "preset", "E", "min11b5", 'bass', false, true, 2, \
+    [
+      [ "2nd degree of D harm maj",  "E2 F#2 G2 A2 Bb2 C#3 D3", "C#3" ],
+    ]
+
+    include_examples "preset", "F", "min11b5", 'tenor', false, true, 2, \
+    [
+      [ "2nd degree of Eb harm maj",  "F3 G3 Ab3 Bb3 B3 D4 Eb4", "D4" ],
+    ]
+  end
 end

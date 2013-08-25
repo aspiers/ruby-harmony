@@ -6,6 +6,7 @@ require 'pp'
 require 'note'
 require 'scale_type'
 require 'mode'
+require 'clef'
 require 'accidental'
 
 class ScaleFinder
@@ -182,23 +183,48 @@ class ScaleFinder
           note_in_scale
         }
         debug 1, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
-        notes = scale.notes
-        notes = NoteArray[*notes.map(&:simplify)] if @simplify
+        notes = notes_from_matching_scale(scale)
         @scales_matched << [scale, notes, NoteArray[*chord_in_scale]]
 
         @ly_scales[scale.name] ||= [
           Accidental.to_ly_markup(scale.original.to_ly),
-          ly_notes(scale, chord_in_scale),
+          ly_notes(notes, chord_in_scale),
           scale.mode.scale_type.name
         ]
       end
     end
   end
 
-  def ly_notes(scale, chord_in_scale)
-    scale.notes.map do |note|
-      note = note.simplify if @simplify
-      (chord_in_scale.include?(note) ? '\emphasise ' : '') + note.to_ly
+  def notes_from_matching_scale(scale)
+    notes = scale.notes
+    notes = NoteArray[*notes.map(&:simplify)] if @simplify
+    middle_note = notes[notes.size / 2]
+    clef = Clef[@clef_name]
+    debug = false
+    #debug = notes[0].name == 'A'
+    #debug = @clef_name == 'bass'
+    #debug = (scale.name =~ /E loc/)
+    if debug
+      puts "middle note for #{scale}: #{middle_note}, #{clef} clef pos #{middle_note.clef_position(clef)}"
+    end
+    while middle_note.clef_position(clef) <= -4 # on or below bottom line of staff
+      notes.each { |note| note.octave += 1 }
+      if debug
+        puts "  ++ octave up -> middle note now #{middle_note} @ position #{middle_note.clef_position(clef)}"
+      end
+    end
+    while middle_note.clef_position(clef) >= 4 # on or above top line of staff
+      notes.each { |note| note.octave -= 1 }
+      if debug
+        puts "  -- octave down -> middle note now #{middle_note} @ position #{middle_note.clef_position(clef)}"
+      end
+    end
+    notes
+  end
+
+  def ly_notes(notes, chord_in_scale)
+    notes.map do |note|
+      (chord_in_scale.include?(note) ? '\emphasise ' : '') + note.to_ly_abs
     end
   end
 
