@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/aspiers/capistrano-unicorn.git
-  revision: 35f161054e4e6c274585c592a1bad9401774d29b
+  revision: 73273b86047b2c9b8600bcaa2c40189e938566c5
   branch: variables
   specs:
     capistrano-unicorn (0.2.0)
@@ -28,7 +28,7 @@ GIT
 
 GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
-  revision: 4c54e85f8dac55997751f4229ba1471c932adb6b
+  revision: 40ffd567ee6bea9974710c58646d309d6a95faaf
   specs:
     twitter-bootstrap-rails (2.2.8)
       actionpack (>= 3.1)
