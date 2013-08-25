@@ -49,9 +49,7 @@ module NoteCollection
   # into a single octave where the numerical pitches range from 0 to 11.
   def octave_squash
     new_notes = map do |note|
-      n = note.dup
-      n.pitch %= 12
-      n
+      note.octave_squash
     end
     self.class.new(new_notes)
   end

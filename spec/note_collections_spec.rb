@@ -22,6 +22,15 @@ describe NoteSet do
     end
   end
 
+  describe "#octave_squash" do
+    let(:notes) { 'Db Eb E F#'.split.map { |name| Note[name] } }
+    let(:set)   { NoteSet[*notes] }
+
+    it "should have the right octaves" do
+      set.octave_squash.map(&:octave).should == [ 0, 0, 0, 0 ]
+    end
+  end
+
   describe "#to_ly_abs" do
     shared_examples "chord" do |note_names, expected|
       context note_names do
