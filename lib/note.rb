@@ -45,8 +45,13 @@ class Note
     @letter = l
   end
 
-  # An Array of Note instances corresponding to the C major scale.
+  # A Hash mapping letters of the natural notes to their pitches in octave 4
+  # (from C4 to B4).
   NATURALS = Hash[LETTERS.zip(NATURAL_PITCHES)]
+
+  # A Hash mapping letters of the natural notes to their letter indices,
+  # i.e. C maps to 0, D maps to 1, ..., B maps to 6.
+  LETTER_INDICES = Hash[LETTERS.zip(0..6)]
 
   def Note.letter_pitch_delta(letter, pitch)
     natural_pitch = NATURALS[letter]
@@ -78,7 +83,7 @@ class Note
   # For example, shifting C by 3 steps results in F, and shifting A by
   # 4 steps results in E.
   def Note.letter_shift(letter, steps)
-    index = LETTERS.find_index { |l| l == letter }
+    index = LETTER_INDICES[letter]
     raise NoteExceptions::InvalidLetter.new(letter) unless index
     return LETTERS[(index + steps) % LETTERS.length]
   end
