@@ -278,6 +278,26 @@ describe Note do
     end
   end
 
+  describe "#octave!" do
+    before :each do
+      @note = Note['A']
+      @orig_pitch = @note.pitch
+    end
+
+    it "should leave a note in octave 0" do
+      @orig_pitch.should == 9
+      @note.octave!(0).pitch.should == @orig_pitch
+    end
+
+    it "should move a note down to octave -1" do
+      @note.octave!(-1).pitch.should == @orig_pitch - 12
+    end
+
+    it "should move a note up to octave 2" do
+      @note.octave!(2).pitch.should == @orig_pitch + 24
+    end
+  end
+
   describe "#octave_squash" do
     let(:note) { Note['Bb'] }
 

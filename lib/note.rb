@@ -148,13 +148,24 @@ class Note
     letter.downcase + Accidental::LY[accidental]
   end
 
+  # Return the note's current octave.  Octaves start at C, with octave
+  # zero starting at middle C
   def octave
     pitch / 12
   end
 
+  # Set the note's octave.  Octaves start at C, with octave zero
+  # starting at middle C
   def octave=(o)
     return if octave == o
     self.pitch = o*12 + pitch % 12
+  end
+
+  # As #octave=, but also returns the updated note to allow method
+  # chaining.
+  def octave!(o)
+    self.octave = o
+    self
   end
 
   def octave_squash
