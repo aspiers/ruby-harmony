@@ -192,6 +192,9 @@ class Note
     return self
   end
 
+  # Returns an instance of the note with the octave set to 4.  If it
+  # was not 4 originally, a new Note object is instantiated to ensure
+  # the receiver object is unchanged.
   def octave_squash
     return self if octave == 4
     dup.octave_squash!
