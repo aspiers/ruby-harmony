@@ -217,6 +217,14 @@ class Note
     dup.octave_squash!
   end
 
+  # Return the position of the note on the given clef.  0 means the
+  # note is on the centre line, 4 means the note is on the top line,
+  # -4 means the bottom line, and so on.  Any value with an absolute
+  # magnitude of 6 or higher requires ledger lines.
+  def clef_position(clef)
+    return letter_index - clef.centre_note.letter_index
+  end
+
   # Return a LilyPond representation of the Note's name to be used
   # in an absolute pitch context.
   def to_ly_abs

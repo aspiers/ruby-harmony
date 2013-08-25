@@ -1,4 +1,5 @@
 require 'note'
+require 'clef'
 require 'exceptions'
 
 describe Note do
@@ -428,4 +429,27 @@ describe Note do
       end
     end
   end
+
+  describe "#clef_position" do
+    tests = [
+      [ 'C4' , 'treble', -6 ], [ 'D3' , 'alto', -6 ], [ 'B2' , 'tenor',  -6 ], [ 'E2' , 'bass', -6 ],
+      [ 'D4' , 'treble', -5 ], [ 'E3' , 'alto', -5 ], [ 'C3' , 'tenor',  -5 ], [ 'F2' , 'bass', -5 ],
+      [ 'E4' , 'treble', -4 ], [ 'F3' , 'alto', -4 ], [ 'D3' , 'tenor',  -4 ], [ 'G2' , 'bass', -4 ],
+      [ 'B4' , 'treble',  0 ], [ 'C4' , 'alto',  0 ], [ 'A3' , 'tenor',   0 ], [ 'D3' , 'bass',  0 ],
+      [ 'E5' , 'treble',  3 ], [ 'F4' , 'alto',  3 ], [ 'D4' , 'tenor',   3 ], [ 'G3' , 'bass',  3 ],
+      [ 'E6' , 'treble', 10 ], [ 'F5' , 'alto', 10 ], [ 'D5' , 'tenor',  10 ], [ 'G4' , 'bass', 10 ],
+
+      [ 'B#4', 'treble', -7 ], [ 'B#4', 'alto', -1 ], [ 'B#4', 'tenor',   1 ], [ 'B#4', 'bass',  5 ],
+      [ 'Cb3', 'treble', -6 ], [ 'Cb3', 'alto',  0 ], [ 'Cb3', 'tenor',   2 ], [ 'Cb3', 'bass',  6 ],
+      [ 'C#4', 'treble', -6 ], [ 'C#4', 'alto',  0 ], [ 'C#4', 'tenor',   2 ], [ 'C#4', 'bass',  6 ],
+    ]
+
+    tests.each do |note_name, clef_name, expected_position|
+      clef = Clef[clef_name]
+      it "should have #{clef} clef position #{expected_position} for #{note_name}" do
+        Note[note_name].clef_position(clef).should == expected_position
+      end
+    end
+  end
+
 end
