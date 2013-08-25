@@ -54,6 +54,16 @@ module NoteCollection
     self.class.new(new_notes)
   end
 
+  # Shifts the collection up by the given number of octaves.  Can be
+  # negative to shift down.  Returns the collection to allow method
+  # chaining.
+  def octave_shift!(delta)
+    each do |note|
+      note.octave += delta
+    end
+    self
+  end
+
   def contains_equivalent_note?(note)
     detect { |n| n === note }
   end

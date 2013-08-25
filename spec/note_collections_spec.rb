@@ -31,6 +31,19 @@ describe NoteSet do
     end
   end
 
+  describe "#octave_shift!" do
+    let(:notes) { 'B7 A2 Db4 Eb3 E5 F#5'.split.map { |name| Note[name] } }
+    let(:set)   { NoteSet[*notes] }
+
+    it "should shift all notes an octave up" do
+      set.octave_shift!(1).map(&:octave).should == [ 8, 3, 5, 4, 6, 6 ]
+    end
+
+    it "should shift all notes down two octaves" do
+      set.octave_shift!(-2).map(&:octave).should == [ 5, 0, 2, 1, 3, 3 ]
+    end
+  end
+
   describe "#to_ly_abs" do
     shared_examples "chord" do |note_names, expected|
       context note_names do
