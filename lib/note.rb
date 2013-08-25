@@ -78,6 +78,18 @@ class Note
     new(letter, 0, pitch)
   end
 
+  # Maps a note to its position relative to the centre of the alto
+  # clef.  This relative scale is used to help calculate positions of
+  # a note on a staff with a given clef.  Any accidental the note may
+  # have does not affect its position on the staff.  The alto clef is
+  # chosen for "calibrating" this relative scale because its middle
+  # line corresponds to middle C; this means that this method will
+  # return 0 for middle C or C# or Cb, 1 for middle D or Db or Dbb, -1
+  # for middle B or Bb or even B#, and so on.
+  def letter_index
+    LETTER_INDICES[letter] + 7 * (naturalize.octave - 4)
+  end
+
   # Shifts a note letter up the C major scale by the given number of
   # steps, and returns the resulting letter (*not* a Note instance).
   # For example, shifting C by 3 steps results in F, and shifting A by

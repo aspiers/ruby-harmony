@@ -186,6 +186,40 @@ describe Note do
     end
   end
 
+  describe "#letter_index" do
+    tests = [
+      [ 'C2'  , -14 ], [ 'D2'  , -13 ], [ 'G2'  , -10 ], [ 'B2'  , -8 ],
+      [ 'C#2' , -14 ], [ 'D#2' , -13 ], [ 'G#2' , -10 ], [ 'B#3' , -8 ],
+      [ 'Cx2' , -14 ], [ 'Dx2' , -13 ], [ 'Gx2' , -10 ], [ 'Bx3' , -8 ],
+      [ 'Cb1' , -14 ], [ 'Db2' , -13 ], [ 'Gb2' , -10 ], [ 'Bb2' , -8 ],
+      [ 'Cbb1', -14 ], [ 'Dbb2', -13 ], [ 'Gbb2', -10 ], [ 'Bbb2', -8 ],
+
+      [ 'C3'  ,  -7 ], [ 'D3'  ,  -6 ], [ 'G3'  ,  -3 ], [ 'B3'  , -1 ],
+      [ 'C#3' ,  -7 ], [ 'D#3' ,  -6 ], [ 'G#3' ,  -3 ], [ 'B#4' , -1 ],
+      [ 'Cx3' ,  -7 ], [ 'Dx3' ,  -6 ], [ 'Gx3' ,  -3 ], [ 'Bx4' , -1 ],
+      [ 'Cb2' ,  -7 ], [ 'Db3' ,  -6 ], [ 'Gb3' ,  -3 ], [ 'Bb3' , -1 ],
+      [ 'Cbb2',  -7 ], [ 'Dbb3',  -6 ], [ 'Gbb3',  -3 ], [ 'Bbb3', -1 ],
+
+      [ 'C4'  ,   0 ], [ 'D4'  ,   1 ], [ 'G4'  ,   4 ], [ 'B4'  ,  6 ],
+      [ 'C#4' ,   0 ], [ 'D#4' ,   1 ], [ 'G#4' ,   4 ], [ 'B#5' ,  6 ],
+      [ 'Cx4' ,   0 ], [ 'Dx4' ,   1 ], [ 'Gx4' ,   4 ], [ 'Bx5' ,  6 ],
+      [ 'Cb3' ,   0 ], [ 'Db4' ,   1 ], [ 'Gb4' ,   4 ], [ 'Bb4' ,  6 ],
+      [ 'Cbb3',   0 ], [ 'Dbb4',   1 ], [ 'Gbb4',   4 ], [ 'Bbb4',  6 ],
+
+      [ 'C5'  ,   7 ], [ 'D5'  ,   8 ], [ 'G5'  ,  11 ], [ 'B5'  , 13 ],
+      [ 'C#5' ,   7 ], [ 'D#5' ,   8 ], [ 'G#5' ,  11 ], [ 'B#6' , 13 ],
+      [ 'Cx5' ,   7 ], [ 'Dx5' ,   8 ], [ 'Gx5' ,  11 ], [ 'Bx6' , 13 ],
+      [ 'Cb4' ,   7 ], [ 'Db5' ,   8 ], [ 'Gb5' ,  11 ], [ 'Bb5' , 13 ],
+      [ 'Cbb4',   7 ], [ 'Dbb5',   8 ], [ 'Gbb5',  11 ], [ 'Bbb5', 13 ],
+    ]
+
+    tests.each do |note_name, expected_index|
+      it "should map #{note_name} onto the right letter index" do
+        Note[note_name].letter_index.should == expected_index
+      end
+    end
+  end
+
   context "equality and equivalence" do
     NOTES.each do |name, ly, pitch, accidental|
       context name do
