@@ -1,9 +1,16 @@
 require 'accidental'
 require 'exceptions'
 
-# A class representing notes which have a numerical
-# pitch (not constrained to a single octave), and a
-# name (i.e. "F#" is considered distinct from "Gb").
+# A class representing notes which have a numerical pitch (not
+# constrained to a single octave), and a name (i.e. "F#" is considered
+# distinct from "Gb").  If a note is constructed without specifying
+# its octave, its pitch will default to the octave from middle C
+# (i.e. C4) to the B above it (B4), using MIDI pitch numbering (C4 is
+# 60).  See
+#
+#   http://en.wikipedia.org/wiki/Note#Note_designation_in_accordance_with_octave_name
+#
+# for the origin of this naming system.
 class Note
   # An Array of note letters, starting with C.
   LETTERS = %w(C D E F G A B)
@@ -11,14 +18,16 @@ class Note
   UGLY_NOTE_NAMES = %w(E# B# Fb Cb)
 
   # The numerical pitches corresponding to LETTERS, starting
-  # with C at 0.
-  NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ]
+  # with (middle) C at 60.
+  NATURAL_PITCHES = [ 0, 2, 4, 5, 7, 9, 11 ].map { |p| p + 60 }
+
+  NOTE_REGEXP = /^([A-G])(|bb?|\#|x)(\d*)$/
 
   attr_reader   :letter
   attr_accessor :accidental, :pitch
 
   def Note.valid?(name)
-    name =~ /^[A-G](|bb?|\#|x)$/
+    name =~ NOTE_REGEXP
   end
 
   def initialize(l, a, p)
@@ -74,15 +83,17 @@ class Note
     return LETTERS[(index + steps) % LETTERS.length]
   end
 
-  # Instantiate a note by a string representing its name, e.g. "C#".
+  # Instantiate a note by a string representing its name, e.g. "C#" or
+  # "Db3".  Defaults to octave 4.
   def Note.by_name(n)
-    letter = n[0]
-    accidental_label = n[1..-1]
+    raise "Invalid note '#{n}'" unless n =~ NOTE_REGEXP
+    letter, accidental_label, octave = $1, $2, $3
     accidental_delta = Accidental::DELTAS[accidental_label]
-    raise "unrecognised accidental '#{accidental_label}'" unless accidental_delta
+    octave = octave.empty? ? 4 : octave.to_i
 
     natural = by_letter(letter)
     pitch = (natural.pitch + accidental_delta) % 12
+    pitch += 12 * (octave + 1)
     new(letter, accidental_delta, pitch)
   end
 
@@ -135,30 +146,36 @@ class Note
     self == self.simplify
   end
 
-  # Return a String representation of the Note's name.
+  # Return a String representation of the note's name, without any
+  # octave designators, e.g. "A", "F#", "Bb", "Bx", or "Ebb".
   def name
     letter + Accidental::LABELS[accidental]
   end
 
-  alias_method :to_s, :name
+  # Return a String representation of the note's name, suffixed by the
+  # octave number, e.g. "C4", "G#1", or "Eb6".
+  def to_s
+    # http://en.wikipedia.org/wiki/Note#Note_designation_in_accordance_with_octave_name
+    "%s%d" % [ name, octave ]
+  end
 
-  # Return a LilyPond representation of the Note's name to be used
+  # Return a LilyPond representation of the note's name to be used
   # in a \relative context.
   def to_ly
     letter.downcase + Accidental::LY[accidental]
   end
 
   # Return the note's current octave.  Octaves start at C, with octave
-  # zero starting at middle C
+  # 4 starting at middle C.
   def octave
-    pitch / 12
+    pitch / 12 - 1
   end
 
-  # Set the note's octave.  Octaves start at C, with octave zero
-  # starting at middle C
+  # Set the note's octave.  Octaves start at C, with octave 4 starting
+  # at middle C.
   def octave=(o)
     return if octave == o
-    self.pitch = o*12 + pitch % 12
+    self.pitch = (o + 1) * 12 + pitch % 12
   end
 
   # As #octave=, but also returns the updated note to allow method
@@ -169,9 +186,9 @@ class Note
   end
 
   def octave_squash
-    return self if octave == 0
+    return self if octave == 4
     n = dup
-    n.octave = 0
+    n.octave = 4
     return n
   end
 
@@ -179,7 +196,7 @@ class Note
   # in an absolute pitch context.
   def to_ly_abs
     letter.downcase + Accidental::LY[accidental] +
-      (octave < -1 ? "," * (-octave - 1) : "'" * (octave + 1))
+      (octave < 3 ? "," * (3 - octave) : "'" * (octave - 3))
   end
 
   # Return a LilyPond representation of the Note's name for use within \markup.

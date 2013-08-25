@@ -31,54 +31,59 @@ describe ScaleFinder do
     end
   end
 
-  shared_examples "preset" do |key_name, chord_type, simplify, exp_total, expected|
+  shared_examples "preset" do |key_name, chord_type, clef, simplify, exp_total, expected|
     key = Note[key_name]
     fixed_chord_notes = ChordType[chord_type].notes(key)
     include_examples "scalefinder",
-      key, key_name + chord_type, fixed_chord_notes, 'treble', simplify, exp_total, expected
+      key, key_name + chord_type, fixed_chord_notes, clef, simplify, exp_total, expected
   end
 
-  include_examples "preset", "C", "7b9", false, 7, \
+  shared_examples "treble preset" do |key_name, chord_type, simplify, exp_total, expected|
+    include_examples "preset",
+      key_name, chord_type, 'treble', simplify, exp_total, expected
+  end
+
+  include_examples "treble preset", "C", "7b9", false, 7, \
   [
     [ "C altered\n(7th degree of Db mel min)",
-                                    "C Db Eb Fb Gb Ab Bb", "Gb Ab"   ],
+                                    "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bb4",  "Gb4 Ab4"    ],
     [ "C dominant b9 b13\n(5th degree of F harm min)",
-                                    "C Db E F G Ab Bb"   , "F Ab"    ],
-    [ "3rd degree of Ab harm maj",  "C Db Eb Fb G Ab Bb" , "Eb G Ab" ],
+                                    "C4 Db4 E4 F4 G4 Ab4 Bb4",     "F4  Ab4"    ],
+    [ "3rd degree of Ab harm maj",  "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4" ,  "Eb4 G4 Ab4" ],
     [ "C dominant b9\n(5th degree of F harm maj)",
-                                    "C Db E F G A Bb"    , "F A"     ],
-    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "Eb A"    ],
-    [ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# G"    ],
+                                    "C4 Db4 E4 F4 G4 A4 Bb4"    ,  "F4 A4"      ],
+    [ "4th degree of G diminished", "C4 Db4 Eb4 E4 F#4 G4 A4 Bb4", "Eb4 A4"     ],
+    [ "4th degree of G diminished", "C4 Db4 Eb4 E4 F#4 G4 A4 Bb4", "F#4 G4"     ],
     # Don't need this since partial expectations are allowed.
-    #[ "4th degree of G diminished", "C Db Eb E F# G A Bb", "F# A"    ],
+    #[ "4th degree of G diminished", "C4 Db4 Eb4 E4 F#4 G4 A4 Bb4", "F#4 A4"    ],
   ]
-  include_examples "preset", "C", "min11", false, 4, \
+  include_examples "treble preset", "C", "min11", false, 4, \
   [
-    [ "C dorian\n(2nd degree of Bb maj)",  "C D Eb F G  A Bb" , "G  A"  ],
-    [ "C aeolian\n(6th degree of Eb maj)", "C D Eb F G  Ab Bb", "G  Ab" ],
+    [ "C dorian\n(2nd degree of Bb maj)",  "C4 D4 Eb4 F4 G4  A4 Bb4" , "G4  A4"  ],
+    [ "C aeolian\n(6th degree of Eb maj)", "C4 D4 Eb4 F4 G4  Ab4 Bb4", "G4  Ab4" ],
     [ "C locrian natural 2\n(6th degree of Eb mel min)",
-                                           "C D Eb F Gb Ab Bb", "Gb Ab" ],
-    [ "2nd degree of Bb harm maj",         "C D Eb F Gb A  Bb", "Gb A"  ],
+                                           "C4 D4 Eb4 F4 Gb4 Ab4 Bb4", "Gb4 Ab4" ],
+    [ "2nd degree of Bb harm maj",         "C4 D4 Eb4 F4 Gb4 A4  Bb4", "Gb4 A4"  ],
   ]
-  include_examples "preset", "C", "min/maj7", false, 10, \
+  include_examples "treble preset", "C", "min/maj7", false, 10, \
   [
-    [ "C augmented", "C D# E G Ab B" , "E G Ab" ],
+    [ "C augmented", "C4 D#4 E4 G4 Ab4 B4" , "E4 G4 Ab4" ],
   ]
-  include_examples "preset", "Db", "7#11", false, 9, \
+  include_examples "treble preset", "Db", "7#11", false, 9, \
   [
-    [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db Eb F G Ab Bb Cb", "Eb Ab"   ],
-    [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db Eb F G Ab Bb Cb", "Eb Bb"   ],
-    [ "Db altered\n(7th degree of Ebb mel min)",  "Db Ebb Fb Gbb Abb Bbb Cb", "Ebb Bbb" ],
-    [ "Db altered\n(7th degree of Ebb mel min)",  "Db Ebb Fb Gbb Abb Bbb Cb", "Fb Bbb"  ],
-    [ "Db whole tone", "Db Eb F G A B", "Eb A" ],
-    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "D Ab" ],
-    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "D Bb" ],
-    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "E Ab" ],
-    [ "6th degree of F diminished", "Db D E F G Ab Bb B", "E Bb" ],
+    [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db4 Eb4 F4 G4 Ab4 Bb4 Cb4", "Eb4 Ab4"   ],
+    [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db4 Eb4 F4 G4 Ab4 Bb4 Cb4", "Eb4 Bb4"   ],
+    [ "Db altered\n(7th degree of Ebb mel min)",  "Db4 Ebb4 Fb4 Gbb4 Abb4 Bbb4 Cb4", "Ebb4 Bbb4" ],
+    [ "Db altered\n(7th degree of Ebb mel min)",  "Db4 Ebb4 Fb4 Gbb4 Abb4 Bbb4 Cb4", "Fb4 Bbb4"  ],
+    [ "Db whole tone", "Db4 Eb4 F4 G4 A4 B4", "Eb4 A4" ],
+    [ "6th degree of F diminished", "Db4 D4 E4 F4 G4 Ab4 Bb4 B4", "D4 Ab4" ],
+    [ "6th degree of F diminished", "Db4 D4 E4 F4 G4 Ab4 Bb4 B4", "D4 Bb4" ],
+    [ "6th degree of F diminished", "Db4 D4 E4 F4 G4 Ab4 Bb4 B4", "E4 Ab4" ],
+    [ "6th degree of F diminished", "Db4 D4 E4 F4 G4 Ab4 Bb4 B4", "E4 Bb4" ],
   ]
-  include_examples "preset", "Db", "7b9#9#11b13", true, 1, \
+  include_examples "treble preset", "Db", "7b9#9#11b13", true, 1, \
   [
-    [ "Db altered\n(7th degree of Ebb mel min)",  "Db D E F G A B", "" ],
+    [ "Db altered\n(7th degree of Ebb mel min)",  "Db4 D4 E4 F4 G4 A4 B4", "" ],
   ]
 
   shared_examples "custom" do |key_name, descr, notes, simplify, exp_total, expected|
@@ -87,28 +92,28 @@ describe ScaleFinder do
       fixed_chord_notes, 'treble', simplify, exp_total, expected
   end
 
-  include_examples "custom", "C", "Ab/C", "C Eb Ab", false, 15, \
+  include_examples "custom", "C", "Ab/C", "C4 Eb4 Ab4", false, 15, \
   [
-    [ "C phrygian\n(3rd degree of Ab maj)",              "C Db Eb F G Ab Bb",    "Db F G"     ],
-    [ "C aeolian\n(6th degree of Eb maj)",               "C D Eb F G Ab Bb",     "D G Bb"     ],
-    [ "C locrian\n(7th degree of Db maj)",               "C Db Eb F Gb Ab Bb",   "Db F Gb Bb" ],
+    [ "C phrygian\n(3rd degree of Ab maj)",              "C4 Db4 Eb4 F4 G4 Ab4 Bb4",   "Db4 F4 G4"      ],
+    [ "C aeolian\n(6th degree of Eb maj)",               "C4 D4 Eb4 F4 G4 Ab4 Bb4",    "D4 G4 Bb4"      ],
+    [ "C locrian\n(7th degree of Db maj)",               "C4 Db4 Eb4 F4 Gb4 Ab4 Bb4",  "Db4 F4 Gb4 Bb4" ],
 
-    [ "C locrian natural 2\n(6th degree of Eb mel min)", "C D Eb F Gb Ab Bb",    "D Gb Bb"    ],
-    [ "C altered\n(7th degree of Db mel min)",           "C Db Eb Fb Gb Ab Bb",  "Fb Gb Bb"   ],
+    [ "C locrian natural 2\n(6th degree of Eb mel min)", "C4 D4 Eb4 F4 Gb4 Ab4 Bb4",   "D4 Gb4 Bb4"     ],
+    [ "C altered\n(7th degree of Db mel min)",           "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bb4", "Fb4 Gb4 Bb4"    ],
 
-    [ "C harm min",                "C D Eb F G Ab B",      "D G B"      ],
-    [ "C harm min",                "C D Eb F G Ab B",      "F G B"      ],
-    [ "7th degree of Db harm min", "C Db Eb Fb Gb Ab Bbb", "Db Fb Bbb"  ],
+    [ "C harm min",                "C4 D4 Eb4 F4 G4 Ab4 B4",      "D4 G4 B4"      ],
+    [ "C harm min",                "C4 D4 Eb4 F4 G4 Ab4 B4",      "F4 G4 B4"      ],
+    [ "7th degree of Db harm min", "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bbb4", "Db4 Fb4 Bbb4"  ],
 
-    [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb",   "Db Fb G"    ],
-    [ "3rd degree of Ab harm maj", "C Db Eb Fb G Ab Bb",   "Fb G Bb"    ],
+    [ "3rd degree of Ab harm maj", "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4",   "Db4 Fb4 G4"    ],
+    [ "3rd degree of Ab harm maj", "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4",   "Fb4 G4 Bb4"    ],
     [ "C lydian #2 #5\n(6th degree of E harm maj)",
-                                   "C D# E F# G# A B",     "E F# B"     ],
+                                   "C4 D#4 E4 F#4 G#4 A4 B4",     "E4 F#4 B4"     ],
     [ "C lydian #2 #5\n(6th degree of E harm maj)",
-                                   "C D# E F# G# A B",     "E A B"      ],
-    [ "7th degree of Db harm maj", "C Db Eb F Gb Ab Bbb",  "Db F Bbb"   ],
+                                   "C4 D#4 E4 F#4 G#4 A4 B4",     "E4 A4 B4"      ],
+    [ "7th degree of Db harm maj", "C4 Db4 Eb4 F4 Gb4 Ab4 Bbb4",  "Db4 F4 Bbb4"   ],
 
-    [ "C diminished",              "C D Eb F Gb Ab A B",   "D A"        ],
-    [ "C augmented",               "C D# E G Ab B",        "E G B"      ],
+    [ "C diminished",              "C4 D4 Eb4 F4 Gb4 Ab4 A4 B4",  "D4 A4"         ],
+    [ "C augmented",               "C4 D#4 E4 G4 Ab4 B4",         "E4 G4 B4"      ],
   ]
 end

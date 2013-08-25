@@ -50,9 +50,9 @@ describe ChordType do
       end
     end
 
-    include_examples 'chord notes', 'C', 'maj7',   'C E B'
-    include_examples 'chord notes', 'D', 'min9',   'D F C E'
-    include_examples 'chord notes', 'E', '7b9#11', 'E G# D F A#'
+    include_examples 'chord notes', 'C', 'maj7',   'C4 E4 B4'
+    include_examples 'chord notes', 'D', 'min9',   'D4 F4 C5 E5'
+    include_examples 'chord notes', 'E', '7b9#11', 'E4 G#4 D5 F5 A#5'
   end
 
   describe "#maybe_add_fifth" do

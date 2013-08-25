@@ -183,8 +183,8 @@ class ScaleFinder
         }
         debug 1, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
         notes = scale.notes
-        notes = notes.map(&:simplify) if @simplify
-        @scales_matched << [scale, notes, chord_in_scale]
+        notes = NoteArray[*notes.map(&:simplify)] if @simplify
+        @scales_matched << [scale, notes, NoteArray[*chord_in_scale]]
 
         @ly_scales[scale.name] ||= [
           Accidental.to_ly_markup(scale.original.to_ly),

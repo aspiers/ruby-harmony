@@ -27,7 +27,7 @@ describe NoteSet do
     let(:set)   { NoteSet[*notes] }
 
     it "should have the right octaves" do
-      set.octave_squash.map(&:octave).should == [ 0, 0, 0, 0 ]
+      set.octave_squash.map(&:octave).should == [ 4, 4, 4, 4 ]
     end
   end
 

@@ -24,21 +24,29 @@ describe Note do
     end
   end
 
-  shared_examples "a note" do |name, letter, ly, pitch, accidental|
+  shared_examples "a note" do |name, ly, pitch, octave, accidental|
     it "should be valid" do
       Note.valid?(name).should be_true
     end
 
     it "should have the right letter" do
-      note.letter.should == letter
+      note.letter.should == name[0]
     end
 
     it "should have the right pitch" do
       note.pitch.should == pitch
     end
 
+    it "should have the right octave" do
+      note.octave.should == octave
+    end
+
     it "should have the right name" do
-      note.name.should == name
+      note.name.sub(/\d+$/, '').should == name.sub(/\d+$/, '')
+    end
+
+    it "should convert to the right string" do
+      note.to_s.should == name
     end
 
     it "should have the right LilyPond code" do
@@ -46,7 +54,7 @@ describe Note do
     end
 
     it "should have the right LilyPond absolute code" do
-      note.to_ly_abs.should == ly + "'"
+      note.to_ly_abs.should == ly + ("'" * (octave - 3))
     end
 
     it "should have the right accidental" do
@@ -57,7 +65,7 @@ describe Note do
   context "constructing #by_letter" do
     context "A" do
       let(:note) { Note.by_letter('A') }
-      it_should_behave_like "a note", "A", "A", "a", 9, 0
+      it_should_behave_like "a note", "A4", "a", 69, 4, 0
     end
 
     context "invalid letter" do
@@ -69,39 +77,40 @@ describe Note do
   end
 
   NOTES = [
-    [ "Gx",  "gss",  9, +2 ],
-    [ "A",   "a",    9,  0 ],
-    [ "Bbb", "bff",  9, -2 ],
+    [ "B#",  "bs",   0 + 60, +1 ],
+    [ "C",   "c",    0 + 60,  0 ],
+    [ "Dbb", "dff",  0 + 60, -2 ],
 
-    [ "A#",  "as",  10,  1 ],
-    [ "Bb",  "bf",  10, -1 ],
-    [ "Cbb", "cff", 10, -2 ],
+    [ "Bx",  "bss",  1 + 60, +2 ],
+    [ "C#",  "cs",   1 + 60, +1 ],
+    [ "Db",  "df",   1 + 60, -1 ],
 
-    [ "Ax",  "ass", 11, +2 ],
-    [ "B",   "b",   11,  0 ],
-    [ "Cb",  "cf",  11, -1 ],
+    [ "Cx",  "css",  2 + 60, +2 ],
+    [ "D",   "d",    2 + 60,  0 ],
+    [ "Ebb", "eff",  2 + 60, -2 ],
 
-    [ "B#",  "bs",   0, +1 ],
-    [ "C",   "c",    0,  0 ],
-    [ "Dbb", "dff",  0, -2 ],
+    [ "Dx",  "dss",  4 + 60, +2 ],
+    [ "Fb",  "ff",   4 + 60, -1 ],
 
-    [ "Bx",  "bss",  1, +2 ],
-    [ "C#",  "cs",   1, +1 ],
-    [ "Db",  "df",   1, -1 ],
+    [ "Gx",  "gss",  9 + 60, +2 ],
+    [ "A",   "a",    9 + 60,  0 ],
+    [ "Bbb", "bff",  9 + 60, -2 ],
 
-    [ "Cx",  "css",  2, +2 ],
-    [ "D",   "d",    2,  0 ],
-    [ "Ebb", "eff",  2, -2 ],
+    [ "A#",  "as",  10 + 60,  1 ],
+    [ "Bb",  "bf",  10 + 60, -1 ],
+    [ "Cbb", "cff", 10 + 60, -2 ],
 
-    [ "Dx",  "dss",  4, +2 ],
-    [ "Fb",  "ff",   4, -1 ],
+    [ "Ax",  "ass", 11 + 60, +2 ],
+    [ "B",   "b",   11 + 60,  0 ],
+    [ "Cb",  "cf",  11 + 60, -1 ],
   ]
 
   context "constructing #by_letter_and_pitch" do
     NOTES.each do |name, ly, pitch, accidental|
+      name += '4'
       context name do
         let(:note) { Note.by_letter_and_pitch(name[0], pitch) }
-        it_should_behave_like "a note", name, name[0], ly, pitch, accidental
+        it_should_behave_like "a note", name, ly, pitch, 4, accidental
       end
     end
 
@@ -127,21 +136,26 @@ describe Note do
     end
   end
 
-  context "constructing #by_name" do
-    shared_examples "a note by name" do |name, ly, pitch, accidental|
-      let(:note) { Note.by_name(name) }
-      it_should_behave_like "a note", name, name[0], ly, pitch, accidental
+  context "" do
+    shared_examples "a note by name" do |by_name, name, ly, pitch, octave, accidental|
+      context "constructing #by_name" do
+        let(:note) { Note.by_name(by_name) }
+        it_should_behave_like "a note", name, ly, pitch, octave, accidental
+      end
+      context "constructing by #[]" do
+        let(:note) { Note[by_name] }
+        it_should_behave_like "a note", name, ly, pitch, octave, accidental
+      end
     end
 
-    NOTES.each do |name, ly, pitch, accidental|
-      it_should_behave_like "a note by name", name, ly, pitch, accidental
-    end
-  end
-
-  context "constructing by #[]" do
-    shared_examples "a note by name" do |name, ly, pitch, accidental|
-      let(:note) { Note[name] }
-      it_should_behave_like "a note", name, name[0], ly, pitch, accidental
+    NOTES.each do |octaveless_name, ly, pitch, accidental|
+      [ '', '4', '5' ].each do |suffix|
+        by_name = octaveless_name + suffix
+        octave = suffix.empty? ? 4 : suffix.to_i
+        name = octaveless_name + octave.to_s
+        pitch += (octave - 4) * 12
+        it_should_behave_like "a note by name", by_name, name, ly, pitch, octave, accidental
+      end
     end
   end
 
@@ -247,25 +261,25 @@ describe Note do
 
   describe ".by_pitch" do
     pitches = [
-      [  0, 'C Dbb B#' ],
-      [  1, 'C# Db Bx' ],
-      [  2, 'Cx D Ebb' ],
-      [  3, 'D# Eb Fbb'],
-      [  4, 'Dx E Fb'  ],
-      [  5, 'E# F Gbb' ],
-      [  6, 'Ex F# Gb' ],
-      [  7, 'Fx G Abb' ],
-      [  8,  'G# Ab'   ],
-      [  9, 'Gx A Bbb' ],
-      [ 10, 'Cbb A# Bb'],
-      [ 11, 'Cb Ax B'  ],
-      [ 12, 'C Dbb B#' ],
-      [ 13, 'C# Db Bx' ],
-      [ 14, 'Cx D Ebb' ],
+      [  0, 'C4 Dbb4 B#4' ],
+      [  1, 'C#4 Db4 Bx4' ],
+      [  2, 'Cx4 D4 Ebb4' ],
+      [  3, 'D#4 Eb4 Fbb4'],
+      [  4, 'Dx4 E4 Fb4'  ],
+      [  5, 'E#4 F4 Gbb4' ],
+      [  6, 'Ex4 F#4 Gb4' ],
+      [  7, 'Fx4 G4 Abb4' ],
+      [  8,   'G#4 Ab4'   ],
+      [  9, 'Gx4 A4 Bbb4' ],
+      [ 10, 'Cbb4 A#4 Bb4'],
+      [ 11, 'Cb4 Ax4 B4'  ],
+      [ 12, 'C5 Dbb5 B#5' ],
+      [ 13, 'C#5 Db5 Bx5' ],
+      [ 14, 'Cx5 D5 Ebb5' ],
     ]
     pitches.each do |pitch, expected|
       context "pitch #{pitch}" do
-        let(:notes) { Note.by_pitch(pitch) }
+        let(:notes) { Note.by_pitch(pitch + 60) }
 
         it "should return Note instances" do
           notes.each { |n| n.is_a?(Note).should be_true }
@@ -284,40 +298,43 @@ describe Note do
       @orig_pitch = @note.pitch
     end
 
-    it "should leave a note in octave 0" do
-      @orig_pitch.should == 9
-      @note.octave!(0).pitch.should == @orig_pitch
+    it "should leave a note in octave 4" do
+      @orig_pitch.should == 69
+      @note.octave!(4).pitch.should == @orig_pitch
     end
 
-    it "should move a note down to octave -1" do
-      @note.octave!(-1).pitch.should == @orig_pitch - 12
+    it "should move a note down to octave 3" do
+      @note.octave!(3).pitch.should == @orig_pitch - 12
     end
 
-    it "should move a note up to octave 2" do
-      @note.octave!(2).pitch.should == @orig_pitch + 24
+    it "should move a note up to octave 6" do
+      @note.octave!(6).pitch.should == @orig_pitch + 24
     end
   end
 
   describe "#octave_squash" do
     let(:note) { Note['Bb'] }
 
-    it "should leave a note in octave 0" do
+    it "should leave a note in octave 4" do
       note.octave_squash.object_id.should == note.object_id
     end
 
-    it "should move a note down to octave 0" do
-      note.octave = 2
-      note.pitch.should > 12
+    it "should move a note down to octave 4" do
+      note.octave = 5
+      p note.pitch
+      note.pitch.should be_between(72, 84)
       squashed = note.octave_squash
-      squashed.octave.should == 0
+      squashed.pitch.should be_between(60, 71)
+      squashed.octave.should == 4
       squashed.object_id.should_not == note.object_id
     end
 
-    it "should move a note up to octave 0" do
-      note.octave = -3
-      note.pitch.should < 0
+    it "should move a note up to octave 4" do
+      note.octave = 3
+      note.pitch.should be_between(48, 59)
       squashed = note.octave_squash
-      squashed.octave.should == 0
+      squashed.pitch.should be_between(60, 71)
+      squashed.octave.should == 4
       squashed.object_id.should_not == note.object_id
     end
   end
@@ -339,7 +356,7 @@ describe Note do
 
     notes.each do |letter, pitch, accidental, ly|
       it "should handle octave 1 right" do
-        note = Note.new(letter, accidental, pitch)
+        note = Note.new(letter, accidental, pitch + 60)
         note.to_ly_abs.should == ly
       end
     end
