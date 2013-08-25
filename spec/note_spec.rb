@@ -313,30 +313,45 @@ describe Note do
   end
 
   describe "#octave_squash" do
-    let(:note) { Note['Bb'] }
-
-    it "should leave a note in octave 4" do
+    it "should leave note untouched in octave 4" do
+      note = Note['Bb']
       note.octave_squash.object_id.should == note.object_id
+      note.octave.should == 4
     end
 
-    it "should move a note down to octave 4" do
-      note.octave = 5
-      p note.pitch
-      note.pitch.should be_between(72, 84)
+    it "should return new note moved down to octave 4" do
+      note = Note['Bb5']
       squashed = note.octave_squash
       squashed.pitch.should be_between(60, 71)
       squashed.octave.should == 4
       squashed.object_id.should_not == note.object_id
     end
 
-    it "should move a note up to octave 4" do
-      note.octave = 3
-      note.pitch.should be_between(48, 59)
+    it "should return new note moved up to octave 4" do
+      note = Note['Bb3']
       squashed = note.octave_squash
       squashed.pitch.should be_between(60, 71)
       squashed.octave.should == 4
       squashed.object_id.should_not == note.object_id
     end
+  end
+
+  describe "#octave_squash!" do
+    shared_examples "a squashed note" do |spec, name|
+      it spec do
+        note = Note[name]
+        orig_object_id = note.object_id
+        note.octave_squash!.object_id.should == orig_object_id
+        note.pitch.should be_between(60, 71)
+        note.octave.should == 4
+      end
+    end
+
+    include_examples "a squashed note", "should leave note untouched in octave 4", "Bb"
+    include_examples "a squashed note", "should leave note untouched in octave 4", "Bb4"
+    include_examples "a squashed note", "should move note up to octave 4",         "Bb3"
+    include_examples "a squashed note", "should move note down to octave 4",       "Bb5"
+  end
   end
 
   describe "#to_ly_abs" do

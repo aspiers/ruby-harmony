@@ -182,14 +182,19 @@ class Note
   # chaining.
   def octave!(o)
     self.octave = o
-    self
+    return self
+  end
+
+  # Set the note's octave to 4.  Returns the updated note to allow
+  # method chaining.
+  def octave_squash!
+    self.octave = 4
+    return self
   end
 
   def octave_squash
     return self if octave == 4
-    n = dup
-    n.octave = 4
-    return n
+    dup.octave_squash!
   end
 
   # Return a LilyPond representation of the Note's name to be used
