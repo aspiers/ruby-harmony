@@ -20,10 +20,10 @@ class ScaleFinder
   # descr - textual description of the chord
   # scales_catalogue - Array of ModeInKey instances to use for matching against
   def initialize(fixed_chord_notes, descr, clef_name, scales_catalogue)
+    @clef = Clef[clef_name]
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @descr = descr
-    @clef_name = clef_name
     @scales_catalogue = scales_catalogue
 
     @simplify = false
@@ -199,24 +199,23 @@ class ScaleFinder
     notes = scale.notes
     notes = NoteArray[*notes.map(&:simplify)] if @simplify
     middle_note = notes[notes.size / 2]
-    clef = Clef[@clef_name]
     debug = false
     #debug = notes[0].name == 'A'
-    #debug = @clef_name == 'bass'
+    #debug = @clef.name == 'bass'
     #debug = (scale.name =~ /E loc/)
     if debug
-      puts "middle note for #{scale}: #{middle_note}, #{clef} clef pos #{middle_note.clef_position(clef)}"
+      puts "middle note for #{scale}: #{middle_note}, #{@clef} clef pos #{middle_note.clef_position(@clef)}"
     end
-    while middle_note.clef_position(clef) <= -4 # on or below bottom line of staff
+    while middle_note.clef_position(@clef) <= -4 # on or below bottom line of staff
       notes.each { |note| note.octave += 1 }
       if debug
-        puts "  ++ octave up -> middle note now #{middle_note} @ position #{middle_note.clef_position(clef)}"
+        puts "  ++ octave up -> middle note now #{middle_note} @ position #{middle_note.clef_position(@clef)}"
       end
     end
-    while middle_note.clef_position(clef) >= 4 # on or above top line of staff
+    while middle_note.clef_position(@clef) >= 4 # on or above top line of staff
       notes.each { |note| note.octave -= 1 }
       if debug
-        puts "  -- octave down -> middle note now #{middle_note} @ position #{middle_note.clef_position(clef)}"
+        puts "  -- octave down -> middle note now #{middle_note} @ position #{middle_note.clef_position(@clef)}"
       end
     end
     notes
@@ -267,7 +266,7 @@ EOF
     data = TemplateData.new(
       descr:  Accidental.to_ly_markup(@descr),
       chord:  @fixed_chord_notes.to_ly_abs,
-      clef:   @clef_name,
+      clef:   @clef.name,
       scales: @ly_scales.values,
     )
     File.write(ly_out_file, data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))
