@@ -22,6 +22,7 @@ class ScaleFinder
   def initialize(fixed_chord_notes, descr, clef_name, scales_catalogue)
     @clef = Clef[clef_name]
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
+    @fixed_chord_notes.centre_on_clef(@clef)
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @descr = descr
     @scales_catalogue = scales_catalogue
