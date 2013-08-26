@@ -8,8 +8,7 @@ describe ModeInKey do
       [
         1, "F#",  DiatonicScaleType::MAJOR,
         "F# ionian\n(F# maj)",
-        'F# G# A# B C# D# E#',
-        [ 6, 8, 10, 11, 13, 15, 17 ],
+        'F#4 G#4 A#4 B4 C#5 D#5 E#5',
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -21,8 +20,7 @@ describe ModeInKey do
       [
         2, "C",  DiatonicScaleType::MAJOR,
         "D dorian\n(2nd degree of C maj)",
-        "D E F G A B C",
-        [ 2, 4, 5, 7, 9, 11, 12 ],
+        "D4 E4 F4 G4 A4 B4 C5",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -34,8 +32,7 @@ describe ModeInKey do
       [
         6, "F",  DiatonicScaleType::MAJOR,
         "D aeolian\n(6th degree of F maj)",
-        "D E F G A Bb C",
-        [ 2, 4, 5, 7, 9, 10, 12 ],
+        "D4 E4 F4 G4 A4 Bb4 C5",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -47,8 +44,7 @@ describe ModeInKey do
       [
         4, "G",  DiatonicScaleType::MELODIC_MINOR,
         "C lydian dominant\n(4th degree of G mel min)",
-        "C D E F# G A Bb",
-        [ 0, 2, 4, 6, 7, 9, 10 ],
+        "C4 D4 E4 F#4 G4 A4 Bb4",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -60,8 +56,7 @@ describe ModeInKey do
       [
         6, "F",  DiatonicScaleType::MELODIC_MINOR,
         "D locrian natural 2\n(6th degree of F mel min)",
-        "D E F G Ab Bb C",
-        [ 2, 4, 5, 7, 8, 10, 12 ],
+        "D4 E4 F4 G4 Ab4 Bb4 C5",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -73,8 +68,7 @@ describe ModeInKey do
       [
         4, "Bb", DiatonicScaleType::MELODIC_MINOR,
         "Eb lydian dominant\n(4th degree of Bb mel min)",
-        "Eb F G A Bb C Db",
-        [ 3, 5, 7, 9, 10, 12, 13 ],
+        "Eb4 F4 G4 A4 Bb4 C5 Db5",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -86,8 +80,7 @@ describe ModeInKey do
       [
         6, "E", DiatonicScaleType::HARMONIC_MAJOR,
         "C lydian #2 #5\n(6th degree of E harm maj)",
-        "C D# E F# G# A B",
-        [ 0, 3, 4, 6, 8, 9, 11 ],
+        "C4 D#4 E4 F#4 G#4 A4 B4",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -99,8 +92,7 @@ describe ModeInKey do
       [
         1, "Ab", SymmetricalScaleType::DIMINISHED,
         "Ab diminished",
-        "Ab Bb B Db D E F G",
-        [ 8, 10, 11, 13, 14, 16, 17, 19 ],
+        "Ab4 Bb4 B4 Db5 D5 E5 F5 G5",
         <<-'EOF',
             "Ab diminished"
         EOF
@@ -108,8 +100,7 @@ describe ModeInKey do
       [
         2, "Bb", SymmetricalScaleType::DIMINISHED,
         "C auxiliary diminished\n(2nd degree of Bb diminished)",
-        "C Db Eb E Gb G A Bb",
-        [ 0, 1, 3, 4, 6, 7, 9, 10 ],
+        "C4 Db4 Eb4 E4 Gb4 G4 A4 Bb4",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
@@ -121,13 +112,12 @@ describe ModeInKey do
       [
         1, "G",  SymmetricalScaleType::WHOLE_TONE,
         "G whole tone",
-        "G A B C# D# F",
-        [ 7, 9, 11, 13, 15, 17 ],
+        "G4 A4 B4 C#5 D#5 F5",
         "            \"G whole tone\"\n"
       ],
     ].each do
       |degree, key_name, scale_type,
-       exp_long_name, exp_notes, exp_pitches, exp_ly|
+       exp_long_name, exp_notes, exp_ly|
 
       context "degree #{degree} of #{key_name} #{scale_type}" do
         let(:mode)        { Mode.new(degree, scale_type)  }
@@ -149,10 +139,6 @@ describe ModeInKey do
 
         it "should have the right note names" do
           mode_in_key.notes.join(' ').should == exp_notes
-        end
-
-        it "should have the right pitches" do
-          mode_in_key.pitches.should == exp_pitches
         end
       end
     end
@@ -184,7 +170,7 @@ describe ModeInKey do
       end
 
       it "should return the right notes" do
-        mode_in_key.notes.map(&:to_s).should == exp_notes.split
+        mode_in_key.note_names.map(&:to_s).should == exp_notes.split
       end
 
       it "should return the name" do
@@ -316,9 +302,9 @@ describe ModeInKey do
       all[0].generic_description.should == '3rd degree of A mel min'
       all[1].generic_description.should == '4th degree of G mel min'
       all[6].generic_description.should == '7th degree of Db mel min'
-      all[0].notes.join(' ').should == 'C D E F# G# A B'
-      all[1].notes.join(' ').should == 'C D E F# G A Bb'
-      all[6].notes.join(' ').should == 'C Db Eb Fb Gb Ab Bb'
+      all[0].note_names.join(' ').should == 'C D E F# G# A B'
+      all[1].note_names.join(' ').should == 'C D E F# G A Bb'
+      all[6].note_names.join(' ').should == 'C Db Eb Fb Gb Ab Bb'
     end
   end
 

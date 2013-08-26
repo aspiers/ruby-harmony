@@ -41,7 +41,7 @@ class ModeInKey
       raise "key_note must be a Note not #{key_note.class}"
     end
     self.mode = mode
-    self.key_note = key_note
+    self.key_note = key_note.octave_squash
 
     @original = nil
   end
@@ -51,8 +51,8 @@ class ModeInKey
   end
 
   def generic_description
-    text = '%s %s' % [ key_note, scale_type.name ]
-    if key_note != starting_note
+    text = '%s %s' % [ key_note.name, scale_type.name ]
+    if key_note.name != starting_note.name
       text = "%s degree of %s" % [ mode.degree.ordinalize, text ]
     end
     return text
@@ -60,7 +60,7 @@ class ModeInKey
 
   def special_description
     special = mode.name
-    return special ? "%s %s" % [ starting_note, special ] : nil
+    return special ? "%s %s" % [ starting_note.name, special ] : nil
   end
 
   def name
@@ -95,6 +95,10 @@ class ModeInKey
 
   def notes
     @notes ||= mode.notes(key_note)
+  end
+
+  def note_names
+    notes.note_names
   end
 
   def starting_note
@@ -159,7 +163,7 @@ class ModeInKey
         mode = mode_in_key.mode
         orig = mode_in_key.original
         special_name = orig.mode.name
-        name = special_name ? "%s %s" % [ starting_note, special_name ]
+        name = special_name ? "%s %s" % [ starting_note.name, special_name ]
                             : orig.generic_description
         s << "%d %-30s %s\n" % [ orig.mode.degree, name, mode_in_key.notes ]
       end

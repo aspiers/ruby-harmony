@@ -284,8 +284,8 @@ describe SymmetricalScaleType do
       ]
     ].each do |scale_type, rest|
       rest.each do |key_name, pitches, notes|
-        include_examples "equivalent keys", scale_type,
-          key_name, pitches, notes.split
+        include_examples "equivalent keys", scale_type, \
+          key_name, pitches.map { |p| p + 60 }, notes.split
       end
     end
   end

@@ -6,6 +6,7 @@ require 'pp'
 require 'note'
 require 'scale_type'
 require 'mode'
+require 'clef'
 require 'accidental'
 
 class ScaleFinder
@@ -18,8 +19,10 @@ class ScaleFinder
   # fixed_chord_notes - NoteSet of chord notes which must be in every matching scale
   # descr - textual description of the chord
   # scales_catalogue - Array of ModeInKey instances to use for matching against
-  def initialize(fixed_chord_notes, descr, scales_catalogue)
+  def initialize(fixed_chord_notes, descr, clef_name, scales_catalogue)
+    @clef = Clef[clef_name]
     @fixed_chord_notes = NoteSet[*fixed_chord_notes]
+    @fixed_chord_notes.centre_on_clef(@clef)
     @variable_chord_notes = PitchSet.chromatic_scale - @fixed_chord_notes
     @descr = descr
     @scales_catalogue = scales_catalogue
@@ -181,23 +184,47 @@ class ScaleFinder
           note_in_scale
         }
         debug 1, "    %-14s + %s" % [ NoteArray[*chord_in_scale], NoteArray[*alterations] ]
-        notes = scale.notes
-        notes = notes.map(&:simplify) if @simplify
-        @scales_matched << [scale, notes, chord_in_scale]
+        notes = notes_from_matching_scale(scale)
+        @scales_matched << [scale, notes, NoteArray[*chord_in_scale]]
 
         @ly_scales[scale.name] ||= [
           Accidental.to_ly_markup(scale.original.to_ly),
-          ly_notes(scale, chord_in_scale),
+          ly_notes(notes, chord_in_scale),
           scale.mode.scale_type.name
         ]
       end
     end
   end
 
-  def ly_notes(scale, chord_in_scale)
-    scale.notes.map do |note|
-      note = note.simplify if @simplify
-      (chord_in_scale.include?(note) ? '\emphasise ' : '') + note.to_ly
+  def notes_from_matching_scale(scale)
+    notes = scale.notes
+    notes = NoteArray[*notes.map(&:simplify)] if @simplify
+    middle_note = notes[notes.size / 2]
+    debug = false
+    #debug = notes[0].name == 'A'
+    #debug = @clef.name == 'bass'
+    #debug = (scale.name =~ /E loc/)
+    if debug
+      puts "middle note for #{scale}: #{middle_note}, #{@clef} clef pos #{middle_note.clef_position(@clef)}"
+    end
+    while middle_note.clef_position(@clef) <= -4 # on or below bottom line of staff
+      notes.each { |note| note.octave += 1 }
+      if debug
+        puts "  ++ octave up -> middle note now #{middle_note} @ position #{middle_note.clef_position(@clef)}"
+      end
+    end
+    while middle_note.clef_position(@clef) >= 4 # on or above top line of staff
+      notes.each { |note| note.octave -= 1 }
+      if debug
+        puts "  -- octave down -> middle note now #{middle_note} @ position #{middle_note.clef_position(@clef)}"
+      end
+    end
+    notes
+  end
+
+  def ly_notes(notes, chord_in_scale)
+    notes.map do |note|
+      (chord_in_scale.include?(note) ? '\emphasise ' : '') + note.to_ly_abs
     end
   end
 
@@ -240,6 +267,7 @@ EOF
     data = TemplateData.new(
       descr:  Accidental.to_ly_markup(@descr),
       chord:  @fixed_chord_notes.to_ly_abs,
+      clef:   @clef.name,
       scales: @ly_scales.values,
     )
     File.write(ly_out_file, data.render(File.read(TEMPLATE_DIR + '/template.ly.erb')))

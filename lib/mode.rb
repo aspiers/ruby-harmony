@@ -29,7 +29,7 @@ class Mode
   def notes(key_note)
     degrees.inject(NoteArray.new()) do |acc, degree|
       note = scale_type.note(key_note, degree)
-      note.octave = 0
+      note.octave = 4
       unless acc.empty?
         note.octave +=1 while note < acc[-1] # ensure ascending
       end
