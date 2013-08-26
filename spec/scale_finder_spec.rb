@@ -31,16 +31,18 @@ describe ScaleFinder do
     end
   end
 
-  shared_examples "preset" do |key_name, chord_type, clef, simplify, exp_total, expected|
+  shared_examples "preset" do |key_name, chord_type_name, clef, fifth, simplify, exp_total, expected|
     key = Note[key_name]
-    fixed_chord_notes = ChordType[chord_type].notes(key)
+    chord_type = ChordType[chord_type_name]
+    chord_type = chord_type.maybe_add_fifth if fifth
+    fixed_chord_notes = chord_type.notes(key)
     include_examples "scalefinder",
-      key, key_name + chord_type, fixed_chord_notes, clef, simplify, exp_total, expected
+      key, key_name + chord_type_name, fixed_chord_notes, clef, simplify, exp_total, expected
   end
 
-  shared_examples "treble preset" do |key_name, chord_type, simplify, exp_total, expected|
+  shared_examples "treble preset" do |key_name, chord_type_name, simplify, exp_total, expected|
     include_examples "preset",
-      key_name, chord_type, 'treble', simplify, exp_total, expected
+      key_name, chord_type_name, 'treble', false, simplify, exp_total, expected
   end
 
   include_examples "treble preset", "C", "7b9", false, 7, \
