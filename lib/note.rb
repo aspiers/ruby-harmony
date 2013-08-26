@@ -263,9 +263,10 @@ class Note
     "%-2s" % to_s
   end
 
-  # Order notes by pitch.
+  # Order notes by pitch and then by letter
   def <=>(other)
-    pitch <=> other.pitch
+    (pitch            <=> other.pitch).nonzero?   ||
+    (naturalize.pitch <=> other.naturalize.pitch)
   end
 
   include Comparable

@@ -279,6 +279,14 @@ describe Note do
     end
   end
 
+  it "should order notes ascending and then by letter" do
+    names = "A3 Bbb3 A#3 Bb3 Ax3 B3 Cb3 B#4 C4 Dbb4 Bx4 C#4 Db4"
+    names_8va = names.gsub(/(\d)/) { $1.to_i + 1 }
+    expected = names + ' ' + names_8va
+    notes = expected.split.map { |name| Note[name] }.shuffle
+    notes.sort.join(' ').should == expected
+  end
+
   describe "#simplify" do
     it "should not touch a natural" do
       Note.by_name("B").simplify.should == Note.by_name("B")
@@ -334,8 +342,8 @@ describe Note do
 
   describe ".by_pitch" do
     pitches = [
-      [  0, 'C4 Dbb4 B#4' ],
-      [  1, 'C#4 Db4 Bx4' ],
+      [  0, 'B#4 C4 Dbb4' ],
+      [  1, 'Bx4 C#4 Db4' ],
       [  2, 'Cx4 D4 Ebb4' ],
       [  3, 'D#4 Eb4 Fbb4'],
       [  4, 'Dx4 E4 Fb4'  ],
@@ -344,10 +352,10 @@ describe Note do
       [  7, 'Fx4 G4 Abb4' ],
       [  8,   'G#4 Ab4'   ],
       [  9, 'Gx4 A4 Bbb4' ],
-      [ 10, 'Cbb4 A#4 Bb4'],
-      [ 11, 'Cb4 Ax4 B4'  ],
-      [ 12, 'C5 Dbb5 B#5' ],
-      [ 13, 'C#5 Db5 Bx5' ],
+      [ 10, 'A#4 Bb4 Cbb4'],
+      [ 11, 'Ax4 B4 Cb4'  ],
+      [ 12, 'B#5 C5 Dbb5' ],
+      [ 13, 'Bx5 C#5 Db5' ],
       [ 14, 'Cx5 D5 Ebb5' ],
     ]
     pitches.each do |pitch, expected|
