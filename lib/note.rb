@@ -171,10 +171,12 @@ class Note
 
   # Return a String representation of the note's name, suffixed by the
   # octave number, e.g. "C4", "G#1", or "Eb6".
-  def to_s
+  def name_with_octave
     # http://en.wikipedia.org/wiki/Note#Note_designation_in_accordance_with_octave_name
     "%s%d" % [ name, octave ]
   end
+
+  alias_method :to_s, :name_with_octave
 
   # Return a LilyPond representation of the note's name to be used
   # in a \relative context.
