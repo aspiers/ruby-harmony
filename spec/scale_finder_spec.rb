@@ -3,7 +3,7 @@ require 'chord_type'
 require 'mode_in_key'
 require 'note'
 
-describe ScaleFinder do
+describe ScaleFinder, slow: true do
   shared_examples "scalefinder" do
     |key, descr, fixed_chord_notes, clef, simplify, exp_total, expected|
 
