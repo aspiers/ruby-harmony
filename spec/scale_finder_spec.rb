@@ -8,20 +8,20 @@ describe ScaleFinder, slow: true do
     |key, descr, fixed_chord_notes, clef, simplify, exp_total, expected|
 
     context "finds #{simplify ? 'simplified ' : ''}scales including: #{fixed_chord_notes.join(' ')}" do
-      let(:scales_catalogue) { ModeInKey.all(key).flatten }
-      let(:scalefinder) { ScaleFinder.new(fixed_chord_notes, descr, clef, scales_catalogue) }
-      before {
-        scalefinder.set_verbosity(0)
-        scalefinder.enable_simplification if simplify
-        scalefinder.identify_modes
+      before(:all) {
+        scales_catalogue = ModeInKey.all(key).flatten
+        @scalefinder = ScaleFinder.new(fixed_chord_notes, descr, clef, scales_catalogue)
+        @scalefinder.set_verbosity(0)
+        @scalefinder.enable_simplification if simplify
+        @scalefinder.identify_modes
       }
 
       it "should find the right number of scales" do
-        scalefinder.scales_matched.size.should == exp_total
+        @scalefinder.scales_matched.size.should == exp_total
       end
 
       it "should find the right scales and identifiers" do
-        results = scalefinder.scales_matched.map do |scale, notes, chord|
+        results = @scalefinder.scales_matched.map do |scale, notes, chord|
           [ scale.name, notes.join(' '), chord.join(' ') ]
         end
         expected.each do |ename, enotes, eidents|
