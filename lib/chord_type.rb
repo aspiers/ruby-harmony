@@ -100,7 +100,11 @@ class ChordType
   end
 
   def notes(key)
-    arr = [key] + intervals.map { |interval| interval.from(key) }
+    arr = [key] + intervals.map do |interval|
+      note = interval.from(key)
+      note.octave -= 1 if %w(#11 b13).include? interval.name
+      note
+    end
     NoteArray[*arr]
   end
 
