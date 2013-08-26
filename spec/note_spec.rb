@@ -54,10 +54,6 @@ describe Note do
       note.to_ly.should == ly
     end
 
-    it "should have the right LilyPond absolute code" do
-      note.to_ly_abs.should == ly + ("'" * (octave - 3))
-    end
-
     it "should have the right accidental" do
       note.accidental.should == accidental
     end
@@ -476,23 +472,23 @@ describe Note do
 
   describe "#to_ly_abs" do
     notes = [
-      [ "B", -13,  0,  "b,"   ],
-      [ "C", -12,  0,  "c"    ],
-      [ "B",  -1,  0,  "b"    ],
-      [ "C",   0,  0,  "c'"   ],
-      [ "A",   9,  0,  "a'"   ],
-      [ "B",  11,  0,  "b'"   ],
-      [ "C",  12,  0,  "c''"  ],
-      [ "D",  14,  0,  "d''"  ],
-      [ "E",  15, -1,  "ef''" ],
-      [ "B",  23,  0,  "b''"  ],
-      [ "C",  24,  0,  "c'''" ],
+      [ "Bb1",  "bf,," ], [ "Bb2",  "bf," ], [ "Bb3",  "bf"   ], [ "Bb4",  "bf'"   ],
+      [ "Cbb1", "cff," ], [ "Cbb2", "cff" ], [ "Cbb3", "cff'" ], [ "Cbb4", "cff''" ],
+
+      [ "B1",   "b,,"  ], [ "B2",   "b,"  ], [ "B3",   "b"    ], [ "B4",   "b'"    ],
+      [ "Cb1",  "cf,"  ], [ "Cb2",  "cf"  ], [ "Cb3",  "cf'"  ], [ "Cb4",  "cf''"  ],
+
+      [ "B#2",  "bs,," ], [ "B#3",  "bs," ], [ "B#4",  "bs"   ], [ "B#5",  "bs'"   ],
+      [ "C2",   "c,"   ], [ "C3",   "c"   ], [ "C4",   "c'"   ], [ "C5",   "c''"   ],
+      [ "Dbb2", "dff," ], [ "Dbb3", "dff" ], [ "Dbb4", "dff'" ], [ "Dbb5", "dff''" ],
+
+      [ "C#2",  "cs,"  ], [ "C#3",  "cs"  ], [ "C#4",  "cs'"  ], [ "C#5",  "cs''"  ],
+      [ "Db2",  "df,"  ], [ "Db3",  "df"  ], [ "Db4",  "df'"  ], [ "Db5",  "df''"  ],
     ]
 
-    notes.each do |letter, pitch, accidental, ly|
-      it "should handle octave 1 right" do
-        note = Note.new(letter, accidental, pitch + 60)
-        note.to_ly_abs.should == ly
+    notes.each do |name, ly|
+      it "should get the right LilyPond absolute pitch notation for #{name}" do
+        Note[name].to_ly_abs.should == ly
       end
     end
   end

@@ -243,11 +243,15 @@ class Note
     return letter_index - clef.centre_note.letter_index
   end
 
-  # Return a LilyPond representation of the Note's name to be used
-  # in an absolute pitch context.
+  # Return a LilyPond representation of the Note's name to be used in
+  # an absolute pitch context.  LilyPond octave adjustment characters
+  # are based on the letter name, not the actual pitch, e.g. whilst C4
+  # (middle C) is represented by "c'", Cb3 which is a semitone below it
+  # is represented by "cf'" not "cf" as you might expect.
   def to_ly_abs
-    letter.downcase + Accidental::LY[accidental] +
-      (octave < 3 ? "," * (3 - octave) : "'" * (octave - 3))
+    ly = letter.downcase + Accidental::LY[accidental]
+    letter_octave = naturalize.octave
+    ly + (letter_octave < 3 ? "," * (3 - letter_octave) : "'" * (letter_octave - 3))
   end
 
   # Return a LilyPond representation of the Note's name for use within \markup.
