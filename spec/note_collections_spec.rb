@@ -44,6 +44,19 @@ describe NoteSet do
     end
   end
 
+  describe "#min and #max" do
+    let(:notes) { 'Db4 A2 B#1 Eb3 B7 Cb7 C1 E5 F#5'.split.map { |name| Note[name] } }
+    let(:set)   { NoteSet[*notes] }
+
+    it "should work with #min" do
+      set.min.name_with_octave.should == 'B#1'
+    end
+
+    it "should work with #max" do
+      set.max.name_with_octave.should == 'Cb7'
+    end
+  end
+
   describe "#to_ly_abs" do
     shared_examples "chord" do |note_names, expected|
       context note_names do
