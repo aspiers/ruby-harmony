@@ -225,18 +225,60 @@ describe Note do
     NOTES.each do |name, ly, pitch, accidental|
       context name do
         let(:note1) { Note.new(name[0], accidental, pitch   ) }
-        let(:note2) { n = note1.dup; n.octave -= 1; n         }
-        let(:note3) { n = note1.dup; n.octave += 1; n         }
+        let(:note2) { n = note1.dup; n                        }
+        let(:note3) { n = note1.dup; n.octave -= 1; n         }
+        let(:note4) { n = note1.dup; n.octave += 1; n         }
+
+        specify "different instances of the same note should be equal" do
+          note1.should == note2
+        end
+
+        specify "different instances of the same note should be equivalent" do
+          note1.should === note2
+          note1.equivalent?(note2).should == true
+        end
 
         specify "notes in different octaves should not be equal" do
-          note1.should_not == note2
-          note2.should_not == note3
+          note1.should_not == note3
+          note3.should_not == note4
         end
 
         specify "notes in different octaves should be equivalent" do
-          note1.should === note2
-          note2.equivalent?(note3).should == true
+          note1.should === note3
+          note3.equivalent?(note4).should == true
         end
+      end
+    end
+
+    equivalent_pairs = [ "A#1 Bb1", "B#2 C2", "Dx3 E3", "D4 Ebb4", "Bx5 Db5", "D#6 Fbb6" ]
+
+    specify "enharmonically equivalent notes in same octave should be equivalent" do
+      equivalent_pairs.each do |pair|
+        a, b = pair.split
+        Note[a].should === Note[b]
+      end
+    end
+
+    specify "enharmonically equivalent notes in same octave should be inequal" do
+      equivalent_pairs.each do |pair|
+        a, b = pair.split
+        Note[a].should_not == Note[b]
+      end
+    end
+
+    non_equivalent_pairs = [ "A#1 Bb2", "B#2 C3", "Dx3 E2", "D4 Ebb2", "Bx0 Db5", "D#6 Fbb8" ]
+
+    specify "enharmonically equivalent notes in different octaves should be equivalent" do
+      non_equivalent_pairs.each do |pair|
+        a, b = pair.split
+        Note[a].should === Note[b]
+      end
+    end
+
+    specify "enharmonically equivalent notes in different octaves should be inequal" do
+      non_equivalent_pairs.each do |pair|
+        a, b = pair.split
+        Note[a].should_not == Note[b]
       end
     end
   end
