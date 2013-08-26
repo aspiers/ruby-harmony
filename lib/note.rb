@@ -227,6 +227,14 @@ class Note
     return self
   end
 
+  # Returns an instance of the note with no accidentals.  If it
+  # was not 4 originally, a new Note object is instantiated to ensure
+  # the receiver object is unchanged.
+  def naturalize
+    return self if accidental == 0
+    dup.naturalize!
+  end
+
   # Return the position of the note on the given clef.  0 means the
   # note is on the centre line, 4 means the note is on the top line,
   # -4 means the bottom line, and so on.  Any value with an absolute

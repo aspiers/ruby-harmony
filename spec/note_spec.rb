@@ -430,7 +430,7 @@ describe Note do
     include_examples "a squashed note", "should move note down to octave 4",       "Bb5"
   end
 
-  describe "#naturalize!" do
+  describe "" do
     notes = [
       [ "Bb3",  "B3" ],
       [ "Cbb3", "C4" ],
@@ -447,7 +447,7 @@ describe Note do
     ]
 
     notes.each do |name, natural|
-      it "should naturalize #{name}" do
+      specify "naturalize! should naturalize #{name}" do
         note = Note[name]
         orig_object_id = note.object_id
         natural = Note[natural]
@@ -457,6 +457,19 @@ describe Note do
         note.pitch.should == natural.pitch
       end
     end
+
+    notes.each do |name, natural|
+      specify "naturalize should naturalize #{name}" do
+        note = Note[name]
+        naturalized = note.naturalize
+        natural = Note[natural]
+        naturalized.name_with_octave.should == natural.name_with_octave
+        naturalized.pitch.should == natural.pitch
+        if name == natural.name_with_octave
+          naturalized.object_id.should == note.object_id
+        else
+          naturalized.object_id.should_not == note.object_id
+        end
       end
     end
   end
