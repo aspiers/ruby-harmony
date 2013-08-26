@@ -64,6 +64,54 @@ module NoteCollection
     self
   end
 
+  def furthest_from_centre(clef)
+    max_by { |note| note.clef_position(clef).abs }
+  end
+
+  def centre_on_clef(clef)
+    debug = false
+    done = false
+    while ! done
+      furthest = furthest_from_centre(clef)
+      furthest_pos = furthest.clef_position(clef)
+      furthest_dist = furthest_pos.abs
+      puts "furthest is #{furthest} @ #{furthest_pos}" if debug
+      if furthest_pos > 0
+        # We're top heavy, i.e. highest note is further from centre
+        # than lowest.  Will shifting down an octave make things any
+        # better?  Let's look at the impact on the top and bottom
+        # notes.
+        new_top_pos    = furthest_pos - 7
+        new_bottom_pos = min.clef_position(clef) - 7
+        puts "  top heavy; new (top, bottom) would be (#{new_top_pos}, #{new_bottom_pos})" if debug
+        if new_top_pos.abs < furthest_dist and new_bottom_pos.abs < furthest_dist
+          puts "    -- shift down" if debug
+          octave_shift!(-1)
+        else
+          # Must be equally balanced, nothing more to do.
+          done = true
+        end
+      elsif furthest_pos < 0
+        # We're bottom heavy, i.e. lowest note is further from centre
+        # than highest.  Will shifting up an octave make things any
+        # better?  Let's look at the impact on the top and bottom
+        # notes.
+        new_bottom_pos = furthest_pos + 7
+        new_top_pos    = max.clef_position(clef) + 7
+        puts "  bottom heavy; new (top, bottom) would be (#{new_top_pos}, #{new_bottom_pos})" if debug
+        if new_top_pos.abs < furthest_dist and new_bottom_pos.abs < furthest_dist
+          puts "    ++ shift up" if debug
+          octave_shift!(+1)
+        else
+          # Must be equally balanced, nothing more to do.
+          done = true
+        end
+      else
+        done = true
+      end
+    end
+  end
+
   def contains_equivalent_note?(note)
     detect { |n| n === note }
   end
