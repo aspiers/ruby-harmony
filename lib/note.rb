@@ -219,6 +219,14 @@ class Note
     dup.octave_squash!
   end
 
+  # Remove any accidental from the note.  Returns the updated note to
+  # allow method chaining.
+  def naturalize!
+    self.pitch -= self.accidental
+    self.accidental = 0
+    return self
+  end
+
   # Return the position of the note on the given clef.  0 means the
   # note is on the centre line, 4 means the note is on the top line,
   # -4 means the bottom line, and so on.  Any value with an absolute
