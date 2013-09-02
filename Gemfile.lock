@@ -69,6 +69,11 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.1.4)
+    capistrano-deploytags (0.8.0)
+      capistrano
+      capistrano-ext
+    capistrano-ext (1.2.1)
+      capistrano (>= 1.0.0)
     coderay (1.0.9)
     coffee-rails (4.0.0)
       coffee-script (>= 2.2.0)
@@ -273,6 +278,7 @@ PLATFORMS
 
 DEPENDENCIES
   capistrano!
+  capistrano-deploytags (>= 0.8.0)
   capistrano-unicorn!
   coffee-rails (~> 4.0.0)
   fuubar
