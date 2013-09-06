@@ -19,7 +19,7 @@ group :development, :test do
   # gem 'debugger'
 
   gem 'capistrano', github: 'aspiers/capistrano', branch: 'app_subdir'
-  gem 'capistrano-unicorn', github: 'aspiers/capistrano-unicorn', branch: 'variables'
+  gem 'capistrano-unicorn', github: 'sosedoff/capistrano-unicorn'
   gem 'rvm-capistrano', github: 'aspiers/rvm-capistrano', branch: 'master'
   gem 'capistrano-deploytags', '>= 0.8.0'
 end

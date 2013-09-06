@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/aspiers/capistrano-unicorn.git
-  revision: c9e5c2cee270e656fa3fa3a60b4f39e632baa948
-  branch: variables
-  specs:
-    capistrano-unicorn (0.2.0)
-      capistrano
-
-GIT
   remote: git://github.com/aspiers/capistrano.git
   revision: d601a6b911a61220414e4cc4e71691f2d9ce6437
   branch: app_subdir
@@ -35,6 +27,13 @@ GIT
       execjs
       rails (>= 3.1)
       railties (>= 3.1)
+
+GIT
+  remote: git://github.com/sosedoff/capistrano-unicorn.git
+  revision: 887b69c5e050d71ffd0558c38bf546d6f1ef290a
+  specs:
+    capistrano-unicorn (0.2.0)
+      capistrano
 
 GEM
   remote: https://rubygems.org/
