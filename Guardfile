@@ -27,7 +27,7 @@ group :tests do
   end
 end
 
-guard 'livereload' do
+guard 'livereload', port: 35730 do
   watch(%r{app/views/.+\.haml$})
   watch(%r{app/helpers/.+\.rb})
   watch(%r{public/.+\.(css|js|html)})
