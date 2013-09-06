@@ -14,6 +14,10 @@ group :development, :test do
   #gem 'guard', github: 'aspiers/guard', branch: 'master'
   gem 'guard-bundler'
 
+  # http://blog.55minutes.com/2013/01/lightning-fast-sass-reloading-in-rails-32/
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
+
   gem 'simplecov', require: false
 
   # gem 'debugger'
