@@ -5,15 +5,6 @@ class DiatonicScaleType < ScaleType
     super(name, increments, 7, 12)
   end
 
-  def offset_from_key(degree)
-    # concatenate as many increments together as we need
-    # to reach the degree, which may be greater than the
-    # number of notes in the scale (e.g. 11, 13)
-    incs = increments * (1 + (degree - 1) / num_modes)
-    increments_from_key = incs.first(degree - 1)
-    return increments_from_key.inject(0) { |a,x| a + x }
-  end
-
   MAJOR           = new('maj',             [ 2, 2, 1, 2, 2, 2, 1 ])
   MELODIC_MINOR   = new('mel min',         [ 2, 1, 2, 2, 2, 2, 1 ])
   HARMONIC_MINOR  = new('harm min',        [ 2, 1, 2, 2, 1, 3, 1 ])
