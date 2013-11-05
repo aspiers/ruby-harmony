@@ -1,5 +1,6 @@
 require 'mode_in_key'
-require 'scale_type'
+require 'diatonic_scale_type'
+require 'symmetrical_scale_type'
 require 'mode'
 
 describe ModeInKey do
