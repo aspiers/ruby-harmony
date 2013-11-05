@@ -55,6 +55,7 @@ class ScaleType
     return increments_from_key.inject(0) { |a,x| a + x }
   end
 
+  # Override to provide special names for selected modes.
   def mode_name(degree)
     nil
   end
