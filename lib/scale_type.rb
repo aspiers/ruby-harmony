@@ -89,7 +89,7 @@ class ScaleType
   # Given a note which is a degree of a scale, find the original key.
   # e.g. 'C' and 3 should return Ab.
   def key(note, degree)
-    key_letter = Note.letter_shift(note.letter, 1 - degree)
+    key_letter = Note.letter_shift(note.letter, - letter_shift(degree))
     key_pitch = note.pitch - offset_from_key(degree)
     return Note.by_letter_and_pitch(key_letter, key_pitch)
   end
