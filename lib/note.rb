@@ -159,6 +159,7 @@ class Note
     end
   end
 
+  # Returns true iff the note doesn't have double sharps or flats.
   def simple?
     self == self.simplify
   end
