@@ -6,13 +6,23 @@ require 'symmetrical_scale_type'
 describe ScaleType do
   describe ".all" do
     it "should be prepopulated with the catalogue" do
-      ScaleType.all.size.should == 8
+      ScaleType.all.size.should == 12
     end
 
     specify "catalogue should contain the right things" do
       ScaleType.all.map(&:name).sort.should == [
-        'augmented', 'diminished', 'harm maj', 'harm min', 'maj',
-        'major pentatonic', 'mel min', 'whole tone',
+        'augmented',
+        'diminished',
+        'harm maj',
+        'harm min',
+        'maj',
+        'major b2 pentatonic',
+        'major b6 pentatonic',
+        'major pentatonic',
+        'mel min',
+        'minor 6 pentatonic',
+        'whole tone',
+        'whole tone pentatonic',
       ]
     end
 
