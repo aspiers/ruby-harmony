@@ -25,7 +25,7 @@ class ModeInKey
     #        "=> #{new_degree} deg of #{key_note}"
     # end
 
-    mode_in_key          = ModeInKey.new(new_mode, key_note)
+    mode_in_key = ModeInKey.new(new_mode, key_note)
     original = mode_in_key.original = ModeInKey.new(mode, original_key)
 
     return mode_in_key
