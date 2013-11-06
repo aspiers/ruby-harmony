@@ -100,7 +100,7 @@ module ScaleSpeller
         # whole tone or something like that, so scratch this key
         # from the candidate list.
         if debug
-          puts "rejected candidate key #{candidate_key}"
+          puts "rejected candidate key #{candidate_key} due to too many accidentals"
         end
         next
       end
