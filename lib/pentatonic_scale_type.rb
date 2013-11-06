@@ -1,6 +1,9 @@
 require 'scale_type'
+require 'scale_speller'
 
 class PentatonicScaleType < ScaleType
+  include ScaleSpeller
+
   def initialize(name, increments, degrees=nil)
     @degrees = degrees || [ 1, 2, 3, 5, 6 ]
     super(name, increments, 5, 12)
@@ -8,6 +11,10 @@ class PentatonicScaleType < ScaleType
 
   def letter_shift(degree)
     @degrees[degree - 1] - 1
+  end
+
+  def equivalent_keys(key_note)
+    Note.by_pitch(key_note.pitch)
   end
 
   MAJOR      = new('major pentatonic',      [ 2, 2, 3, 2, 3 ])
