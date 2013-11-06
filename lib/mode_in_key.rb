@@ -63,11 +63,11 @@ class ModeInKey
     return special ? "%s %s" % [ starting_note.name, special ] : nil
   end
 
-  def name
+  def name(divider="\n")
     generic = generic_description
     special = special_description
     return generic if generic == special
-    return special ? "%s\n(%s)" % [ special, generic ] : generic
+    return special ? "%s%s(%s)" % [ special, divider, generic ] : generic
   end
 
   def scale_type
