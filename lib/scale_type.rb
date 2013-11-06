@@ -1,5 +1,6 @@
 require 'note'
 require 'note_collections'
+require 'exceptions'
 
 class ScaleType
   @@all = [ ] # all scale types instantiated in any subclass
@@ -72,7 +73,11 @@ class ScaleType
   def note(key_note, degree)
     letter = Note.letter_shift(key_note.letter, letter_shift(degree))
     pitch = key_note.pitch + offset_from_key(degree)
-    return Note.by_letter_and_pitch(letter, pitch)
+    begin
+      Note.by_letter_and_pitch(letter, pitch)
+    rescue NoteExceptions::LetterPitchMismatch => e
+      raise $!, "#{$!} whilst calculating degree #{degree} of #{name} in #{key_note}" #, $!.backtrace
+    end
   end
 
   # Find the degree of the given note in the given key.
