@@ -1,16 +1,19 @@
 require 'mode'
 require 'diatonic_scale_type'
+require 'pentatonic_scale_type'
 require 'symmetrical_scale_type'
 
 describe ScaleType do
   describe ".all" do
     it "should be prepopulated with the catalogue" do
-      ScaleType.all.size.should == 7
+      ScaleType.all.size.should == 8
     end
 
-    specify "catalogue should be sorted by order of registration" do
-      ScaleType.all[ 0].should == DiatonicScaleType::MAJOR
-      ScaleType.all[-1].should == SymmetricalScaleType::AUGMENTED
+    specify "catalogue should contain the right things" do
+      ScaleType.all.map(&:name).sort.should == [
+        'augmented', 'diminished', 'harm maj', 'harm min', 'maj',
+        'major pentatonic', 'mel min', 'whole tone',
+      ]
     end
 
     it "should have the right index for sorting" do

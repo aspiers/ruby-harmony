@@ -148,7 +148,12 @@ class ModeInKey
   #   ]
   def ModeInKey.all(starting_note)
     count = 0
-    ScaleType.all.map do |scale_type|
+    scale_types = [
+      DiatonicScaleType.all_in_subclass,
+      #PentatonicScaleType.all_in_subclass,
+      SymmetricalScaleType.all_in_subclass,
+    ]
+    scale_types.flatten.map do |scale_type|
       modes_in_key = ModeInKey.all_for_scale_type(scale_type, starting_note)
       #modes_in_key.each { |mode| mode.index = (count += 1) }
       modes_in_key
