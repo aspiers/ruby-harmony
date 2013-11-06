@@ -1,6 +1,8 @@
 require 'scale_finder'
 require 'chord_type'
 require 'mode_in_key'
+require 'diatonic_scale_type'
+require 'symmetrical_scale_type'
 require 'note'
 
 describe ScaleFinder, slow: true do
@@ -9,8 +11,13 @@ describe ScaleFinder, slow: true do
 
     context "finds #{simplify ? 'simplified ' : ''}scales including: #{fixed_chord_notes.join(' ')}" do
       before(:all) {
-        scales_catalogue = ModeInKey.all(key).flatten
-        @scalefinder = ScaleFinder.new(fixed_chord_notes, descr, clef, scales_catalogue)
+        scale_types = [
+          DiatonicScaleType.all_in_subclass,
+          #PentatonicScaleType.all_in_subclass,
+          SymmetricalScaleType.all_in_subclass,
+        ].flatten
+        catalogue = ModeInKey.from_scale_types(key, scale_types).flatten
+        @scalefinder = ScaleFinder.new(fixed_chord_notes, descr, clef, catalogue)
         @scalefinder.set_verbosity(0)
         @scalefinder.enable_simplification if simplify
         @scalefinder.identify_modes

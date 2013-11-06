@@ -309,8 +309,21 @@ describe ModeInKey do
     end
   end
 
-  describe ".all" do
-    let(:all) { ModeInKey.all(Note.by_name("C")) }
+  shared_context "diatonic and symmetrical modes in C" do
+    let(:key) { Note.by_name("C") }
+    let(:scale_types) {
+      [
+        DiatonicScaleType.all_in_subclass,
+        #PentatonicScaleType.all_in_subclass,
+        SymmetricalScaleType.all_in_subclass,
+      ].flatten
+    }
+  end
+
+  describe ".from_scale_types" do
+    include_context "diatonic and symmetrical modes in C"
+
+    let(:all) { ModeInKey.from_scale_types(key, scale_types) }
 
     it "should have at least 28 modes" do
       all.size.should >= 4
@@ -321,8 +334,10 @@ describe ModeInKey do
   end
 
   describe "#output_modes" do
+    include_context "diatonic and symmetrical modes in C"
+
     it "should show all the scales in C" do
-      ModeInKey.output_modes(Note['C']).should == <<EOF
+      ModeInKey.output_modes(key, scale_types).should == <<EOF
 4 C lydian                       C   D   E   F#  G   A   B  
 1 C ionian                       C   D   E   F   G   A   B  
 5 C mixo                         C   D   E   F   G   A   Bb 

@@ -146,24 +146,19 @@ class ModeInKey
   #     [ ... modes of 2nd scale type ... ],
   #     ...
   #   ]
-  def ModeInKey.all(starting_note)
+  def ModeInKey.from_scale_types(starting_note, scale_types)
     count = 0
-    scale_types = [
-      DiatonicScaleType.all_in_subclass,
-      #PentatonicScaleType.all_in_subclass,
-      SymmetricalScaleType.all_in_subclass,
-    ]
-    scale_types.flatten.map do |scale_type|
+    scale_types.map do |scale_type|
       modes_in_key = ModeInKey.all_for_scale_type(scale_type, starting_note)
       #modes_in_key.each { |mode| mode.index = (count += 1) }
       modes_in_key
     end
   end
 
-  def ModeInKey.output_modes(starting_note)
+  def ModeInKey.output_modes(starting_note, scale_types)
     s = ""
 
-    for modes_in_key in ModeInKey.all(starting_note)
+    for modes_in_key in ModeInKey.from_scale_types(starting_note, scale_types)
       for mode_in_key in modes_in_key
         mode = mode_in_key.mode
         orig = mode_in_key.original
