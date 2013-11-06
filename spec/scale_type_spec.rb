@@ -20,6 +20,25 @@ describe ScaleType do
     end
   end
 
+  describe ".all_in_subclass" do
+    it "should have diatonic scales in the right order" do
+      DiatonicScaleType.all_in_subclass.should == [
+        DiatonicScaleType::MAJOR,
+        DiatonicScaleType::MELODIC_MINOR,
+        DiatonicScaleType::HARMONIC_MINOR,
+        DiatonicScaleType::HARMONIC_MAJOR,
+      ]
+    end
+
+    it "should have symmetrical scales in the right order" do
+      SymmetricalScaleType.all_in_subclass.should == [
+        SymmetricalScaleType::WHOLE_TONE,
+        SymmetricalScaleType::DIMINISHED,
+        SymmetricalScaleType::AUGMENTED,
+      ]
+    end
+  end
+
   describe "#degree_of" do
     [
       [ DiatonicScaleType::MAJOR,         'Bb', 'Bb', 1 ],
