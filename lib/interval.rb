@@ -1,6 +1,6 @@
 require 'active_support/core_ext/integer/inflections'
 
-require 'scale_type'
+require 'diatonic_scale_type'
 require 'accidental'
 
 class Interval
