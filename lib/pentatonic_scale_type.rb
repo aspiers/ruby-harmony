@@ -17,6 +17,7 @@ class PentatonicScaleType < ScaleType
     Note.by_pitch(key_note.pitch)
   end
 
+  # Lydian one from Barak, used in Africa: [ 2, 2, 2, 3, 3 ]
   MAJOR      = new('major pentatonic',      [ 2, 2, 3, 2, 3 ])
   # Jerry Bergonzi volume 2 chapter 9
   MINOR_SIX  = new('minor 6 pentatonic',    [ 2, 1, 4, 2, 3 ])
