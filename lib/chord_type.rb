@@ -18,6 +18,8 @@ class ChordType
     [ 'min7b5'      , '  b3   b5    b7                ' ],
     [ 'min7b9'      , '  b3         b7 b9             ' ],
     [ 'min7b5b9'    , '  b3   b5    b7 b9             ' ],
+    [ 'min7b9b13'   , '  b3         b7 b9        b13  ' ],
+    [ 'min7b5b9b13' , '  b3   b5    b7 b9        b13  ' ],
     [ 'min9'        , '  b3         b7  9             ' ],
     [ 'min9b5'      , '  b3   b5    b7  9             ' ],
     [ 'min11'       , '  b3         b7  9     11      ' ],
