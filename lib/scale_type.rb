@@ -35,7 +35,14 @@ class ScaleType
   # Thanks to Messiaen for helping me realise those facts:
   # http://en.wikipedia.org/wiki/Modes_of_limited_transposition
 
+  @@by_name = {}
+
   def initialize(name, increments, num_modes, transpositions)
+    if @@by_name[name]
+      $stderr.puts "already initialized #{name} with index #{@@by_name[name].index}; all: #{ScaleType.all}"
+    end
+    @@by_name[name] = self
+
     @name = name
     @increments = increments
     @num_modes = num_modes
