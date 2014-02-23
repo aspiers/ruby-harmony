@@ -17,6 +17,16 @@ describe Accidental do
         '"minor 7 is "\raise #0.5 \fontsize #-3 \flat "3 and "\raise #0.5 \fontsize #-3 \flat "7"'
     end
 
+    it "should convert multiple consecutive flats with no space" do
+      Accidental.to_ly_markup('"C7b9b13"').should ==
+        '"C7"\raise #0.5 \fontsize #-3 \flat "9"\raise #0.5 \fontsize #-3 \flat "13"'
+    end
+
+    it "should convert multiple consecutive flats with a space" do
+      Accidental.to_ly_markup('"C mixolydian b9 b13"').should ==
+        '"C mixolydian "\raise #0.5 \fontsize #-3 \flat "9 "\raise #0.5 \fontsize #-3 \flat "13"'
+    end
+
     it "should convert flat numbers inside chord names" do
       Accidental.to_ly_markup('"min7b5"').should ==
         '"min7"\raise #0.5 \fontsize #-3 \flat "5"'

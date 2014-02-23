@@ -30,11 +30,11 @@ module Accidental
       delta = DELTAS[accidental]
       letter + '"' + Accidental::LY_MARKUP[delta] + ' "'
     end
-    text.gsub(/([^a-zA-Z]|\d)(b|bb|#|x|natural\s*)(1\d|[1-7])/) do |m|
-      prefix, accidental, number = $1, $2, $3
+    text = text.gsub(/(?<=[^a-zA-Z]|\d|\s)(b|bb|#|x|natural\s*)(1[13]|[1-79])/) do |m|
+      accidental, number = $1, $2
       accidental = '' if accidental =~ /natural/
       delta = DELTAS[accidental]
-      prefix + '"' + Accidental::LY_MARKUP[delta] + ' "' + number
+      '"' + Accidental::LY_MARKUP[delta] + ' "' + number
     end
   end
 end
