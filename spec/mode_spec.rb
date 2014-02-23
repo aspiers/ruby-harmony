@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 require 'mode'
 
 describe Mode do
@@ -35,19 +37,19 @@ describe Mode do
     1, "A", "ionian", "A B C# D E F# G#".split
 
   include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
-    2, "B", "dorian b2", "C# D E F# G# A# B".split
+    2, "B", "dorian b9", "C# D E F# G# A# B".split
 
   include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
-    6, "D", "locrian natural 2", "B C# D E F G A".split
+    6, "D", "locrian ♮9", "B C# D E F G A".split
 
   include_examples "given key", DiatonicScaleType::MELODIC_MINOR, \
     7, "C", "altered", "B C D Eb F G A".split
 
   include_examples "given key", DiatonicScaleType::HARMONIC_MINOR, \
-    2, "B", "locrian natural 6", "C# D E F# G A# B".split
+    2, "B", "locrian ♮6", "C# D E F# G A# B".split
 
   include_examples "given key", DiatonicScaleType::HARMONIC_MAJOR, \
-    7, "F", nil, "E F G A Bb C Db".split
+    7, "F", "locrian bb7", "E F G A Bb C Db".split
 
   shared_examples "given starting note" do
     |scale, degree, start_name, expected_notes, expected_name|
@@ -73,9 +75,9 @@ describe Mode do
     include_examples "given starting note", DiatonicScaleType::MELODIC_MINOR, \
       3, "Eb", "Eb F  G  A  B  C  D",  "lydian augmented"
     include_examples "given starting note", DiatonicScaleType::HARMONIC_MINOR, \
-      7, "D",  "D  Eb F  Gb Ab Bb Cb", nil
+      7, "D",  "D  Eb F  Gb Ab Bb Cb", "altered bb7"
     include_examples "given starting note", DiatonicScaleType::HARMONIC_MAJOR, \
-      3, "E#", "E# F# G# A  B# C# D#", nil
+      3, "E#", "E# F# G# A  B# C# D#", "altered ♮5"
   end
 
   describe "diminished" do

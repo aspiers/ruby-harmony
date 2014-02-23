@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'scale_finder'
 require 'chord_type'
 require 'mode_in_key'
@@ -56,10 +57,11 @@ describe ScaleFinder, slow: true do
   [
     [ "C altered\n(7th degree of Db mel min)",
                                     "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bb4",  "Gb4 Ab4"    ],
-    [ "C dominant b9 b13\n(5th degree of F harm min)",
+    [ "C mixolydian b9 b13\n(5th degree of F harm min)",
                                     "C4 Db4 E4 F4 G4 Ab4 Bb4",     "F4  Ab4"    ],
-    [ "3rd degree of Ab harm maj",  "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4" ,  "Eb4 G4 Ab4" ],
-    [ "C dominant b9\n(5th degree of F harm maj)",
+    [ "C altered ♮5\n(3rd degree of Ab harm maj)",  "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4" ,
+                                                                   "Eb4 G4 Ab4" ],
+    [ "C mixolydian b9\n(5th degree of F harm maj)",
                                     "C4 Db4 E4 F4 G4 A4 Bb4"    ,  "F4 A4"      ],
     [ "4th degree of G diminished", "C4 Db4 Eb4 E4 F#4 G4 A4 Bb4", "Eb4 A4"     ],
     [ "4th degree of G diminished", "C4 Db4 Eb4 E4 F#4 G4 A4 Bb4", "F#4 G4"     ],
@@ -70,9 +72,10 @@ describe ScaleFinder, slow: true do
   [
     [ "C dorian\n(2nd degree of Bb maj)",  "C4 D4 Eb4 F4 G4  A4 Bb4" , "G4  A4"  ],
     [ "C aeolian\n(6th degree of Eb maj)", "C4 D4 Eb4 F4 G4  Ab4 Bb4", "G4  Ab4" ],
-    [ "C locrian natural 2\n(6th degree of Eb mel min)",
+    [ "C locrian ♮9\n(6th degree of Eb mel min)",
                                            "C4 D4 Eb4 F4 Gb4 Ab4 Bb4", "Gb4 Ab4" ],
-    [ "2nd degree of Bb harm maj",         "C4 D4 Eb4 F4 Gb4 A4  Bb4", "Gb4 A4"  ],
+    [ "C locrian ♮9 ♮13\n(2nd degree of Bb harm maj)",
+                                           "C4 D4 Eb4 F4 Gb4 A4  Bb4", "Gb4 A4"  ],
   ]
   include_examples "treble preset", "C", "min/maj7", false, 10, \
   [
@@ -80,8 +83,8 @@ describe ScaleFinder, slow: true do
   ]
   include_examples "treble preset", "Db", "7#11", false, 9, \
   [
-    [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db4 Eb4 F4 G4 Ab4 Bb4 Cb4", "Eb4 Ab4"   ],
-    [ "Db lydian dominant\n(4th degree of Ab mel min)", "Db4 Eb4 F4 G4 Ab4 Bb4 Cb4", "Eb4 Bb4"   ],
+    [ "Db lydian mixolydian\n(4th degree of Ab mel min)", "Db4 Eb4 F4 G4 Ab4 Bb4 Cb4", "Eb4 Ab4"   ],
+    [ "Db lydian mixolydian\n(4th degree of Ab mel min)", "Db4 Eb4 F4 G4 Ab4 Bb4 Cb4", "Eb4 Bb4"   ],
     [ "Db altered\n(7th degree of Ebb mel min)",  "Db4 Ebb4 Fb4 Gbb4 Abb4 Bbb4 Cb4", "Ebb4 Bbb4" ],
     [ "Db altered\n(7th degree of Ebb mel min)",  "Db4 Ebb4 Fb4 Gbb4 Abb4 Bbb4 Cb4", "Fb4 Bbb4"  ],
     [ "Db whole tone", "Db4 Eb4 F4 G4 A4 B4", "Eb4 A4" ],
@@ -107,20 +110,20 @@ describe ScaleFinder, slow: true do
     [ "C aeolian\n(6th degree of Eb maj)",               "C4 D4 Eb4 F4 G4 Ab4 Bb4",    "D4 G4 Bb4"      ],
     [ "C locrian\n(7th degree of Db maj)",               "C4 Db4 Eb4 F4 Gb4 Ab4 Bb4",  "Db4 F4 Gb4 Bb4" ],
 
-    [ "C locrian natural 2\n(6th degree of Eb mel min)", "C4 D4 Eb4 F4 Gb4 Ab4 Bb4",   "D4 Gb4 Bb4"     ],
+    [ "C locrian ♮9\n(6th degree of Eb mel min)", "C4 D4 Eb4 F4 Gb4 Ab4 Bb4",   "D4 Gb4 Bb4"     ],
     [ "C altered\n(7th degree of Db mel min)",           "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bb4", "Fb4 Gb4 Bb4"    ],
 
     [ "C harm min",                "C4 D4 Eb4 F4 G4 Ab4 B4",      "D4 G4 B4"      ],
     [ "C harm min",                "C4 D4 Eb4 F4 G4 Ab4 B4",      "F4 G4 B4"      ],
-    [ "7th degree of Db harm min", "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bbb4", "Db4 Fb4 Bbb4"  ],
+    [ "C altered bb7\n(7th degree of Db harm min)", "C4 Db4 Eb4 Fb4 Gb4 Ab4 Bbb4", "Db4 Fb4 Bbb4"  ],
 
-    [ "3rd degree of Ab harm maj", "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4",   "Db4 Fb4 G4"    ],
-    [ "3rd degree of Ab harm maj", "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4",   "Fb4 G4 Bb4"    ],
-    [ "C lydian #2 #5\n(6th degree of E harm maj)",
+    [ "C altered ♮5\n(3rd degree of Ab harm maj)", "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4",   "Db4 Fb4 G4"    ],
+    [ "C altered ♮5\n(3rd degree of Ab harm maj)", "C4 Db4 Eb4 Fb4 G4 Ab4 Bb4",   "Fb4 G4 Bb4"    ],
+    [ "C lydian augmented #9\n(6th degree of E harm maj)",
                                    "C4 D#4 E4 F#4 G#4 A4 B4",     "E4 F#4 B4"     ],
-    [ "C lydian #2 #5\n(6th degree of E harm maj)",
+    [ "C lydian augmented #9\n(6th degree of E harm maj)",
                                    "C4 D#4 E4 F#4 G#4 A4 B4",     "E4 A4 B4"      ],
-    [ "7th degree of Db harm maj", "C4 Db4 Eb4 F4 Gb4 Ab4 Bbb4",  "Db4 F4 Bbb4"   ],
+    [ "C locrian bb7\n(7th degree of Db harm maj)", "C4 Db4 Eb4 F4 Gb4 Ab4 Bbb4",  "Db4 F4 Bbb4"   ],
 
     [ "C diminished",              "C4 D4 Eb4 F4 Gb4 Ab4 A4 B4",  "D4 A4"         ],
     [ "C augmented",               "C4 D#4 E4 G4 Ab4 B4",         "E4 G4 B4"      ],
@@ -141,17 +144,17 @@ describe ScaleFinder, slow: true do
 
     include_examples "preset", "D", "min11b5", 'bass', false, true, 2, \
     [
-      [ "2nd degree of C harm maj",  "D3 E3 F3 G3 Ab3 B3 C4", "B3" ],
+      [ "D locrian ♮9 ♮13\n(2nd degree of C harm maj)",  "D3 E3 F3 G3 Ab3 B3 C4", "B3" ],
     ]
 
     include_examples "preset", "E", "min11b5", 'bass', false, true, 2, \
     [
-      [ "2nd degree of D harm maj",  "E2 F#2 G2 A2 Bb2 C#3 D3", "C#3" ],
+      [ "E locrian ♮9 ♮13\n(2nd degree of D harm maj)",  "E2 F#2 G2 A2 Bb2 C#3 D3", "C#3" ],
     ]
 
     include_examples "preset", "F", "min11b5", 'tenor', false, true, 2, \
     [
-      [ "2nd degree of Eb harm maj",  "F3 G3 Ab3 Bb3 B3 D4 Eb4", "D4" ],
+      [ "F locrian ♮9 ♮13\n(2nd degree of Eb harm maj)",  "F3 G3 Ab3 Bb3 B3 D4 Eb4", "D4" ],
     ]
   end
 end

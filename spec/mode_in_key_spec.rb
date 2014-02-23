@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 require 'mode_in_key'
 require 'diatonic_scale_type'
 require 'symmetrical_scale_type'
@@ -44,48 +46,48 @@ describe ModeInKey do
       ],
       [
         4, "G",  DiatonicScaleType::MELODIC_MINOR,
-        "C lydian dominant\n(4th degree of G mel min)",
+        "C lydian mixolydian\n(4th degree of G mel min)",
         "C4 D4 E4 F#4 G4 A4 Bb4",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
-              \line { "C lydian dominant" }
+              \line { "C lydian mixolydian" }
               \line { "(4th degree of G mel min)" }
             }
         EOF
       ],
       [
         6, "F",  DiatonicScaleType::MELODIC_MINOR,
-        "D locrian natural 2\n(6th degree of F mel min)",
+        "D locrian ♮9\n(6th degree of F mel min)",
         "D4 E4 F4 G4 Ab4 Bb4 C5",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
-              \line { "D locrian natural 2" }
+              \line { "D locrian ♮9" }
               \line { "(6th degree of F mel min)" }
             }
         EOF
       ],
       [
         4, "Bb", DiatonicScaleType::MELODIC_MINOR,
-        "Eb lydian dominant\n(4th degree of Bb mel min)",
+        "Eb lydian mixolydian\n(4th degree of Bb mel min)",
         "Eb4 F4 G4 A4 Bb4 C5 Db5",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
-              \line { "Eb lydian dominant" }
+              \line { "Eb lydian mixolydian" }
               \line { "(4th degree of Bb mel min)" }
             }
         EOF
       ],
       [
         6, "E", DiatonicScaleType::HARMONIC_MAJOR,
-        "C lydian #2 #5\n(6th degree of E harm maj)",
+        "C lydian augmented #9\n(6th degree of E harm maj)",
         "C4 D#4 E4 F#4 G#4 A4 B4",
         <<-'EOF',
             \override #'(baseline-skip . 2)
             \column {
-              \line { "C lydian #2 #5" }
+              \line { "C lydian augmented #9" }
               \line { "(6th degree of E harm maj)" }
             }
         EOF
@@ -347,28 +349,28 @@ describe ModeInKey do
 7 C locrian                      C   Db  Eb  F   Gb  Ab  Bb 
 
 3 C lydian augmented             C   D   E   F#  G#  A   B  
-4 C lydian dominant              C   D   E   F#  G   A   Bb 
+4 C lydian mixolydian            C   D   E   F#  G   A   Bb 
 1 C mel min                      C   D   Eb  F   G   A   B  
-5 C dominant b13                 C   D   E   F   G   Ab  Bb 
-2 C dorian b2                    C   Db  Eb  F   G   A   Bb 
-6 C locrian natural 2            C   D   Eb  F   Gb  Ab  Bb 
+5 C mixolydian b13               C   D   E   F   G   Ab  Bb 
+2 C dorian b9                    C   Db  Eb  F   G   A   Bb 
+6 C locrian ♮9                   C   D   Eb  F   Gb  Ab  Bb 
 7 C altered                      C   Db  Eb  Fb  Gb  Ab  Bb 
 
-6 C lydian #2                    C   D#  E   F#  G   A   B  
-3 C major #5                     C   D   E   F   G#  A   B  
-4 C dorian #4                    C   D   Eb  F#  G   A   Bb 
+6 C lydian #9                    C   D#  E   F#  G   A   B  
+3 C ionian #5                    C   D   E   F   G#  A   B  
+4 C dorian #11                   C   D   Eb  F#  G   A   Bb 
 1 C harm min                     C   D   Eb  F   G   Ab  B  
-5 C dominant b9 b13              C   Db  E   F   G   Ab  Bb 
-2 C locrian natural 6            C   Db  Eb  F   Gb  A   Bb 
-7 7th degree of Db harm min      C   Db  Eb  Fb  Gb  Ab  Bbb
+5 C mixolydian b9 b13            C   Db  E   F   G   Ab  Bb 
+2 C locrian ♮6                   C   Db  Eb  F   Gb  A   Bb 
+7 C altered bb7                  C   Db  Eb  Fb  Gb  Ab  Bbb
 
-6 C lydian #2 #5                 C   D#  E   F#  G#  A   B  
-4 C melodic min #4               C   D   Eb  F#  G   A   B  
+6 C lydian augmented #9          C   D#  E   F#  G#  A   B  
+4 C melodic min #11              C   D   Eb  F#  G   A   B  
 1 C harm maj                     C   D   E   F   G   Ab  B  
-5 C dominant b9                  C   Db  E   F   G   A   Bb 
-2 2nd degree of Bb harm maj      C   D   Eb  F   Gb  A   Bb 
-3 3rd degree of Ab harm maj      C   Db  Eb  Fb  G   Ab  Bb 
-7 7th degree of Db harm maj      C   Db  Eb  F   Gb  Ab  Bbb
+5 C mixolydian b9                C   Db  E   F   G   A   Bb 
+2 C locrian ♮9 ♮13               C   D   Eb  F   Gb  A   Bb 
+3 C altered ♮5                   C   Db  Eb  Fb  G   Ab  Bb 
+7 C locrian bb7                  C   Db  Eb  F   Gb  Ab  Bbb
 
 1 C whole tone                   C   D   E   F#  G#  A# 
 
